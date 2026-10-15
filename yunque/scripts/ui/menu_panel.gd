@@ -4,7 +4,7 @@ class_name MenuPanel
 ## 打开方式：Tab 键；关闭：Tab 或 Esc。键盘 ↑↓ 或 ←→ 切页，鼠标点击也可。
 ## 数据来源：GameState（旗标/线索/物品/队伍）+ GameData（定义表），UI 不自行计算数值。
 
-enum Page { QUEST, ITEMS, CHARACTER }
+enum Page { QUEST, ITEMS, CHARACTER, SAVE }
 
 @onready var paper: ColorRect = $Paper
 @onready var nav_box: VBoxContainer = $Root/HBox/Nav
@@ -22,6 +22,7 @@ func _ready() -> void:
 	nav_box.get_node("NavQuest").pressed.connect(func(): _set_page(Page.QUEST))
 	nav_box.get_node("NavItems").pressed.connect(func(): _set_page(Page.ITEMS))
 	nav_box.get_node("NavChar").pressed.connect(func(): _set_page(Page.CHARACTER))
+	nav_box.get_node("NavSave").pressed.connect(func(): _set_page(Page.SAVE))
 	footer.text = "Tab / Esc 关闭　·　↑ ↓ 或 ← → 切换页面"
 	footer.add_theme_font_size_override("font_size", 15)
 	footer.add_theme_color_override("font_color", UITheme.INK_SUB)
@@ -61,10 +62,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		close()
 	elif event.is_action_pressed("ui_down") or event.is_action_pressed("ui_right"):
 		get_viewport().set_input_as_handled()
-		_set_page((page + 1) % 3)
+		_set_page((page + 1) % 4)
 	elif event.is_action_pressed("ui_up") or event.is_action_pressed("ui_left"):
 		get_viewport().set_input_as_handled()
-		_set_page((page + 2) % 3)
+		_set_page((page + 3) % 4)
 
 func _set_page(p: int) -> void:
 	page = p
@@ -81,10 +82,12 @@ func _refresh() -> void:
 			_build_items()
 		Page.CHARACTER:
 			_build_characters()
+		Page.SAVE:
+			_build_saves()
 
 func _update_nav() -> void:
-	var names := ["任务日志", "物品", "角色状态"]
-	var keys := ["NavQuest", "NavItems", "NavChar"]
+	var names := ["任务日志", "物品", "角色状态", "存档"]
+	var keys := ["NavQuest", "NavItems", "NavChar", "NavSave"]
 	for i in keys.size():
 		var b: Button = nav_box.get_node(keys[i])
 		b.text = ("▍ " if i == page else "　") + names[i]
@@ -236,6 +239,71 @@ func _stats_for(character_id: String, level: int) -> Dictionary:
 	if best.is_empty() and not table.is_empty():
 		best = table[table.keys()[0]]
 	return best
+
+
+# ---------------------------------------------------------------- 存档
+
+func _build_saves() -> void:
+	page_title.text = "存档"
+	_add_para("自动存档：任务阶段推进时、以及退出游戏前各写一次（只保留最近一条）。手动槽位随时可存。", true)
+	_add_hairline()
+	_add_save_row(SaveManager.AUTOSAVE_SLOT)
+	for s in SaveManager.MANUAL_SLOTS:
+		_add_save_row(int(s))
+	_add_hairline()
+	_add_para("存档内容：任务阶段与旗标、三条线索、物品与数量、队伍、已播一次性对白标记、时段、地图与玩家位置。", true)
+	_add_para("读档后：已完成的一次性过场不会重播，已取得的线索与暗门状态保持不变（设计方案 §21 兜底规则）。", true)
+
+func _add_save_row(slot: int) -> void:
+	var is_auto := slot == SaveManager.AUTOSAVE_SLOT
+	var info := SaveManager.slot_info(slot)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+
+	var lb := Label.new()
+	lb.custom_minimum_size = Vector2(620, 0)
+	lb.add_theme_font_size_override("font_size", 18)
+	if info.is_empty():
+		lb.text = "%s　（空）" % SaveManager.slot_label(slot)
+		lb.add_theme_color_override("font_color", UITheme.INK_SUB)
+	elif bool(info.get("broken", false)):
+		lb.text = "%s　（存档损坏或版本不符）" % SaveManager.slot_label(slot)
+		lb.add_theme_color_override("font_color", UITheme.ACCENT_CINNABAR)
+	else:
+		lb.text = "%s　%s　%s　线索 %d　队伍 %d" % [
+			SaveManager.slot_label(slot), str(info.get("saved_at", "")),
+			str(info.get("scene_name", "")), int(info.get("clue_count", 0)), int(info.get("party_size", 0))]
+	row.add_child(lb)
+
+	if not is_auto:
+		var bs := Button.new()
+		bs.text = "保存"
+		bs.pressed.connect(func(): _do_save(slot))
+		row.add_child(bs)
+	var bl := Button.new()
+	bl.text = "读取"
+	bl.disabled = info.is_empty() or bool(info.get("broken", false))
+	bl.pressed.connect(func(): _do_load(slot))
+	row.add_child(bl)
+	if not is_auto:
+		var bd := Button.new()
+		bd.text = "删除"
+		bd.disabled = info.is_empty()
+		bd.pressed.connect(func(): _do_delete(slot))
+		row.add_child(bd)
+	body.add_child(row)
+
+func _do_save(slot: int) -> void:
+	SaveManager.save_game(slot)
+	_refresh()
+
+func _do_load(slot: int) -> void:
+	close()
+	await SaveManager.load_game(slot)
+
+func _do_delete(slot: int) -> void:
+	SaveManager.delete_save(slot)
+	_refresh()
 
 
 # ---------------------------------------------------------------- 构件

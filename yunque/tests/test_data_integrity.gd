@@ -72,6 +72,38 @@ func _ready() -> void:
 	_ok_if(_interactable_dialogues_valid(map), "所有交互点引用的对白都存在")
 	_ok_if(_no_footprint_overlap(map), "建筑/戏台范围互不重叠")
 
+	_section("存档往返（M2）")
+	var slot := 3
+	SaveManager.delete_save(slot)
+	GameState.set_flag("TEST_SAVE_FLAG", true)
+	GameState.add_item("ITEM_SMALL_HEAL", 2)
+	GameState.add_party(["SCN_JiangAtang"])
+	GameState.mark_dialogue_seen("MOYI_ATANG_010")
+	var clue_before := GameState.clue_count()
+	var party_before := GameState.party.size()
+	var item_before := GameState.item_count("ITEM_SMALL_HEAL")
+	var stage_before := _stage("Q_CH01_LAMP_AND_SHADOW")
+	_ok_if(SaveManager.save_game(slot, true), "写入存档（槽 %d）" % slot)
+	_ok_if(SaveManager.has_save(slot), "存档文件已生成")
+	var info := SaveManager.slot_info(slot)
+	_ok_eq(str(info.get("save_version", -1)), str(SaveManager.SAVE_VERSION), "存档版本号")
+
+	GameState.from_dict({})
+	_ok_if(not GameState.has_flag("TEST_SAVE_FLAG"), "清空状态：旗标已移除")
+	_ok_if(GameState.clue_count() == 0, "清空状态：线索归零")
+	_ok_if(GameState.party.is_empty(), "清空状态：队伍清空")
+
+	await SaveManager.load_game(slot)
+	_ok_if(GameState.has_flag("TEST_SAVE_FLAG"), "读档恢复旗标")
+	_ok_eq(str(GameState.clue_count()), str(clue_before), "读档恢复线索数")
+	_ok_eq(str(GameState.party.size()), str(party_before), "读档恢复队伍人数")
+	_ok_eq(str(GameState.item_count("ITEM_SMALL_HEAL")), str(item_before), "读档恢复物品数量")
+	_ok_if(GameState.is_dialogue_seen("MOYI_ATANG_010"), "读档恢复一次性对白标记（不重播过场）")
+	_ok_if(GameState.has_flag("ALL_CLUES"), "读档后派生旗标重算（ALL_CLUES）")
+	_ok_eq(_stage("Q_CH01_LAMP_AND_SHADOW"), stage_before, "读档后任务阶段与存档前一致")
+	_ok_if(SaveManager.delete_save(slot), "清理测试存档")
+	_ok_if(not SaveManager.has_save(slot), "测试存档已删除")
+
 	_report()
 
 # ---------------------------------------------------------------- 断言工具

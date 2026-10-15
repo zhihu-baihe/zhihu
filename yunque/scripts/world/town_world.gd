@@ -26,6 +26,10 @@ func _ready() -> void:
 func get_player() -> Node:
 	return player
 
+## 供存档记录地图名
+func display_name() -> String:
+	return str(map.get("display_name", "墨邑古城"))
+
 func _apply_environment() -> void:
 	# 时段预设：按当前 time_band 取参数；缺预设时回落到 environment 兜底块。
 	var presets: Dictionary = map.get("environment_presets", {})

@@ -229,6 +229,67 @@ func set_time_band(band: String) -> void:
 	time_band_changed.emit(band)
 
 
+# ---------------------------------------------------------------- 序列化（存档）
+
+## 存档：只导出状态本身。派生旗标（ANY_CLUE / ALL_CLUES）不写入文件，载入时重算。
+func to_dict() -> Dictionary:
+	var f := {}
+	for k in flags:
+		f[str(k)] = bool(flags[k])
+	var c: Array = []
+	for k in clues:
+		c.append(str(k))
+	var sd: Array = []
+	for k in seen_dialogues:
+		sd.append(str(k))
+	return {
+		"flags": f,
+		"clues": c,
+		"items": items.duplicate(),
+		"party": party.duplicate(),
+		"party_levels": party_levels.duplicate(),
+		"seen_dialogues": sd,
+		"time_band": time_band,
+	}
+
+## 读档：整体替换状态，然后重算派生旗标与任务阶段，并广播一次批量刷新信号。
+func from_dict(d: Dictionary) -> void:
+	flags.clear()
+	clues.clear()
+	items.clear()
+	party.clear()
+	party_levels.clear()
+	seen_dialogues.clear()
+	_quest_stage_cache.clear()
+
+	var f: Dictionary = d.get("flags", {})
+	for k in f:
+		flags[str(k)] = bool(f[k])
+	for k in d.get("clues", []):
+		clues[str(k)] = true
+	var it: Dictionary = d.get("items", {})
+	for k in it:
+		items[str(k)] = int(it[k])
+	for k in d.get("party", []):
+		var id := str(k)
+		if id != "" and not party.has(id):
+			party.append(id)
+	var lv: Dictionary = d.get("party_levels", {})
+	for k in lv:
+		party_levels[str(k)] = int(lv[k])
+	for k in d.get("seen_dialogues", []):
+		seen_dialogues[str(k)] = true
+	time_band = str(d.get("time_band", time_band))
+
+	_refresh_derived_flags()
+	_refresh_all_quests()
+	# 批量刷新信号：让 HUD / 菜单一次性对齐（正常玩法路径仍走细粒度信号）
+	item_changed.emit("", 0)
+	clue_added.emit("", clue_count(), clue_total())
+	party_changed.emit(party.duplicate())
+	time_band_changed.emit(time_band)
+
+
 # ---------------------------------------------------------------- 工具
 
 static func _as_list(v) -> Array:

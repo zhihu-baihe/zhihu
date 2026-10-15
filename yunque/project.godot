@@ -20,6 +20,7 @@ GameData="*res://scripts/autoload/game_data.gd"
 GameState="*res://scripts/autoload/game_state.gd"
 DialogueRunner="*res://scripts/autoload/dialogue_runner.gd"
 SceneRouter="*res://scripts/autoload/scene_router.gd"
+SaveManager="*res://scripts/autoload/save_manager.gd"
 
 [display]
 

@@ -8,6 +8,28 @@ signal fade_finished()
 
 var _world_root: Node = null
 var _fade: ColorRect = null
+## 当前世界场景路径与显示名：存档需要记录「玩家在哪个地图」。
+var current_path: String = ""
+var current_display_name: String = ""
+
+func is_ready() -> bool:
+	return _world_root != null and is_instance_valid(_world_root)
+
+func get_player() -> Node:
+	var w := current_world()
+	if w == null:
+		return null
+	return _find_player(w)
+
+func current_scene_name() -> String:
+	return current_display_name
+
+func current_world() -> Node:
+	if _world_root == null:
+		return null
+	for c in _world_root.get_children():
+		return c
+	return null
 
 func setup(world_root: Node, fade_rect: ColorRect) -> void:
 	_world_root = world_root
@@ -34,6 +56,8 @@ func change_world(path: String, spawn: Vector3 = Vector3.INF, yaw_deg: float = 0
 	var world := packed.instantiate()
 	_world_root.add_child(world)
 	await get_tree().process_frame
+	current_path = path
+	current_display_name = str(world.call("display_name")) if world.has_method("display_name") else path.get_file()
 
 	if spawn != Vector3.INF:
 		var player := _find_player(world)
@@ -42,13 +66,6 @@ func change_world(path: String, spawn: Vector3 = Vector3.INF, yaw_deg: float = 0
 			player.set_spawn_yaw(yaw_deg)
 	await fade_in(fade_time)
 	world_loaded.emit(path)
-
-func current_world() -> Node:
-	if _world_root == null:
-		return null
-	for c in _world_root.get_children():
-		return c
-	return null
 
 func fade_out(t: float = 0.35) -> void:
 	if _fade == null:

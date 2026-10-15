@@ -32,6 +32,10 @@ func set_spawn_yaw(deg: float) -> void:
 	if model:
 		model.rotation.y = _facing
 
+## 供存档使用：当前朝向（度）。
+func facing_yaw_deg() -> float:
+	return rad_to_deg(_facing)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		camera_yaw.rotate_y(-event.relative.x * mouse_sensitivity)

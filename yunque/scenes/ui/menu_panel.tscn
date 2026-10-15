@@ -46,6 +46,10 @@ text = "物品"
 layout_mode = 2
 text = "角色状态"
 
+[node name="NavSave" type="Button" parent="Root/HBox/Nav"]
+layout_mode = 2
+text = "存档"
+
 [node name="Divider" type="ColorRect" parent="Root/HBox"]
 custom_minimum_size = Vector2(1, 0)
 layout_mode = 2
