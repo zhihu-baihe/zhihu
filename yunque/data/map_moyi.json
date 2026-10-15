@@ -290,6 +290,20 @@
       "thickness": 0.5,
       "mat": "wood_dark",
       "note": "城内河沿护栏·东"
+    },
+    {
+      "from": [
+        9.7,
+        19.2
+      ],
+      "to": [
+        9.7,
+        14.6
+      ],
+      "height": 2.7,
+      "thickness": 0.45,
+      "mat": "wall",
+      "note": "夜市东·戏台与临街铺面之间的院墙（补 z=14.5~19 空缺；邻墙相接比再塞一栋 3 m 进深的房子真实）"
     }
   ],
   "gate": {
@@ -583,6 +597,60 @@
       "wall_mat": "wall",
       "roof_mat": "roof_dark",
       "note": "对岸剪影·4"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        -15,
+        34.3
+      ],
+      "footprint": [
+        11,
+        7.6
+      ],
+      "height": 3.9,
+      "roof": "gable",
+      "yaw_deg": 90,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "sign": "墨记客店",
+      "note": "城门内·西客店（补主街西 z=30~38 空缺；进深压在 38.1 以内，避开城门台基 z≥38.4）"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        15,
+        34.3
+      ],
+      "footprint": [
+        11,
+        7.6
+      ],
+      "height": 3.6,
+      "roof": "gable",
+      "yaw_deg": 270,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "sign": "灯纸铺",
+      "note": "城门内·东铺面（补主街东 z=30~38 空缺）"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        15,
+        0.75
+      ],
+      "footprint": [
+        11,
+        7.5
+      ],
+      "height": 3.5,
+      "roof": "gable",
+      "yaw_deg": 270,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "sign": "百花幡行",
+      "note": "夜市东·南铺（补主街东 z=-3~4.5 空缺，与戏台留 1 m 空隙）"
     }
   ],
   "stage": {

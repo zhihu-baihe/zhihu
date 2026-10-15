@@ -535,7 +535,9 @@ static func _mountain(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
 	mi.position = Vector3(pos.x, h * 0.5 - 30.0, pos.y)
 	parent.add_child(mi)
 
-## 远景塔：层叠方塔 + 出檐，河对岸山中的地标剪影
+## 远景塔：层叠方塔 + 出檐，河对岸山中的地标剪影。
+## 118 m 外的塔只有 ~110 px 高，加实体光没有意义（灯照不到、预算也不够），
+## 所以「亮」全部由**自发光 + bloom**承担：每层四面一扇暖窗 + 每层檐口一圈冷白轮廓光。
 static func _pagoda(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
 	var pos := _v2(p.get("pos", [0, 0]))
 	var tiers := maxi(1, int(p.get("tiers", 3)))
@@ -543,14 +545,32 @@ static func _pagoda(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
 	var tier_h := float(p.get("height", 4.0))
 	var wall_mat := MatCache.solid(_col(pal, str(p.get("wall_mat", "wood_dark")), "#4f3a27"), 0.9)
 	var roof_mat := MatCache.solid(_col(pal, str(p.get("mat", "roof_dark")), "#333c46"), 0.85)
+	var win_mat := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 1.15, 0.7)
+	var edge_mat := MatCache.emissive(Color(1.0, 0.90, 0.72), 0.80, 0.75)
+	var win_boxes: Array = []
+	var edge_boxes: Array = []
 	var y := 0.0
 	for i in tiers:
 		var scale_f := 1.0 - 0.18 * float(i)
 		var w := base * scale_f
 		_box(parent, Vector3(pos.x, y + tier_h * 0.4, pos.y), Vector3(w, tier_h * 0.8, w), wall_mat, false, 0.0, "PagodaTier")
 		_prism(parent, Vector3(pos.x, y + tier_h * 0.9, pos.y), Vector3(w * 1.5, tier_h * 0.42, w * 1.5), roof_mat, 0.0, "PagodaRoof")
+		# 亮窗：每层四面各一扇，贴在塔身外皮 5 cm 处
+		for ax in 4:
+			var a := TAU * float(ax) / 4.0
+			var d := Vector3(sin(a), 0.0, cos(a))
+			var thin: Vector3 = Vector3(0.10, 1.5, 1.15) if absf(d.x) > 0.5 else Vector3(1.15, 1.5, 0.10)
+			win_boxes.append([Vector3(pos.x, y + tier_h * 0.42, pos.y) + d * (w * 0.5 + 0.05), thin])
+		# 轮廓灯：檐口下沿一圈冷白细线。远处只剩这几条线，也认得出是塔
+		var ry := y + tier_h * 0.9 - tier_h * 0.21
+		var ew := w * 0.75 - 0.03
+		for s: float in [-1.0, 1.0]:
+			edge_boxes.append([Vector3(pos.x, ry, pos.y + s * ew), Vector3(ew * 2.0, 0.09, 0.09)])
+			edge_boxes.append([Vector3(pos.x + s * ew, ry, pos.y), Vector3(0.09, 0.09, ew * 2.0)])
 		y += tier_h * 0.85
 	_prism(parent, Vector3(pos.x, y + tier_h * 0.35, pos.y), Vector3(base * 0.5, tier_h * 0.8, base * 0.5), roof_mat, 0.0, "PagodaSpire")
+	_merged_world(parent, "PagodaWindows", win_mat, win_boxes)
+	_merged_world(parent, "PagodaEdgeGlow", edge_mat, edge_boxes)
 
 static func _wall(parent: Node3D, w: Dictionary, pal: Dictionary) -> void:
 	var a := _v2(w.get("from", [0, 0]))
@@ -594,7 +614,10 @@ static func _gate(parent: Node3D, g: Dictionary, pal: Dictionary) -> void:
 		_roof_kit(parent, Vector3(tp.x, 0.0, tp.z), 0.0,
 			tsize.x + 1.7, (tsize.z + 1.9) * 0.5, tsize.y + 0.85, tsize.y + 2.7,
 			roof_mat, ridge_mat, wood_dark, {"corner_lift": 0.7, "spacing": 0.5})
-		_light(parent, tp + Vector3(0, 1.4, 2.6), _col(pal, "lantern", "#ffb457"), 2.0, 10.0)
+		# 箭楼动态光：原来挂在 z = pos.y + 2.6（城**外**），玩家在城内什么都照不到。
+		# 挪到城门内侧，同时给门楣下的灯笼串补光。
+		_light(parent, Vector3(pos.x + off * s, 2.9, pos.y - tsize.z * 0.5 - 1.0),
+			_col(pal, "lantern", "#ffb457"), 2.0, 11.0)
 	# 门楣（过梁）
 	_box(parent, Vector3(pos.x, beam_y, pos.y), Vector3(off * 2 + 2.0, 1.3, tsize.z * 0.8),
 		_mat(pal, "wood_dark", 0.9), false, 0.0, "GateBeam")
@@ -607,12 +630,79 @@ static func _gate(parent: Node3D, g: Dictionary, pal: Dictionary) -> void:
 		var t := (float(i) / 5.0 - 0.5) * (off * 2.0 + 1.6)
 		_box(parent, Vector3(pos.x + t, beam_y + 1.72, pos.y - tsize.z * 0.45 - 0.1),
 			Vector3(0.5, 0.5, 0.4), wall_mat, false, 0.0, "Crenel")
+
+	# ---- 自发光窗：箭楼朝城内那一面各两扇 ----
+	# 城门原是纯剪影，加两排暖窗才有「城楼上有人」的活气，且不花动态光预算。
+	# 必须配木棂 —— 只放一块自发光板会被读成灯箱，不是窗。
+	var gwin_mat := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 0.85, 0.6)
+	var gwin_boxes: Array = []
+	var gframe_boxes: Array = []
+	for s in [-1.0, 1.0]:
+		for k: float in [-1.0, 1.0]:
+			var wc := Vector3(pos.x + off * s + k * 1.9, 3.3, pos.y - tsize.z * 0.5 - 0.07)
+			gwin_boxes.append([wc, Vector3(1.05, 1.45, 0.12)])
+			gframe_boxes.append_array(_window_boxes(wc, false, 1.05, 1.45))
+	_merged_world(parent, "GateWindows", gwin_mat, gwin_boxes)
+	_merged_world(parent, "GateWindowFrame", wood_dark, gframe_boxes)
+
+	# ---- 门楣下一排灯笼（自发光；26 盏动态光预算已满，这里靠 bloom 出光）----
+	var lam_top := beam_y - 0.65
+	var lam_mat := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 1.25)
+	var cord_boxes: Array = []
+	for i in 5:
+		var lx := pos.x + (float(i) / 4.0 - 0.5) * (off * 2.0 - 1.4)
+		var lc := Vector3(lx, lam_top - 0.31, pos.y - tsize.z * 0.5 - 0.34)
+		_cylinder(parent, lc, 0.30, 0.62, lam_mat, false, "GateLantern")
+		_cylinder(parent, lc + Vector3(0, 0.37, 0), 0.055, 0.14, wood_dark, false, "GateLanternCap")
+		var ch := lam_top - (lc.y + 0.31) - 0.07
+		if ch > 0.05:
+			cord_boxes.append([lc + Vector3(0, 0.31 + ch * 0.5, 0), Vector3(0.05, ch, 0.05)])
+	_merged_world(parent, "GateLanternCord", wood_dark, cord_boxes)
+
 	var plaque := str(g.get("plaque", "城门"))
 	_label(parent, Vector3(pos.x, beam_y + 0.2, pos.y - tsize.z * 0.45), plaque,
 		Color(0.98, 0.9, 0.66), 96, 0.007, 180.0)
 
 
 # ================================================================ 建筑
+
+## 环绕墙基的一道石活（勒脚 / 压顶石）→ 盒体清单。
+##   outer_t   = 这道石活的厚度（墙厚 + 两侧出挑之和）
+##   y0 / y1   = 上下沿
+##   door_axis = 0 无门；1 门在 ±X 两面之一；2 门在 ±Z 两面之一
+##   door_side = 有门的那一面（-1 / +1）
+##   gap_half  = 门洞两侧各留的净空半宽
+## 有门的那一面断成两段 —— 0.36 m 高的石活横过门洞，会把门下半截直接砌死。
+static func _course_boxes(pos: Vector2, fp: Vector2, outer_t: float, y0: float, y1: float,
+		door_axis: int, door_side: float, gap_half: float) -> Array:
+	var out: Array = []
+	var cy := (y0 + y1) * 0.5
+	var hh := y1 - y0
+	var t := outer_t
+	for s: float in [-1.0, 1.0]:
+		# ±Z 两条边：板沿 X 铺，长度盖过角部
+		if door_axis == 2 and is_equal_approx(s, door_side):
+			var seg := fp.x * 0.5 + t * 0.5 - gap_half
+			if seg > 0.25:
+				for k: float in [-1.0, 1.0]:
+					out.append([Vector3(pos.x + k * (gap_half + seg * 0.5), cy, pos.y + s * fp.y * 0.5),
+						Vector3(seg, hh, t)])
+		else:
+			# 两端各缩 0.015：避免与 ±X 那道板的外侧面共面（共面 = z-fighting 闪面）
+			out.append([Vector3(pos.x, cy, pos.y + s * fp.y * 0.5),
+				Vector3(fp.x + t - 0.03, hh, t)])
+		# ±X 两条边：板沿 Z 铺，两端缩进 t/4 埋进上面那两条边里
+		if door_axis == 1 and is_equal_approx(s, door_side):
+			var seg2 := fp.y * 0.5 - t * 0.25 - gap_half
+			if seg2 > 0.25:
+				for k2: float in [-1.0, 1.0]:
+					out.append([Vector3(pos.x + s * fp.x * 0.5, cy, pos.y + k2 * (gap_half + seg2 * 0.5)),
+						Vector3(t, hh, seg2)])
+		else:
+			out.append([Vector3(pos.x + s * fp.x * 0.5, cy, pos.y),
+				Vector3(t, hh, fp.y - t * 0.5)])
+	return out
+
 
 static func _building(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 	var pos := _v2(b.get("pos", [0, 0]))
@@ -633,23 +723,45 @@ static func _building(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 	var east_side := absf(front.x) > 0.5
 	var fsign := signf(front.x) if east_side else signf(front.z)
 
-	# ---- 石台基 + 正面踏跺（均不碰撞：保留原墙碰撞，避免门槛卡住玩家）----
-	_box(parent, Vector3(pos.x, 0.14, pos.y), Vector3(fp.x + 1.1, 0.28, fp.y + 1.1),
+	# ---- 石台基 + 正面踏跺 + 勒脚（均不碰撞：保留原墙碰撞，避免门槛卡住玩家）----
+	const PLINTH_H := 0.28        # 台明高度
+	const PLINTH_OUT := 0.55      # 台明每侧出挑
+	const LE_TOP := 0.64          # 勒脚顶面（勒脚净高 0.36）
+	const CAP_TOP := 0.76         # 压顶石顶面
+	var door_w := 1.8
+	_box(parent, Vector3(pos.x, PLINTH_H * 0.5, pos.y),
+		Vector3(fp.x + PLINTH_OUT * 2.0, PLINTH_H, fp.y + PLINTH_OUT * 2.0),
 		stone_mat, false, 0.0, "Plinth")
+	# 踏跺必须从**台明外缘**往外退着排，不能从建筑中心量。
+	# 旧实现是 `dist = 0.76 + (2-k)*0.42`（相对中心），只有 footprint 2~3 m 时才成立；
+	# 现在进深 11 m，三级台阶整个埋在 0.28 m 高的台明板里，一张都没露出来。
+	const TREAD := 0.30
+	var base_edge := (fp.x if east_side else fp.y) * 0.5 + PLINTH_OUT
 	for k in 3:
 		var half := 0.14 * (float(k) + 1.0) / 3.0
-		var dist := 0.76 + float(2 - k) * 0.42
+		var dist := base_edge + TREAD * (0.5 + float(2 - k))
 		if east_side:
 			_box(parent, Vector3(pos.x + fsign * dist, half, pos.y),
-				Vector3(0.45, half * 2.0, 2.4), stone_mat, false, 0.0, "Step")
+				Vector3(TREAD, half * 2.0, 2.4), stone_mat, false, 0.0, "Step")
 		else:
 			_box(parent, Vector3(pos.x, half, pos.y + fsign * dist),
-				Vector3(2.4, half * 2.0, 0.45), stone_mat, false, 0.0, "Step")
+				Vector3(2.4, half * 2.0, TREAD), stone_mat, false, 0.0, "Step")
+
+	# ---- 勒脚（石砌墙脚）+ 压顶石：文档 08 §2.4 要的两道真实构件 ----
+	# 各只占 1 个合并网格，不逐面建节点。压顶换一种粗糙度，好在月光下留一条横向亮线。
+	# 门洞那一面必须断开：门扇下沿贴地，横过门洞的石活会把门下半截砌死。
+	var door_axis := 1 if east_side else 2
+	var door_side := -fsign       # 门洞开在「正面」的反侧（见下面的四面墙代码）
+	var gap_half := door_w * 0.5 + 0.15
+	var stone_tint := _col(pal, "stone_dark", "#9a948a")
+	_merged_world(parent, "PlinthCourse", _mat(pal, "stone_dark", 0.95, stone_tint.darkened(0.12)),
+		_course_boxes(pos, fp, th + 0.20, PLINTH_H, LE_TOP, door_axis, door_side, gap_half))
+	_merged_world(parent, "PlinthCap", _mat(pal, "stone_dark", 0.86, stone_tint),
+		_course_boxes(pos, fp, th + 0.34, LE_TOP, CAP_TOP, door_axis, door_side, gap_half))
 
 	# ---- 四面墙（保留原有门洞逻辑）----
 	_box(parent, Vector3(pos.x, h * 0.5, pos.y - fp.y * 0.5), Vector3(fp.x, h, th), wall_mat, true, 0.0, "WallN")
 	_box(parent, Vector3(pos.x, h * 0.5, pos.y + fp.y * 0.5), Vector3(fp.x, h, th), wall_mat, true, 0.0, "WallS")
-	var door_w := 1.8
 	if east_side:
 		var wx := pos.x - signf(front.x) * fp.x * 0.5
 		var z0 := pos.y - fp.y * 0.5
@@ -697,7 +809,8 @@ static func _building(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 		else:
 			cp = Vector3(pos.x + off, 0.0, pos.y + fsign * wall_out)
 		_cylinder(parent, cp + Vector3(0, eave_h * 0.5, 0), 0.125, eave_h, wood_mat, false, "Pillar")
-		_cylinder(parent, cp + Vector3(0, 0.17, 0), 0.19, 0.34, stone_mat, false, "PillarBase")
+		# 柱础必须坐在压顶石上（CAP_TOP = 0.76）。原来是 0~0.34 —— 加了勒脚之后会被整根埋进石活里。
+		_cylinder(parent, cp + Vector3(0, CAP_TOP + 0.17, 0), 0.24, 0.34, stone_mat, false, "PillarBase")
 
 	# ---- 檐口瓦口压边（沿屋檐外缘一道，压住瓦的收口）----
 	_merged(parent, "EaveBand", roof_mat, rc, roof_yaw, [
@@ -738,12 +851,12 @@ static func _building(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 	_merged_world(parent, "Windows", wood_dark, win_boxes)
 	_merged_world(parent, "WindowGlow", win_mat, light_boxes)
 
-	# ---- 底部木梁（压脚，遮挡墙与台基的接缝）----
+	# ---- 地栿（木压脚）：坐在压顶石上。接缝已被勒脚接管，这里只剩横向收头 ----
 	if east_side:
-		_box(parent, Vector3(pos.x + fsign * (fp.x * 0.5 + 0.05), 0.42, pos.y),
+		_box(parent, Vector3(pos.x + fsign * (fp.x * 0.5 + 0.05), CAP_TOP + 0.12, pos.y),
 			Vector3(0.16, 0.24, fp.y), wood_dark, false, 0.0, "Beam")
 	else:
-		_box(parent, Vector3(pos.x, 0.42, pos.y + fsign * (fp.y * 0.5 + 0.05)),
+		_box(parent, Vector3(pos.x, CAP_TOP + 0.12, pos.y + fsign * (fp.y * 0.5 + 0.05)),
 			Vector3(fp.x, 0.24, 0.16), wood_dark, false, 0.0, "Beam")
 
 	# ---- 招牌 ----

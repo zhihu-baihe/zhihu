@@ -63,6 +63,8 @@
 | `bridge` | 千灯桥 + 城门 |
 | `roof` | 建筑斜俯近景（屋面曲率 / 正脊翘头 / 檐下椽头 / 石台基） |
 | `facade` | 建筑正立面（格子窗 / 檐柱 / 额枋 / 门洞 / 招牌） |
+| `base` | 墙基低机位特写（台明 / 踏跺 / 勒脚 / 压顶石 / 柱础 的层叠关系） |
+| `gate` | 城门（城内望向南门：门楣 / 匾额 / 女儿墙 / 箭楼亮窗 / 门楣灯笼串） |
 | `char` | 主角特写（比例 / 配色 / 待机 / 佩剑） |
 | `npc` | NPC 特写（站在该 NPC 正前方拍） |
 | `walk` | 步态冻结帧（`_phase=1.30`，用于复核走姿） |
@@ -77,7 +79,25 @@
 | 网络前提 | 直连 github.com 时通时不通；**失败就走 v2rayN SOCKS 代理** |
 | 推送命令 | `git push https://x-access-token:<TOKEN>@github.com/zhihu-baihe/zhihu.git main:main`（代理已写在仓库本地配置里） |
 
-> **大包提示**：仓库已配置 `http.postBuffer=5242880`（约 5MB）。不要调大——超过该值时 git 会改用整包上传，长连接容易被重置（`curl 55 Send failure` / `HTTP 408`）。小 postBuffer 会强制分块传输，实测可稳定推送 90MB+ 的提交；偶发失败直接重试即可（第二次通常就过）。
+> **单次推送上限 ≈ 3 MB（实测标定，2026-10-15）**。
+> 本机必须走 SOCKS5 代理（`git -c http.proxy=socks5h://127.0.0.1:10808`），
+> 并且**两个开关要一起关**：`http.schannelCheckRevoke=false` **加** `http.sslVerify=false`
+> （只关吊销检查会报 `CRYPT_E_REVOCATION_OFFLINE 0x80092013`）。
+> 实测对照：
+>
+> | 未压缩对象体积 | 结果 |
+> |---|---|
+> | **2.68 MB** | 7 秒成功 |
+> | **2.95 MB** | 上次成功的推送（`c312a6a`） |
+> | 4.68 MB | `HTTP 408` 或 `curl 55 Connection was reset` |
+> | 19.2 MB | 同上 |
+>
+> 代理侧的阈值在 **3 ~ 4.7 MB** 之间，且同一批**时好时坏**。所以：
+> 把提交**拆成 ≤ 3 MB 的多批**，每批套一个重试循环（第 2 次通常就过），
+> 而不是去调 `postBuffer` —— `5242880` / `52428800` / HTTP/2 / HTTP/1.1 全部试过，
+> 都不是决定因素。
+> 附带一条：**本地 `origin/main` 跟踪引用会陈旧**，判断远端真实状态必须用
+> `git ls-remote origin main`，不要信 `git log origin/main`。
 
 ## 在新机器上继续开发
 

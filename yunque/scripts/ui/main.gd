@@ -57,6 +57,20 @@ func _capture() -> void:
 			cam.look_at_from_position(Vector3(2.5, 2.4, 24), Vector3(-9.5, 2.9, 24), Vector3.UP)
 			cam.current = true
 			await get_tree().create_timer(0.4).timeout
+		"base":
+			# 墙基特写（低机位近距）：验收台明 / 踏跺 / 勒脚 / 压顶石 / 柱础 的层叠关系
+			add_child(cam)
+			cam.fov = 40.0
+			cam.look_at_from_position(Vector3(-2.6, 1.60, 25.2), Vector3(-9.6, 0.85, 23.6), Vector3.UP)
+			cam.current = true
+			await get_tree().create_timer(0.4).timeout
+		"gate":
+			# 城门（城内向北望南门）：验收门楣、匾额、女儿墙、箭楼亮窗与门楣灯笼串
+			add_child(cam)
+			cam.fov = 50.0
+			cam.look_at_from_position(Vector3(0, 2.0, 21.0), Vector3(0, 5.0, 42.0), Vector3.UP)
+			cam.current = true
+			await get_tree().create_timer(0.4).timeout
 		"char":
 			# 角色特写：验收人形比例、配色、待机姿态与佩剑
 			add_child(cam)
