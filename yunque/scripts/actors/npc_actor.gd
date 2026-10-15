@@ -1,16 +1,16 @@
 extends Node3D
 class_name NPCActor
-## NPC 演员：从数据读取显示名与配色，并把 npc_id 交给子节点的交互组件。
+## NPC 演员：从数据读取显示名与配色，用 HumanoidBuilder 生成人形并驱动待机动作。
 ## 数据来源：dialogue.json 的 npcs 段（显示名 / 颜色 / 体型缩放）。
 
 @export var npc_id := "NPC_LIU"
 @export var name_override := ""
 
-@onready var body: MeshInstance3D = $Model/Body
-@onready var head: MeshInstance3D = $Model/Head
-@onready var hat: MeshInstance3D = $Model/Hat
+@onready var model: Node3D = $Model
 @onready var label: Label3D = $NameLabel
 @onready var interactable: Area3D = $Interactable
+
+var rig: HumanoidRig = null
 
 func _ready() -> void:
 	add_to_group("npc")
@@ -18,19 +18,26 @@ func _ready() -> void:
 	var shown := name_override if name_override != "" else GameData.npc_name(npc_id)
 	if label:
 		label.text = shown
-	_apply_colors(meta)
+	_build_humanoid(meta)
 	var s := float(meta.get("scale", 1.0))
-	if not is_equal_approx(s, 1.0):
-		$Model.scale = Vector3.ONE * s
+	if not is_equal_approx(s, 1.0) and model:
+		model.scale = Vector3.ONE * s
 	if interactable and interactable.has_method("set_npc_id"):
 		interactable.set_npc_id(npc_id)
 
-func _apply_colors(meta: Dictionary) -> void:
-	var body_color := Color(str(meta.get("body", "#7d7d7d")))
-	var accent := Color(str(meta.get("color", "#c9a24a")))
-	if body:
-		body.material_override = MatCache.solid(body_color, 0.85)
-	if head:
-		head.material_override = MatCache.solid(body_color.lightened(0.28), 0.8)
-	if hat:
-		hat.material_override = MatCache.solid(accent, 0.7)
+func _build_humanoid(meta: Dictionary) -> void:
+	if model == null:
+		return
+	var cfg := {
+		"robe": Color(str(meta.get("body", "#7d7d7d"))),
+		"trim": Color(str(meta.get("color", "#c9a24a"))),
+		"skin": Color(str(meta.get("skin", HumanoidBuilder.DEFAULT_SKIN))),
+		"hair": Color(str(meta.get("hair", HumanoidBuilder.DEFAULT_HAIR))),
+		"boot": Color(str(meta.get("boot", HumanoidBuilder.DEFAULT_BOOT))),
+	}
+	rig = HumanoidBuilder.build(model, cfg)
+
+## 供后续 NPC 巡走使用（当前 NPC 全部站定，速度恒为 0）。
+func set_locomotion(speed: float) -> void:
+	if rig:
+		rig.set_locomotion(speed)

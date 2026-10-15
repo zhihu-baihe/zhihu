@@ -17,6 +17,7 @@ var _full_text := ""
 var _revealed := 0.0
 var _typing := false
 var _lock_frame := -1
+var _blip_steps := 0
 
 func _ready() -> void:
 	UITheme.apply(self, UITheme.build())
@@ -30,6 +31,11 @@ func _process(delta: float) -> void:
 		return
 	_revealed += CHARS_PER_SECOND * delta
 	var n := int(_revealed)
+	# 打字音：每 3 个字响一次，否则密到像噪音（音量压得很低）
+	var steps := n / 3
+	if steps != _blip_steps:
+		_blip_steps = steps
+		AudioDirector.play_sfx("dialogue_blip", -19.0, 0.07)
 	if n >= _full_text.length():
 		_revealed = float(_full_text.length())
 		_typing = false
@@ -70,6 +76,7 @@ func _on_line(_index: int, speaker: String, text: String) -> void:
 	_full_text = text
 	_revealed = 0.0
 	_typing = true
+	_blip_steps = 0
 	text_label.text = ""
 	hint_label.text = "E / 空格 跳过"
 

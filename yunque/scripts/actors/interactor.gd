@@ -36,6 +36,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("interact"):
 		if nearest != null and is_instance_valid(nearest) and nearest.has_method("interact"):
+			AudioDirector.play_ui("ui_click", -15.0)
 			nearest.interact(get_parent())
 			get_viewport().set_input_as_handled()
 

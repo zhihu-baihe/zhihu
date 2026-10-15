@@ -73,7 +73,7 @@ const TEX_ROOT := "res://assets/processed/textures/"
 const TEX_MAP := {
 	"roof": ["RoofingTiles013A", 0.5],
 	"roof_dark": ["RoofingTiles013A", 0.5],
-	"wall": ["PavingStones151", 0.28],
+	"wall": ["Plaster001", 0.32],
 	"stone": ["PavingStones151", 0.28],
 	"stone_dark": ["PavingStones151", 0.28],
 	"wood": ["Planks037A", 0.42],
@@ -87,21 +87,30 @@ static var _mat_cache: Dictionary = {}
 
 ## 取材质：调色板键有贴图集时返回「贴图 + 该键颜色作色调」，否则回退纯色。
 ## tint_override 用于需要压暗/变体的场合（如墙帽、湿石街）。
-static func _mat(pal: Dictionary, key: String, roughness := 0.85, tint_override := Color(0, 0, 0, 0)) -> Material:
+static func _mat(pal: Dictionary, key: String, roughness := 0.85,
+		tint_override := Color(0, 0, 0, 0), double_sided := false) -> Material:
 	var color := _col(pal, key)
 	if tint_override.a > 0.0:
 		color = tint_override
 	if not TEX_MAP.has(key):
-		return MatCache.solid(color, roughness)
+		if not double_sided:
+			return MatCache.solid(color, roughness)
+		var sk := "DS|%s|%.2f" % [color.to_html(true), roughness]
+		if _mat_cache.has(sk):
+			return _mat_cache[sk]
+		var sm := MatCache.solid(color, roughness).duplicate() as StandardMaterial3D
+		sm.cull_mode = BaseMaterial3D.CULL_DISABLED
+		_mat_cache[sk] = sm
+		return sm
 	var entry: Array = TEX_MAP[key]
 	var set_name := str(entry[0])
 	var world_scale := float(entry[1])
-	var ck := "%s|%s|%.2f|%.2f" % [set_name, color.to_html(true), world_scale, roughness]
+	var ck := "%s|%s|%.2f|%.2f|%s" % [set_name, color.to_html(true), world_scale, roughness, str(double_sided)]
 	if _mat_cache.has(ck):
 		return _mat_cache[ck]
 	var base := TEX_ROOT + set_name + "/" + set_name + "_1K-JPG_"
 	var m := MatCache.textured(base + "Color.jpg", base + "NormalGL.jpg",
-		base + "Roughness.jpg", base + "AmbientOcclusion.jpg", world_scale, color, roughness)
+		base + "Roughness.jpg", base + "AmbientOcclusion.jpg", world_scale, color, roughness, 1.0, double_sided)
 	_mat_cache[ck] = m
 	return m
 
@@ -255,6 +264,194 @@ static func _label(parent: Node3D, pos: Vector3, text: String, color: Color,
 	return lb
 
 
+# ================================================================ 中式木构构件
+#
+# 参考图的辨识度来自**造型**而非贴图：屋面要「反宇」（脊陡、檐缓、角翘），
+# 要有正脊与翘头、檐下密排椽头、立面檐柱与格子窗、底部石台基。
+# 这些全部程序化生成，不依赖任何外部模型；布局仍完全由 map_moyi.json 驱动。
+
+## 盒体 8 顶点（顺序固定，与 CUBE_INDEX 配套）。
+static func _box_verts(c: Vector3, s: Vector3) -> Array:
+	var hx := s.x * 0.5
+	var hy := s.y * 0.5
+	var hz := s.z * 0.5
+	return [
+		c + Vector3(-hx, -hy, -hz), c + Vector3(hx, -hy, -hz),
+		c + Vector3(hx, hy, -hz), c + Vector3(-hx, hy, -hz),
+		c + Vector3(-hx, -hy, hz), c + Vector3(hx, -hy, hz),
+		c + Vector3(hx, hy, hz), c + Vector3(-hx, hy, hz),
+	]
+
+## 12 个三角形索引（逆时针 = 法线朝外）。
+const CUBE_INDEX := [
+	0, 3, 2, 0, 2, 1,
+	4, 5, 6, 4, 6, 7,
+	0, 4, 7, 0, 7, 3,
+	1, 2, 6, 1, 6, 5,
+	3, 7, 6, 3, 6, 2,
+	0, 1, 5, 0, 5, 4,
+]
+
+## 把一批盒体合并成单个网格。
+## 一副立面的椽头 + 窗棂就是几十根木头，逐个建节点会让场景树爆掉，所以合并。
+## boxes: [[Vector3 中心, Vector3 尺寸], ...]（中心为 origin/yaw 定义的空间）
+static func _merged(parent: Node3D, nm: String, mat: Material, origin: Vector3,
+		yaw_deg: float, boxes: Array) -> MeshInstance3D:
+	if boxes.is_empty():
+		return null
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for bi in boxes.size():
+		var e = boxes[bi]
+		var c: Vector3 = e[0]
+		var s: Vector3 = e[1]
+		var vs := _box_verts(c, s)
+		for i: int in CUBE_INDEX:
+			var v: Vector3 = vs[i]
+			st.set_uv(Vector2(v.x, v.z) * 0.5)
+			st.add_vertex(v)
+	st.generate_normals()
+	st.generate_tangents()
+	var mi := MeshInstance3D.new()
+	mi.name = nm
+	mi.mesh = st.commit()
+	mi.material_override = mat
+	mi.position = origin
+	mi.rotation.y = deg_to_rad(yaw_deg)
+	parent.add_child(mi)
+	return mi
+
+## 世界坐标版合并：盒体坐标已经是世界坐标（轴对齐的柱础、窗棂用这个）。
+static func _merged_world(parent: Node3D, nm: String, mat: Material, boxes: Array) -> MeshInstance3D:
+	return _merged(parent, nm, mat, Vector3.ZERO, 0.0, boxes)
+
+## 屋脊方向（局部 +X）在世界空间的方向。
+static func _ridge_dir(yaw_deg: float) -> Vector3:
+	var r := deg_to_rad(yaw_deg)
+	return Vector3(cos(r), 0.0, -sin(r))
+
+## 曲面屋面：中式「反宇」双坡顶 + 翼角起翘。
+## 局部坐标：+X 沿屋脊，Z 为坡向，Y 向上；center 为屋脊中点的水平位置（世界）。
+## eave_h / ridge_h 为檐口 / 正脊相对地面的高度。
+static func _roof_curved(parent: Node3D, center: Vector3, yaw_deg: float,
+		length: float, half_depth: float, eave_h: float, ridge_h: float,
+		mat: Material, nm := "RoofCurved", opts: Dictionary = {}) -> MeshInstance3D:
+	var lift := float(opts.get("corner_lift", 0.6))
+	var q := float(opts.get("curve", 1.75))
+	var camber := float(opts.get("ridge_camber", 0.06))
+	var u_seg := maxi(4, int(opts.get("u_seg", 12)))
+	var v_seg := maxi(3, int(opts.get("v_seg", 8)))
+	var verts: Array = []
+	for iu in range(u_seg + 1):
+		for iv in range(v_seg + 1):
+			var u := float(iu) / float(u_seg)
+			var v := float(iv) / float(v_seg) * 2.0 - 1.0
+			var ax := absf(v)
+			var along := absf(2.0 * u - 1.0)
+			# 举折：脊部陡、檐口缓，两坡在正脊处成折角。
+			# 方向若反了（脊平檐陡）中式感立刻消失，这是屋面辨识度的第一要素。
+			var y := eave_h + (ridge_h - eave_h) * pow(1.0 - ax, q)
+			y += camber * (1.0 - along) * (1.0 - ax)
+			# 翼角起翘：只在四角抬起
+			y += lift * pow(along, 3.0) * pow(ax, 2.5)
+			verts.append(Vector3((u - 0.5) * length, y, v * half_depth))
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for iu in range(u_seg):
+		for iv in range(v_seg):
+			var i00 := iu * (v_seg + 1) + iv
+			var i01 := i00 + 1
+			var i10 := (iu + 1) * (v_seg + 1) + iv
+			var i11 := i10 + 1
+			for i: int in [i00, i01, i11, i00, i11, i10]:
+				var p: Vector3 = verts[i]
+				st.set_uv(Vector2(p.x, p.z) * 0.6)
+				st.add_vertex(p)
+	st.generate_normals()
+	st.generate_tangents()
+	var mi := MeshInstance3D.new()
+	mi.name = nm
+	mi.mesh = st.commit()
+	mi.material_override = mat
+	mi.position = center
+	mi.rotation.y = deg_to_rad(yaw_deg)
+	parent.add_child(mi)
+	return mi
+
+## 正脊：脊身 + 两端翘头（只做块面示意，不做具象兽形）。
+## center 为正脊中心（世界，含高度）。
+static func _ridge_set(parent: Node3D, center: Vector3, yaw_deg: float, length: float,
+		mat_body: Material, mat_tip: Material, opts: Dictionary = {}) -> void:
+	var w := float(opts.get("width", 0.46))
+	var hh := float(opts.get("height", 0.32))
+	var inset := float(opts.get("ridge_inset", 0.5))
+	var span := length * 0.5 - inset
+	if span < 0.6:
+		span = maxf(0.3, length * 0.5 - 0.15)
+	_box(parent, center, Vector3(span * 2.0, hh, w), mat_body, false, yaw_deg, "RidgeBody")
+	var dir := _ridge_dir(yaw_deg)
+	for s: float in [-1.0, 1.0]:
+		var tip_pos: Vector3 = center + dir * (s * span)
+		var tip := _box(parent, tip_pos, Vector3(0.4, hh + 0.34, w * 0.94), mat_tip, false, yaw_deg, "RidgeTip")
+		if tip is Node3D:
+			(tip as Node3D).rotate_object_local(Vector3(0, 0, 1), deg_to_rad(s * 28.0))
+
+## 檐下密排椽头。
+static func _rafter_boxes(center: Vector3, yaw_deg: float, length: float, half_depth: float,
+		eave_h: float, opts: Dictionary = {}) -> Array:
+	var spacing := float(opts.get("spacing", 0.48))
+	var inset := float(opts.get("inset", 0.5))
+	var out: Array = []
+	var dir := _ridge_dir(yaw_deg)
+	var perp := Vector3(-dir.z, 0.0, dir.x)
+	var span := maxf(1.0, length - inset * 2.0)
+	var n := maxi(2, int(span / spacing))
+	var sz := Vector3(0.13, 0.15, 0.6)
+	for i in range(n + 1):
+		var t := float(i) / float(n)
+		var base := center + dir * ((t - 0.5) * span) + Vector3(0.0, eave_h - 0.13, 0.0)
+		for s: float in [-1.0, 1.0]:
+			out.append([base + perp * (s * (half_depth - 0.14)), sz])
+	return out
+
+## 格子窗棂：窗框 + 竖棂 + 一道横绦环。替代表面贴一块自发光方块。
+static func _window_boxes(center: Vector3, east_side: bool, w: float, h: float) -> Array:
+	var out: Array = []
+	var t := 0.075
+	var d := 0.1
+	if east_side:
+		out.append([center + Vector3(0, h * 0.5, 0), Vector3(d, t, w)])
+		out.append([center + Vector3(0, -h * 0.5, 0), Vector3(d, t, w)])
+		out.append([center + Vector3(0, 0, -w * 0.5), Vector3(d, h, t)])
+		out.append([center + Vector3(0, 0, w * 0.5), Vector3(d, h, t)])
+		var n := maxi(2, int(w / 0.28))
+		for i in range(1, n):
+			var z := (float(i) / float(n) - 0.5) * w
+			out.append([center + Vector3(0, 0, z), Vector3(d * 0.7, h, t * 0.6)])
+		out.append([center + Vector3(0, h * 0.12, 0), Vector3(d * 0.7, t * 0.6, w)])
+	else:
+		out.append([center + Vector3(0, h * 0.5, 0), Vector3(w, t, d)])
+		out.append([center + Vector3(0, -h * 0.5, 0), Vector3(w, t, d)])
+		out.append([center + Vector3(-w * 0.5, 0, 0), Vector3(t, h, d)])
+		out.append([center + Vector3(w * 0.5, 0, 0), Vector3(t, h, d)])
+		var n2 := maxi(2, int(w / 0.28))
+		for i in range(1, n2):
+			var x := (float(i) / float(n2) - 0.5) * w
+			out.append([center + Vector3(x, 0, 0), Vector3(t * 0.6, h, d * 0.7)])
+		out.append([center + Vector3(0, h * 0.12, 0), Vector3(w, t * 0.6, d * 0.7)])
+	return out
+
+## 一座完整的曲面屋顶套装：屋面 + 正脊 + 檐下椽头（三者共用一套尺寸推导）。
+static func _roof_kit(parent: Node3D, center: Vector3, yaw_deg: float, along: float,
+		half_depth: float, eave_h: float, ridge_h: float, roof_mat: Material,
+		ridge_mat: Material, wood_mat: Material, opts: Dictionary = {}) -> void:
+	_roof_curved(parent, center, yaw_deg, along, half_depth, eave_h, ridge_h, roof_mat, "Roof", opts)
+	_ridge_set(parent, center + Vector3(0, ridge_h, 0), yaw_deg, along - 0.2, ridge_mat, ridge_mat, opts)
+	if bool(opts.get("rafters", true)):
+		_merged_world(parent, "Rafters", wood_mat,
+			_rafter_boxes(center, yaw_deg, along, half_depth, eave_h, opts))
+
+
 # ================================================================ 地面与道路
 
 static func _terrain(parent: Node3D, t: Dictionary, pal: Dictionary) -> void:
@@ -347,19 +544,33 @@ static func _gate(parent: Node3D, g: Dictionary, pal: Dictionary) -> void:
 	var tsize := _v3(g.get("tower_size", [8, 6, 7.5]))
 	var beam_y := float(g.get("beam_y", 6.0))
 	var wall_mat := _mat(pal, "wall", 0.9)
-	var roof_col := _col(pal, "roof", "#46525e")
-	var roof_mat := _mat(pal, "roof", 0.8)
+	var roof_mat := _mat(pal, "roof", 0.8, Color(0, 0, 0, 0), true)
+	var ridge_mat := _mat(pal, "roof_dark", 0.85)
+	var wood_dark := _mat(pal, "wood_dark", 0.9)
+	var base_mat := _mat(pal, "stone_dark", 0.95)
+	# 城台基座
+	_box(parent, Vector3(pos.x, 0.5, pos.y), Vector3(off * 2.0 + tsize.x, 1.0, tsize.z + 1.2),
+		base_mat, true, 0.0, "GateBase")
 	for s in [-1.0, 1.0]:
-		var tp := Vector3(pos.x + off * s, tsize.y * 0.5, pos.y)
+		var tp := Vector3(pos.x + off * s, tsize.y * 0.5 + 1.0, pos.y)
 		_box(parent, tp, tsize, wall_mat, true, 0.0, "GateTower")
-		_prism(parent, tp + Vector3(0, tsize.y * 0.5 + 0.7, 0), Vector3(tsize.x + 1.6, 1.4, tsize.z + 1.6),
-			roof_mat, 0.0, "GateRoof")
+		# 箭楼曲面屋顶（脊沿世界 X，与城墙同向）
+		_roof_kit(parent, Vector3(tp.x, 0.0, tp.z), 0.0,
+			tsize.x + 1.7, (tsize.z + 1.9) * 0.5, tsize.y + 0.85, tsize.y + 2.7,
+			roof_mat, ridge_mat, wood_dark, {"corner_lift": 0.7, "spacing": 0.5})
 		_light(parent, tp + Vector3(0, 1.4, 2.6), _col(pal, "lantern", "#ffb457"), 2.0, 10.0)
-	_sphere(parent, Vector3(pos.x, 0, pos.y) + Vector3(0, 0, 0), 0.01, MatCache.solid(Color.BLACK, 1.0), "Noop")
+	# 门楣（过梁）
 	_box(parent, Vector3(pos.x, beam_y, pos.y), Vector3(off * 2 + 2.0, 1.3, tsize.z * 0.8),
-		roof_mat, false, 0.0, "GateBeam")
-	_box(parent, Vector3(pos.x, beam_y + 1.35, pos.y), Vector3(off * 2 + 3.0, 1.5, tsize.z * 0.95),
-		_mat(pal, "roof", 0.8, roof_col.darkened(0.2)), false, 0.0, "GateRoofTop")
+		_mat(pal, "wood_dark", 0.9), false, 0.0, "GateBeam")
+	# 门楣上女儿墙 + 压顶石：城楼平台的观感，且不与两侧箭楼屋顶打架
+	_box(parent, Vector3(pos.x, beam_y + 1.15, pos.y), Vector3(off * 2 + 3.0, 1.0, tsize.z * 0.9),
+		wall_mat, false, 0.0, "GateParapet")
+	_box(parent, Vector3(pos.x, beam_y + 1.78, pos.y), Vector3(off * 2 + 3.3, 0.26, tsize.z * 0.9 + 0.3),
+		roof_mat, false, 0.0, "GateCoping")
+	for i in 6:
+		var t := (float(i) / 5.0 - 0.5) * (off * 2.0 + 1.6)
+		_box(parent, Vector3(pos.x + t, beam_y + 1.72, pos.y - tsize.z * 0.45 - 0.1),
+			Vector3(0.5, 0.5, 0.4), wall_mat, false, 0.0, "Crenel")
 	var plaque := str(g.get("plaque", "城门"))
 	_label(parent, Vector3(pos.x, beam_y + 0.2, pos.y - tsize.z * 0.45), plaque,
 		Color(0.98, 0.9, 0.66), 96, 0.007, 180.0)
@@ -375,20 +586,33 @@ static func _building(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 	var wall_key := str(b.get("wall_mat", "wall"))
 	var roof_key := str(b.get("roof_mat", "roof"))
 	var wall_mat := _mat(pal, wall_key, 0.9)
-	var roof_col := _col(pal, roof_key)
-	var roof_mat := _mat(pal, roof_key, 0.82)
+	var roof_mat := _mat(pal, roof_key, 0.82, Color(0, 0, 0, 0), true)  # 双面：檐下看得到瓦底
+	var ridge_mat := _mat(pal, "roof_dark", 0.85)
 	var wood_mat := _mat(pal, "wood", 0.85)
+	var wood_dark := _mat(pal, "wood_dark", 0.9)
+	var stone_mat := _mat(pal, "stone_dark", 0.95)
+	var win_mat := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 1.3, 0.6)
 	var th := 0.35
-
-	# 石砌墙基（不碰撞，避免门槛卡住玩家）
-	_box(parent, Vector3(pos.x, 0.09, pos.y), Vector3(fp.x + 0.7, 0.18, fp.y + 0.7),
-		_mat(pal, "stone_dark", 0.95), false, 0.0, "Base")
-
-	# 四面墙
-	_box(parent, Vector3(pos.x, h * 0.5, pos.y - fp.y * 0.5), Vector3(fp.x, h, th), wall_mat, true, 0.0, "WallN")
-	_box(parent, Vector3(pos.x, h * 0.5, pos.y + fp.y * 0.5), Vector3(fp.x, h, th), wall_mat, true, 0.0, "WallS")
 	var front := _front_dir(yaw)
 	var east_side := absf(front.x) > 0.5
+	var fsign := signf(front.x) if east_side else signf(front.z)
+
+	# ---- 石台基 + 正面踏跺（均不碰撞：保留原墙碰撞，避免门槛卡住玩家）----
+	_box(parent, Vector3(pos.x, 0.14, pos.y), Vector3(fp.x + 1.1, 0.28, fp.y + 1.1),
+		stone_mat, false, 0.0, "Plinth")
+	for k in 3:
+		var half := 0.14 * (float(k) + 1.0) / 3.0
+		var dist := 0.76 + float(2 - k) * 0.42
+		if east_side:
+			_box(parent, Vector3(pos.x + fsign * dist, half, pos.y),
+				Vector3(0.45, half * 2.0, 2.4), stone_mat, false, 0.0, "Step")
+		else:
+			_box(parent, Vector3(pos.x, half, pos.y + fsign * dist),
+				Vector3(2.4, half * 2.0, 0.45), stone_mat, false, 0.0, "Step")
+
+	# ---- 四面墙（保留原有门洞逻辑）----
+	_box(parent, Vector3(pos.x, h * 0.5, pos.y - fp.y * 0.5), Vector3(fp.x, h, th), wall_mat, true, 0.0, "WallN")
+	_box(parent, Vector3(pos.x, h * 0.5, pos.y + fp.y * 0.5), Vector3(fp.x, h, th), wall_mat, true, 0.0, "WallS")
 	var door_w := 1.8
 	if east_side:
 		var wx := pos.x - signf(front.x) * fp.x * 0.5
@@ -409,47 +633,90 @@ static func _building(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 		_box(parent, Vector3(door_x, h - 0.35, wz), Vector3(door_w, 0.7, th), wall_mat, true, 0.0, "WallLintel")
 		_box(parent, Vector3(door_x, 1.05, wz - signf(front.z) * 0.12), Vector3(door_w - 0.2, 2.1, 0.14), wood_mat, false, 0.0, "DoorLeaf")
 
-	# 悬山顶（PrismMesh：三角截面沿 Z 拉伸；脊线沿 Z 或旋转 90°）
-	var roof_h := clampf(h * 0.42, 1.0, 2.0)
-	if east_side:
-		_prism(parent, Vector3(pos.x, h + roof_h * 0.5, pos.y), Vector3(fp.y + 1.0, roof_h, fp.x + 1.0),
-			roof_mat, 90.0, "Roof")
-	else:
-		_prism(parent, Vector3(pos.x, h + roof_h * 0.5, pos.y), Vector3(fp.x + 1.0, roof_h, fp.y + 1.0),
-			roof_mat, 0.0, "Roof")
+	# ---- 曲面屋面套装（举折双坡 + 正脊 + 檐下椽头）----
+	var overhang := 0.9
+	var eave_h := h - 0.12
+	var along := (fp.y if east_side else fp.x) + overhang * 2.0
+	var half_depth := ((fp.x if east_side else fp.y) + overhang * 2.0) * 0.5
+	# 屋脊高度按屋面的水平投影反推，而不是按墙高：
+	# 中式屋面坡度约 28°，用「墙高 × 0.4」只会得到 13° 的塌屋顶。
+	var roof_h := clampf(half_depth * 0.44, 1.5, 3.6)
+	var ridge_h := h + roof_h
+	var roof_yaw := _yaw_from_dir(Vector2(0, 1)) if east_side else 0.0
+	var rc := Vector3(pos.x, 0.0, pos.y)
+	_roof_kit(parent, rc, roof_yaw, along, half_depth, eave_h, ridge_h,
+		roof_mat, ridge_mat, wood_dark,
+		{"corner_lift": 0.62, "spacing": 0.48, "inset": 0.55})
 
-	# 立面细节：木梁 + 暖灯窗（灰盒阶段也要能读出「这里住着人」）
-	var win_mat := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 1.4, 0.6)
-	var span := (fp.y if east_side else fp.x) - 2.2
+	# ---- 前檐檐柱 + 柱础 ----
+	var face_span := (fp.y if east_side else fp.x)
+	var wall_out := (fp.x if east_side else fp.y) * 0.5 + 0.16
+	var n_col := 4
+	for i in n_col:
+		var t := float(i) / float(n_col - 1)
+		var off := (t - 0.5) * (face_span - 0.9)
+		var cp: Vector3
+		if east_side:
+			cp = Vector3(pos.x + fsign * wall_out, 0.0, pos.y + off)
+		else:
+			cp = Vector3(pos.x + off, 0.0, pos.y + fsign * wall_out)
+		_cylinder(parent, cp + Vector3(0, eave_h * 0.5, 0), 0.125, eave_h, wood_mat, false, "Pillar")
+		_cylinder(parent, cp + Vector3(0, 0.17, 0), 0.19, 0.34, stone_mat, false, "PillarBase")
+
+	# ---- 檐口瓦口压边（沿屋檐外缘一道，压住瓦的收口）----
+	_merged(parent, "EaveBand", roof_mat, rc, roof_yaw, [
+		[Vector3(0, eave_h + 0.02, half_depth - 0.12), Vector3(along, 0.2, 0.3)],
+		[Vector3(0, eave_h + 0.02, -(half_depth - 0.12)), Vector3(along, 0.2, 0.3)],
+	])
+
+	# ---- 额枋：连接檐柱的水平横梁，中式立面最关键的横向韵律 ----
+	var fang_h := eave_h - 0.17
+	var fang_boxes: Array = []
+	for s: float in [-1.0, 1.0]:
+		if east_side:
+			fang_boxes.append([Vector3(pos.x + s * wall_out, fang_h, pos.y),
+				Vector3(0.18, 0.26, face_span + 0.2)])
+		else:
+			fang_boxes.append([Vector3(pos.x, fang_h, pos.y + s * wall_out),
+				Vector3(face_span + 0.2, 0.26, 0.18)])
+	_merged_world(parent, "Fang", wood_mat, fang_boxes)
+
+	# ---- 格子窗（窗棂合并网格 + 窗内暖光）----
+	var span := face_span - 2.4
 	var n_win := maxi(2, int(span / 2.6))
+	var win_boxes: Array = []
+	var light_boxes: Array = []
 	for i in n_win:
 		var t := 0.0 if n_win <= 1 else float(i) / float(n_win - 1)
-		var along := lerpf(-span * 0.5, span * 0.5, t)
-		if absf(along) < 1.5:
-			continue  # 避开正中的门洞
+		var al := lerpf(-span * 0.5, span * 0.5, t)
+		if absf(al) < 1.5:
+			continue
+		var wp: Vector3
 		if east_side:
-			_box(parent, Vector3(pos.x + signf(front.x) * (fp.x * 0.5 + 0.06), h * 0.62, pos.y + along),
-				Vector3(0.09, 0.8, 1.0), win_mat, false, 0.0, "Window")
+			wp = Vector3(pos.x + fsign * (fp.x * 0.5 + 0.055), h * 0.6, pos.y + al)
 		else:
-			_box(parent, Vector3(pos.x + along, h * 0.62, pos.y + signf(front.z) * (fp.y * 0.5 + 0.06)),
-				Vector3(1.0, 0.8, 0.09), win_mat, false, 0.0, "Window")
-	# 上下木梁
-	if east_side:
-		for yy: float in [0.45, h - 0.25]:
-			_box(parent, Vector3(pos.x + signf(front.x) * (fp.x * 0.5 + 0.03), yy, pos.y),
-				Vector3(0.14, 0.22, fp.y), wood_mat, false, 0.0, "Beam")
-	else:
-		for yy: float in [0.45, h - 0.25]:
-			_box(parent, Vector3(pos.x, yy, pos.y + signf(front.z) * (fp.y * 0.5 + 0.03)),
-				Vector3(fp.x, 0.22, 0.14), wood_mat, false, 0.0, "Beam")
+			wp = Vector3(pos.x + al, h * 0.6, pos.y + fsign * (fp.y * 0.5 + 0.055))
+		win_boxes.append_array(_window_boxes(wp, east_side, 1.05, 0.85))
+		var back := Vector3(-fsign * 0.06, 0, 0) if east_side else Vector3(0, 0, -fsign * 0.06)
+		light_boxes.append([wp + back, Vector3(0.04, 0.78, 0.98) if east_side else Vector3(0.98, 0.78, 0.04)])
+	_merged_world(parent, "Windows", wood_dark, win_boxes)
+	_merged_world(parent, "WindowGlow", win_mat, light_boxes)
 
-	# 招牌
+	# ---- 底部木梁（压脚，遮挡墙与台基的接缝）----
+	if east_side:
+		_box(parent, Vector3(pos.x + fsign * (fp.x * 0.5 + 0.05), 0.42, pos.y),
+			Vector3(0.16, 0.24, fp.y), wood_dark, false, 0.0, "Beam")
+	else:
+		_box(parent, Vector3(pos.x, 0.42, pos.y + fsign * (fp.y * 0.5 + 0.05)),
+			Vector3(fp.x, 0.24, 0.16), wood_dark, false, 0.0, "Beam")
+
+	# ---- 招牌 ----
 	var sign_text := str(b.get("sign", ""))
 	if sign_text != "":
-		var front_half := (fp.x if absf(front.x) > 0.5 else fp.y) * 0.5
-		var sp := Vector3(pos.x, 0, pos.y) + front * (front_half + 0.16) + Vector3(0, h * 0.66, 0)
-		_box(parent, sp, Vector3(2.6, 0.7, 0.1) if absf(front.x) > 0.5 else Vector3(0.1, 0.7, 2.6),
-			wood_mat, false, yaw, "Sign")
+		var front_half := (fp.x if east_side else fp.y) * 0.5
+		var sp := Vector3(pos.x, 0, pos.y) + front * (front_half + 0.34) + Vector3(0, h * 0.72, 0)
+		_box(parent, sp, Vector3(2.6, 0.7, 0.1) if east_side else Vector3(0.1, 0.7, 2.6),
+			wood_dark, false, yaw, "Sign")
 		_label(parent, sp + front * 0.24 + Vector3(0, 0.02, 0), sign_text,
 			Color(0.98, 0.9, 0.66), 64, 0.005, _label_yaw(front))
 		_light(parent, sp + front * 0.9 + Vector3(0, -0.15, 0), _col(pal, "lantern", "#ffb457"), 1.6, 7.0)
@@ -464,8 +731,8 @@ static func _stage(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	var yaw := float(s.get("yaw_deg", 270.0))
 	var wood := _mat(pal, "wood", 0.85)
 	var wood_dark := _mat(pal, "wood_dark", 0.85)
-	var roof_col := _col(pal, "roof", "#46525e")
-	var roof := _mat(pal, "roof", 0.8)
+	var roof := _mat(pal, "roof", 0.8, Color(0, 0, 0, 0), true)
+	var ridge_mat := _mat(pal, "roof_dark", 0.85)
 	var cloth := _mat(pal, str(s.get("curtain", "cloth_red")), 0.95)
 
 	_box(parent, Vector3(pos.x, h * 0.5, pos.y), Vector3(size.x, h, size.y), wood, true, 0.0, "StageDeck")
@@ -473,8 +740,10 @@ static func _stage(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 		for sz in [-1.0, 1.0]:
 			_cylinder(parent, Vector3(pos.x + sx * (size.x * 0.5 - 0.6), h + 2.3, pos.y + sz * (size.y * 0.5 - 0.6)),
 				0.16, 4.6, wood_dark, true, "Pillar")
-	_box(parent, Vector3(pos.x, h + 5.0, pos.y), Vector3(size.x + 1.4, 0.35, size.y + 1.4), roof, false, 0.0, "StageRoof")
-	_prism(parent, Vector3(pos.x, h + 5.7, pos.y), Vector3(size.x + 1.8, 1.2, size.y + 1.8), _mat(pal, "roof", 0.8, roof_col.darkened(0.15)), 0.0, "StageRoofTop")
+	# 傩戏台曲面屋顶：出檐深、翼角翘得比民居更高（公共建筑等级更高）
+	_roof_kit(parent, Vector3(pos.x, 0.0, pos.y), 0.0, size.x + 2.4, (size.y + 2.4) * 0.5,
+		h + 4.9, h + 7.4, roof, ridge_mat, wood_dark,
+		{"corner_lift": 0.85, "spacing": 0.55, "inset": 0.6})
 	# 后台幕布（背对观众的一侧 = -front）
 	var front := _front_dir(yaw)
 	var back := -front

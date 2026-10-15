@@ -14,16 +14,37 @@ class_name PlayerController
 @export var pitch_max_deg := 28.0
 @export var turn_speed := 12.0
 
+## 沈照野的配色（青蓝外袍 + 铜金缘边），与人物档案一致。
+@export var robe_color := Color("#4b6284")
+@export var trim_color := Color("#c09a4e")
+@export var skin_color := Color("#d6b394")
+@export var hair_color := Color("#221d1a")
+@export var carries_sword := true
+
 @onready var camera_yaw: Node3D = $CameraYaw
 @onready var arm: SpringArm3D = $CameraYaw/SpringArm3D
 @onready var model: Node3D = $Model
 
+var rig: HumanoidRig = null
 var _facing := 0.0
 
 func _ready() -> void:
 	add_to_group("player")
+	_build_humanoid()
 	if DisplayServer.get_name() != "headless":
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _build_humanoid() -> void:
+	if model == null:
+		return
+	rig = HumanoidBuilder.build(model, {
+		"robe": robe_color,
+		"trim": trim_color,
+		"skin": skin_color,
+		"hair": hair_color,
+		"weapon": carries_sword,
+		"phase_offset": 0.0,
+	})
 
 ## 供出生点使用：设置初始朝向（度）。
 func set_spawn_yaw(deg: float) -> void:
@@ -81,3 +102,10 @@ func _physics_process(delta: float) -> void:
 			# 模型的正面是 -Z：rotation.y = atan2(-x, -z)
 			_facing = atan2(-wish.x, -wish.z)
 		model.rotation.y = lerp_angle(model.rotation.y, _facing, turn_speed * delta)
+
+	# 驱动程序化人形：水平速度决定步频与摆幅
+	var hspeed := Vector2(velocity.x, velocity.z).length()
+	if rig:
+		rig.set_locomotion(hspeed)
+	# 脚步声按移动距离触发，与帧率无关
+	AudioDirector.tick_footsteps(hspeed, delta, is_on_floor())

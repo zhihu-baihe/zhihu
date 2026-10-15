@@ -90,6 +90,7 @@ func add_clue(clue_id: String) -> void:
 	var entry := GameData.clue_entry(clue_id)
 	var label := str(entry.get("name", clue_id))
 	toast.emit("获得线索：%s（%d/%d）" % [label, clue_count(), clue_total()], UITheme.ACCENT_CINNABAR)
+	AudioDirector.play_sfx("clue", -8.0)
 	clue_added.emit(clue_id, clue_count(), clue_total())
 	_refresh_derived_flags()
 	_refresh_all_quests()
@@ -121,6 +122,7 @@ func add_item(item_id: String, count: int = 1) -> void:
 		items.erase(item_id)
 	item_changed.emit(item_id, cur)
 	toast.emit("获得：%s ×%d" % [GameData.item_name(item_id), count], UITheme.ACCENT_TEAL)
+	AudioDirector.play_sfx("pickup", -10.0, 0.04)
 
 func item_count(item_id: String) -> int:
 	return int(items.get(item_id, 0))
@@ -144,6 +146,7 @@ func add_party(character_ids) -> void:
 	if changed:
 		party_changed.emit(party.duplicate())
 		toast.emit("队伍加入：%s" % [GameData.character_name(str(party[-1]))], UITheme.ACCENT_TEAL)
+		AudioDirector.play_sfx("ui_open", -10.0)
 
 func party_has(character_id: String) -> bool:
 	return party.has(character_id)

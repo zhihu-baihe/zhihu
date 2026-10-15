@@ -39,6 +39,7 @@ func toggle() -> void:
 func open() -> void:
 	visible = true
 	GameState.ui_blocked = true
+	AudioDirector.play_ui("ui_open")
 	if DisplayServer.get_name() != "headless":
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	_refresh()
@@ -46,6 +47,7 @@ func open() -> void:
 func close() -> void:
 	visible = false
 	GameState.ui_blocked = false
+	AudioDirector.play_ui("ui_close")
 	if DisplayServer.get_name() != "headless":
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -68,6 +70,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_set_page((page + 3) % 4)
 
 func _set_page(p: int) -> void:
+	if p != page:
+		AudioDirector.play_ui("ui_click", -13.0)
 	page = p
 	_refresh()
 

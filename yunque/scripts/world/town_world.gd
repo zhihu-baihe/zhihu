@@ -22,6 +22,8 @@ func _ready() -> void:
 	if player.has_method("set_spawn_yaw"):
 		player.set_spawn_yaw(float(sp.get("yaw_deg", 0.0)))
 	print("[TownWorld] 墨邑生成完成：%s，动态灯 %d 盏。" % [str(map.get("display_name", "?")), int(stats.get("lights_used", 0))])
+	# 环境音三层（夜风 / 河水 / 虫鸣）按地图配置淡入
+	AudioDirector.enter_world(map)
 
 func get_player() -> Node:
 	return player

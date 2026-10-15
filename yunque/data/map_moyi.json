@@ -14,10 +14,18 @@
       "sky_ground_horizon": "#3a3026",
       "sun_color": "#e0a97a",
       "sun_energy": 0.55,
-      "sun_rotation_deg": [-22, 118, 0],
+      "sun_rotation_deg": [
+        -22,
+        118,
+        0
+      ],
       "moon_color": "#bcd2ff",
       "moon_energy": 0.45,
-      "moon_rotation_deg": [-34, 300, 0],
+      "moon_rotation_deg": [
+        -34,
+        300,
+        0
+      ],
       "ambient_energy": 0.62,
       "fog_color": "#2c3644",
       "fog_density": 0.008,
@@ -31,21 +39,29 @@
       "sky_top": "#0d1730",
       "sky_horizon": "#7b87ad",
       "sky_ground_bottom": "#080c14",
-      "sky_ground_horizon": "#2b3350",
+      "sky_ground_horizon": "#3e4a6a",
       "sun_color": "#c98a5e",
       "sun_energy": 0.18,
-      "sun_rotation_deg": [-8, 115, 0],
+      "sun_rotation_deg": [
+        -8,
+        115,
+        0
+      ],
       "moon_color": "#c8d8ff",
-      "moon_energy": 0.55,
-      "moon_rotation_deg": [-38, 300, 0],
-      "ambient_energy": 0.50,
+      "moon_energy": 0.8,
+      "moon_rotation_deg": [
+        -38,
+        300,
+        0
+      ],
+      "ambient_energy": 0.7,
       "fog_color": "#26314a",
       "fog_density": 0.011,
-      "fog_sky_affect": 0.40,
+      "fog_sky_affect": 0.4,
       "glow_strength": 0.45,
-      "glow_bloom": 0.20,
+      "glow_bloom": 0.2,
       "ssr_enabled": true,
-      "tonemap_exposure": 1.05
+      "tonemap_exposure": 1.1
     }
   },
   "environment": {
@@ -55,18 +71,26 @@
     "sky_ground_horizon": "#2b3350",
     "sun_color": "#c98a5e",
     "sun_energy": 0.18,
-    "sun_rotation_deg": [-8, 115, 0],
+    "sun_rotation_deg": [
+      -8,
+      115,
+      0
+    ],
     "moon_color": "#c8d8ff",
     "moon_energy": 0.55,
-    "moon_rotation_deg": [-38, 300, 0],
-    "ambient_energy": 0.50,
+    "moon_rotation_deg": [
+      -38,
+      300,
+      0
+    ],
+    "ambient_energy": 0.5,
     "fog_enabled": true,
     "fog_color": "#26314a",
     "fog_density": 0.011,
-    "fog_sky_affect": 0.40,
+    "fog_sky_affect": 0.4,
     "glow_enabled": true,
     "glow_strength": 0.45,
-    "glow_bloom": 0.20,
+    "glow_bloom": 0.2,
     "ssao_enabled": true,
     "ssr_enabled": true,
     "tonemap_mode": 3,
@@ -94,32 +118,274 @@
     "ridge_far": "#222c3c"
   },
   "terrain": [
-    {"kind": "terrain", "pos": [0, -0.5, 13],  "size": [96, 1.0, 70], "mat": "stone_dark", "note": "城内台地，顶面 y=0"},
-    {"kind": "terrain", "pos": [0, -1.1, -31], "size": [124, 1.2, 19], "mat": "riverbed", "note": "河道"},
-    {"kind": "terrain", "pos": [0, -0.4, -44], "size": [96, 1.2, 8],  "mat": "stone_dark", "note": "对岸台地，顶面 y=0.2"},
-    {"kind": "water",   "pos": [0, -0.42, -31], "size": [116, 15], "mat": "water", "note": "水面，无碰撞"}
+    {
+      "kind": "terrain",
+      "pos": [
+        0,
+        -0.5,
+        13
+      ],
+      "size": [
+        96,
+        1.0,
+        70
+      ],
+      "mat": "stone_dark",
+      "note": "城内台地，顶面 y=0"
+    },
+    {
+      "kind": "terrain",
+      "pos": [
+        0,
+        -1.1,
+        -31
+      ],
+      "size": [
+        124,
+        1.2,
+        19
+      ],
+      "mat": "riverbed",
+      "note": "河道"
+    },
+    {
+      "kind": "terrain",
+      "pos": [
+        0,
+        -0.4,
+        -44
+      ],
+      "size": [
+        96,
+        1.2,
+        8
+      ],
+      "mat": "stone_dark",
+      "note": "对岸台地，顶面 y=0.2"
+    },
+    {
+      "kind": "water",
+      "pos": [
+        0,
+        -0.42,
+        -31
+      ],
+      "size": [
+        116,
+        15
+      ],
+      "mat": "water",
+      "note": "水面，无碰撞"
+    }
   ],
   "walls": [
-    {"from": [-48, 42], "to": [-5, 42], "height": 6.5, "thickness": 1.4, "mat": "wall", "note": "南城墙·西段"},
-    {"from": [5, 42],   "to": [48, 42], "height": 6.5, "thickness": 1.4, "mat": "wall", "note": "南城墙·东段"},
-    {"from": [-48, 42], "to": [-48, -22], "height": 6.5, "thickness": 1.4, "mat": "wall", "note": "西城墙"},
-    {"from": [48, 42],  "to": [48, -22],  "height": 6.5, "thickness": 1.4, "mat": "wall", "note": "东城墙"},
-    {"from": [-48, -39], "to": [-3.5, -39], "height": 1.2, "thickness": 0.5, "mat": "wood_dark", "note": "对岸护栏·西"},
-    {"from": [3.5, -39], "to": [48, -39],   "height": 1.2, "thickness": 0.5, "mat": "wood_dark", "note": "对岸护栏·东"},
-    {"from": [-48, -22], "to": [-3.5, -22], "height": 1.2, "thickness": 0.5, "mat": "wood_dark", "note": "城内河沿护栏·西"},
-    {"from": [3.5, -22], "to": [48, -22],   "height": 1.2, "thickness": 0.5, "mat": "wood_dark", "note": "城内河沿护栏·东"}
+    {
+      "from": [
+        -48,
+        42
+      ],
+      "to": [
+        -5,
+        42
+      ],
+      "height": 6.5,
+      "thickness": 1.4,
+      "mat": "wall",
+      "note": "南城墙·西段"
+    },
+    {
+      "from": [
+        5,
+        42
+      ],
+      "to": [
+        48,
+        42
+      ],
+      "height": 6.5,
+      "thickness": 1.4,
+      "mat": "wall",
+      "note": "南城墙·东段"
+    },
+    {
+      "from": [
+        -48,
+        42
+      ],
+      "to": [
+        -48,
+        -22
+      ],
+      "height": 6.5,
+      "thickness": 1.4,
+      "mat": "wall",
+      "note": "西城墙"
+    },
+    {
+      "from": [
+        48,
+        42
+      ],
+      "to": [
+        48,
+        -22
+      ],
+      "height": 6.5,
+      "thickness": 1.4,
+      "mat": "wall",
+      "note": "东城墙"
+    },
+    {
+      "from": [
+        -48,
+        -39
+      ],
+      "to": [
+        -3.5,
+        -39
+      ],
+      "height": 1.2,
+      "thickness": 0.5,
+      "mat": "wood_dark",
+      "note": "对岸护栏·西"
+    },
+    {
+      "from": [
+        3.5,
+        -39
+      ],
+      "to": [
+        48,
+        -39
+      ],
+      "height": 1.2,
+      "thickness": 0.5,
+      "mat": "wood_dark",
+      "note": "对岸护栏·东"
+    },
+    {
+      "from": [
+        -48,
+        -22
+      ],
+      "to": [
+        -3.5,
+        -22
+      ],
+      "height": 1.2,
+      "thickness": 0.5,
+      "mat": "wood_dark",
+      "note": "城内河沿护栏·西"
+    },
+    {
+      "from": [
+        3.5,
+        -22
+      ],
+      "to": [
+        48,
+        -22
+      ],
+      "height": 1.2,
+      "thickness": 0.5,
+      "mat": "wood_dark",
+      "note": "城内河沿护栏·东"
+    }
   ],
-  "gate": {"pos": [0, 42], "tower_offset": 7.0, "tower_size": [8, 7.5, 6], "beam_y": 6.6, "plaque": "墨邑"},
+  "gate": {
+    "pos": [
+      0,
+      42
+    ],
+    "tower_offset": 7.0,
+    "tower_size": [
+      8,
+      7.5,
+      6
+    ],
+    "beam_y": 6.6,
+    "plaque": "墨邑"
+  },
   "streets": [
-    {"kind": "street", "from": [0, 40], "to": [0, -20], "width": 9,  "mat": "stone", "note": "MY-T01/T02 入城街 + 灯市主街"},
-    {"kind": "street", "from": [0, 16], "to": [0, -3],  "width": 18, "mat": "stone", "note": "MY-T03 百花夜市（主街在此拓宽成市集广场）"},
-    {"kind": "street", "from": [-4.5, -2.2], "to": [-14.5, -2.2], "width": 2.6, "mat": "dirt", "note": "MY-T09 废灯坊侧巷"},
-    {"kind": "street", "from": [-26, -19], "to": [-13, -19], "width": 6, "mat": "stone", "note": "MY-T08 河埠"},
-    {"kind": "plaza", "pos": [-19, -19.5], "size": [12, 6], "mat": "stone", "note": "MY-T08 河埠小广场"}
+    {
+      "kind": "street",
+      "from": [
+        0,
+        40
+      ],
+      "to": [
+        0,
+        -20
+      ],
+      "width": 9,
+      "mat": "stone",
+      "note": "MY-T01/T02 入城街 + 灯市主街"
+    },
+    {
+      "kind": "street",
+      "from": [
+        0,
+        16
+      ],
+      "to": [
+        0,
+        -3
+      ],
+      "width": 18,
+      "mat": "stone",
+      "note": "MY-T03 百花夜市（主街在此拓宽成市集广场）"
+    },
+    {
+      "kind": "street",
+      "from": [
+        -4.5,
+        -2.2
+      ],
+      "to": [
+        -14.5,
+        -2.2
+      ],
+      "width": 2.6,
+      "mat": "dirt",
+      "note": "MY-T09 废灯坊侧巷"
+    },
+    {
+      "kind": "street",
+      "from": [
+        -26,
+        -19
+      ],
+      "to": [
+        -13,
+        -19
+      ],
+      "width": 6,
+      "mat": "stone",
+      "note": "MY-T08 河埠"
+    },
+    {
+      "kind": "plaza",
+      "pos": [
+        -19,
+        -19.5
+      ],
+      "size": [
+        12,
+        6
+      ],
+      "mat": "stone",
+      "note": "MY-T08 河埠小广场"
+    }
   ],
   "bridge": {
-    "from": [0, -20],
-    "to": [0, -40],
+    "from": [
+      0,
+      -20
+    ],
+    "to": [
+      0,
+      -40
+    ],
     "width": 6.5,
     "arch": 2.1,
     "segments": 19,
@@ -128,22 +394,207 @@
     "note": "MY-T05 千灯桥（全图视觉中心）"
   },
   "buildings": [
-    {"kind": "building", "pos": [-15, 24], "footprint": [11, 10], "height": 3.6, "roof": "gable", "yaw_deg": 90,  "wall_mat": "wall", "roof_mat": "roof", "note": "主街西·铺面"},
-    {"kind": "building", "pos": [-15, 14], "footprint": [11, 10], "height": 3.6, "roof": "gable", "yaw_deg": 90,  "wall_mat": "wall", "roof_mat": "roof", "note": "主街西·铺面"},
-    {"kind": "building", "pos": [-15, 4],  "footprint": [11, 10], "height": 3.4, "roof": "gable", "yaw_deg": 90,  "wall_mat": "wall", "roof_mat": "roof", "note": "主街西·铺面（与废灯坊之间留出侧巷）"},
-    {"kind": "building", "pos": [15, 24],  "footprint": [11, 10], "height": 3.6, "roof": "gable", "yaw_deg": 270, "wall_mat": "wall", "roof_mat": "roof", "note": "主街东·铺面"},
-    {"kind": "building", "pos": [15, -9],  "footprint": [11, 10], "height": 3.5, "roof": "gable", "yaw_deg": 270, "wall_mat": "wall", "roof_mat": "roof", "sign": "纸扎铺", "note": "MY-T07 纸扎铺（梁叔）"},
-    {"kind": "building", "pos": [16, -19], "footprint": [10, 7],  "height": 3.2, "roof": "gable", "yaw_deg": 270, "wall_mat": "wall", "roof_mat": "roof", "sign": "灯籍小房", "note": "MY-T06 灯籍小房（顾簿吏，沿河）"},
-    {"kind": "building", "pos": [-15, -9], "footprint": [12, 11], "height": 4.4, "roof": "gable", "yaw_deg": 90,  "wall_mat": "stone_dark", "roof_mat": "roof_dark", "sign": "废灯坊", "note": "MY-T09 废灯坊（暗门开在南面，封存）"},
-    {"kind": "building", "pos": [-32, -36], "footprint": [13, 9], "height": 3.6, "roof": "gable", "yaw_deg": 0, "wall_mat": "wall", "roof_mat": "roof_dark", "note": "对岸剪影·1"},
-    {"kind": "building", "pos": [-13, -37], "footprint": [11, 8], "height": 3.4, "roof": "gable", "yaw_deg": 0, "wall_mat": "wall", "roof_mat": "roof_dark", "note": "对岸剪影·2"},
-    {"kind": "building", "pos": [9, -36],  "footprint": [13, 9], "height": 3.6, "roof": "gable", "yaw_deg": 0, "wall_mat": "wall", "roof_mat": "roof_dark", "note": "对岸剪影·3"},
-    {"kind": "building", "pos": [30, -37], "footprint": [11, 8], "height": 3.4, "roof": "gable", "yaw_deg": 0, "wall_mat": "wall", "roof_mat": "roof_dark", "note": "对岸剪影·4"}
+    {
+      "kind": "building",
+      "pos": [
+        -15,
+        24
+      ],
+      "footprint": [
+        11,
+        10
+      ],
+      "height": 3.6,
+      "roof": "gable",
+      "yaw_deg": 90,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "note": "主街西·铺面"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        -15,
+        14
+      ],
+      "footprint": [
+        11,
+        10
+      ],
+      "height": 3.6,
+      "roof": "gable",
+      "yaw_deg": 90,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "note": "主街西·铺面"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        -15,
+        4
+      ],
+      "footprint": [
+        11,
+        10
+      ],
+      "height": 3.4,
+      "roof": "gable",
+      "yaw_deg": 90,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "note": "主街西·铺面（与废灯坊之间留出侧巷）"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        15,
+        24
+      ],
+      "footprint": [
+        11,
+        10
+      ],
+      "height": 3.6,
+      "roof": "gable",
+      "yaw_deg": 270,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "note": "主街东·铺面"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        15,
+        -9
+      ],
+      "footprint": [
+        11,
+        10
+      ],
+      "height": 3.5,
+      "roof": "gable",
+      "yaw_deg": 270,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "sign": "纸扎铺",
+      "note": "MY-T07 纸扎铺（梁叔）"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        16,
+        -19
+      ],
+      "footprint": [
+        10,
+        7
+      ],
+      "height": 3.2,
+      "roof": "gable",
+      "yaw_deg": 270,
+      "wall_mat": "wall",
+      "roof_mat": "roof",
+      "sign": "灯籍小房",
+      "note": "MY-T06 灯籍小房（顾簿吏，沿河）"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        -15,
+        -9
+      ],
+      "footprint": [
+        12,
+        11
+      ],
+      "height": 4.4,
+      "roof": "gable",
+      "yaw_deg": 90,
+      "wall_mat": "stone_dark",
+      "roof_mat": "roof_dark",
+      "sign": "废灯坊",
+      "note": "MY-T09 废灯坊（暗门开在南面，封存）"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        -32,
+        -36
+      ],
+      "footprint": [
+        13,
+        9
+      ],
+      "height": 3.6,
+      "roof": "gable",
+      "yaw_deg": 0,
+      "wall_mat": "wall",
+      "roof_mat": "roof_dark",
+      "note": "对岸剪影·1"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        -13,
+        -37
+      ],
+      "footprint": [
+        11,
+        8
+      ],
+      "height": 3.4,
+      "roof": "gable",
+      "yaw_deg": 0,
+      "wall_mat": "wall",
+      "roof_mat": "roof_dark",
+      "note": "对岸剪影·2"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        9,
+        -36
+      ],
+      "footprint": [
+        13,
+        9
+      ],
+      "height": 3.6,
+      "roof": "gable",
+      "yaw_deg": 0,
+      "wall_mat": "wall",
+      "roof_mat": "roof_dark",
+      "note": "对岸剪影·3"
+    },
+    {
+      "kind": "building",
+      "pos": [
+        30,
+        -37
+      ],
+      "footprint": [
+        11,
+        8
+      ],
+      "height": 3.4,
+      "roof": "gable",
+      "yaw_deg": 0,
+      "wall_mat": "wall",
+      "roof_mat": "roof_dark",
+      "note": "对岸剪影·4"
+    }
   ],
   "stage": {
     "kind": "stage",
-    "pos": [15, 10],
-    "size": [13, 9],
+    "pos": [
+      15,
+      10
+    ],
+    "size": [
+      13,
+      9
+    ],
     "height": 1.0,
     "yaw_deg": 270,
     "curtain": "cloth_red",
@@ -151,79 +602,802 @@
     "note": "MY-T04 傩戏台（姜阿棠登场、后台戏箱）；正面朝西，西侧生成上台坡道"
   },
   "stalls": [
-    {"pos": [-6.5, 13], "size": [3.4, 2.6], "yaw_deg": 90,  "cloth": "cloth_red",   "note": "夜市·灯摊"},
-    {"pos": [6.5, 13],  "size": [3.4, 2.6], "yaw_deg": 270, "cloth": "cloth_gold",  "note": "夜市·糖摊"},
-    {"pos": [-6.5, 5],  "size": [3.4, 2.6], "yaw_deg": 90,  "cloth": "cloth_green", "note": "夜市·纸灯"},
-    {"pos": [6.5, 5],   "size": [3.4, 2.6], "yaw_deg": 270, "cloth": "cloth_red",   "note": "夜市·灯谜"},
-    {"pos": [-6, 0.5],  "size": [3.4, 2.6], "yaw_deg": 0,   "cloth": "cloth_gold",  "note": "夜市·茶摊"},
-    {"pos": [-21, -19], "size": [3.6, 2.6], "yaw_deg": 0,   "cloth": "cloth_green", "note": "MY-T08 柳婶河灯摊"},
-    {"pos": [-25, -19], "size": [3.6, 2.6], "yaw_deg": 0,   "cloth": "cloth_green", "note": "河埠·备用摊"}
+    {
+      "pos": [
+        -6.5,
+        13
+      ],
+      "size": [
+        3.4,
+        2.6
+      ],
+      "yaw_deg": 90,
+      "cloth": "cloth_red",
+      "note": "夜市·灯摊"
+    },
+    {
+      "pos": [
+        6.5,
+        13
+      ],
+      "size": [
+        3.4,
+        2.6
+      ],
+      "yaw_deg": 270,
+      "cloth": "cloth_gold",
+      "note": "夜市·糖摊"
+    },
+    {
+      "pos": [
+        -6.5,
+        5
+      ],
+      "size": [
+        3.4,
+        2.6
+      ],
+      "yaw_deg": 90,
+      "cloth": "cloth_green",
+      "note": "夜市·纸灯"
+    },
+    {
+      "pos": [
+        6.5,
+        5
+      ],
+      "size": [
+        3.4,
+        2.6
+      ],
+      "yaw_deg": 270,
+      "cloth": "cloth_red",
+      "note": "夜市·灯谜"
+    },
+    {
+      "pos": [
+        -6,
+        0.5
+      ],
+      "size": [
+        3.4,
+        2.6
+      ],
+      "yaw_deg": 0,
+      "cloth": "cloth_gold",
+      "note": "夜市·茶摊"
+    },
+    {
+      "pos": [
+        -21,
+        -19
+      ],
+      "size": [
+        3.6,
+        2.6
+      ],
+      "yaw_deg": 0,
+      "cloth": "cloth_green",
+      "note": "MY-T08 柳婶河灯摊"
+    },
+    {
+      "pos": [
+        -25,
+        -19
+      ],
+      "size": [
+        3.6,
+        2.6
+      ],
+      "yaw_deg": 0,
+      "cloth": "cloth_green",
+      "note": "河埠·备用摊"
+    }
   ],
   "lantern_rows": [
-    {"from": [0, 40],  "to": [0, 27],  "count": 5, "height": 3.6, "light_every": 2, "offset": [5, 0],  "mat": "lantern", "note": "入城街·东"},
-    {"from": [0, 40],  "to": [0, 27],  "count": 5, "height": 3.6, "light_every": 2, "offset": [-5, 0], "mat": "lantern", "note": "入城街·西"},
-    {"from": [0, 24],  "to": [0, -19], "count": 9, "height": 4.0, "light_every": 2, "offset": [5.5, 0],  "mat": "lantern", "note": "主街·东"},
-    {"from": [0, 24],  "to": [0, -19], "count": 9, "height": 4.0, "light_every": 2, "offset": [-5.5, 0], "mat": "lantern", "note": "主街·西"},
-    {"from": [-8, 15], "to": [-8, -2], "count": 5, "height": 3.8, "light_every": 2, "offset": [0, 0], "mat": "lantern", "note": "夜市·西缘"},
-    {"from": [8, 15],  "to": [8, -2],  "count": 5, "height": 3.8, "light_every": 2, "offset": [0, 0], "mat": "lantern", "note": "夜市·东缘"},
-    {"from": [-26, -17], "to": [-13, -17], "count": 5, "height": 3.2, "light_every": 2, "offset": [0, -1.5], "mat": "lantern", "note": "河埠·河灯串"},
-    {"from": [-5, -2.4], "to": [-14, -2.4], "count": 4, "height": 3.4, "light_every": 1, "offset": [0, 0], "mat": "lantern_cold", "note": "废灯坊侧巷·冷灯"}
+    {
+      "from": [
+        0,
+        40
+      ],
+      "to": [
+        0,
+        27
+      ],
+      "count": 5,
+      "height": 3.6,
+      "light_every": 2,
+      "offset": [
+        5,
+        0
+      ],
+      "mat": "lantern",
+      "note": "入城街·东"
+    },
+    {
+      "from": [
+        0,
+        40
+      ],
+      "to": [
+        0,
+        27
+      ],
+      "count": 5,
+      "height": 3.6,
+      "light_every": 2,
+      "offset": [
+        -5,
+        0
+      ],
+      "mat": "lantern",
+      "note": "入城街·西"
+    },
+    {
+      "from": [
+        0,
+        24
+      ],
+      "to": [
+        0,
+        -19
+      ],
+      "count": 9,
+      "height": 4.0,
+      "light_every": 2,
+      "offset": [
+        5.5,
+        0
+      ],
+      "mat": "lantern",
+      "note": "主街·东"
+    },
+    {
+      "from": [
+        0,
+        24
+      ],
+      "to": [
+        0,
+        -19
+      ],
+      "count": 9,
+      "height": 4.0,
+      "light_every": 2,
+      "offset": [
+        -5.5,
+        0
+      ],
+      "mat": "lantern",
+      "note": "主街·西"
+    },
+    {
+      "from": [
+        -8,
+        15
+      ],
+      "to": [
+        -8,
+        -2
+      ],
+      "count": 5,
+      "height": 3.8,
+      "light_every": 2,
+      "offset": [
+        0,
+        0
+      ],
+      "mat": "lantern",
+      "note": "夜市·西缘"
+    },
+    {
+      "from": [
+        8,
+        15
+      ],
+      "to": [
+        8,
+        -2
+      ],
+      "count": 5,
+      "height": 3.8,
+      "light_every": 2,
+      "offset": [
+        0,
+        0
+      ],
+      "mat": "lantern",
+      "note": "夜市·东缘"
+    },
+    {
+      "from": [
+        -26,
+        -17
+      ],
+      "to": [
+        -13,
+        -17
+      ],
+      "count": 5,
+      "height": 3.2,
+      "light_every": 2,
+      "offset": [
+        0,
+        -1.5
+      ],
+      "mat": "lantern",
+      "note": "河埠·河灯串"
+    },
+    {
+      "from": [
+        -5,
+        -2.4
+      ],
+      "to": [
+        -14,
+        -2.4
+      ],
+      "count": 4,
+      "height": 3.4,
+      "light_every": 1,
+      "offset": [
+        0,
+        0
+      ],
+      "mat": "lantern_cold",
+      "note": "废灯坊侧巷·冷灯"
+    }
   ],
   "props": [
-    {"kind": "tree", "pos": [-26, 34], "scale": 1.1}, {"kind": "tree", "pos": [26, 34], "scale": 1.0},
-    {"kind": "tree", "pos": [-26, 22], "scale": 1.2}, {"kind": "tree", "pos": [26, 22], "scale": 1.1},
-    {"kind": "tree", "pos": [-26, 6],  "scale": 1.0}, {"kind": "tree", "pos": [26, 6],  "scale": 1.0},
-    {"kind": "tree", "pos": [-26, -8], "scale": 1.3}, {"kind": "tree", "pos": [26, -12], "scale": 1.2},
-    {"kind": "bamboo", "pos": [-30, 14], "count": 7}, {"kind": "bamboo", "pos": [30, -2], "count": 6},
-    {"kind": "well", "pos": [7, -6]},
-    {"kind": "sign", "pos": [-6, 18], "yaw_deg": 90, "text": "百花夜市", "height": 3.4},
-    {"kind": "sign", "pos": [5, -15], "yaw_deg": 270, "text": "千灯桥", "height": 3.2},
-    {"kind": "sign", "pos": [-12, -16], "yaw_deg": 0, "text": "河埠", "height": 2.8},
-    {"kind": "boat", "pos": [-16, -27], "yaw_deg": 8}, {"kind": "boat", "pos": [6, -32], "yaw_deg": -12},
-    {"kind": "boat", "pos": [22, -28], "yaw_deg": 4},
-    {"kind": "crate", "pos": [-8, -1.4], "yaw_deg": 12}, {"kind": "crate", "pos": [-9.6, -2.9], "yaw_deg": -20},
-    {"kind": "crate", "pos": [6, 15], "yaw_deg": 8}, {"kind": "crate", "pos": [7.2, 14.4], "yaw_deg": -14},
-    {"kind": "barrel", "pos": [-7.5, 7], "yaw_deg": 0}, {"kind": "barrel", "pos": [7, -2], "yaw_deg": 0},
-    {"kind": "desk", "pos": [7.5, -9], "yaw_deg": 270, "note": "纸扎铺门前柜台"},
-    {"kind": "desk", "pos": [9, -19], "yaw_deg": 270, "note": "灯籍小房门前案桌"}
+    {
+      "kind": "tree",
+      "pos": [
+        -26,
+        34
+      ],
+      "scale": 1.1
+    },
+    {
+      "kind": "tree",
+      "pos": [
+        26,
+        34
+      ],
+      "scale": 1.0
+    },
+    {
+      "kind": "tree",
+      "pos": [
+        -26,
+        22
+      ],
+      "scale": 1.2
+    },
+    {
+      "kind": "tree",
+      "pos": [
+        26,
+        22
+      ],
+      "scale": 1.1
+    },
+    {
+      "kind": "tree",
+      "pos": [
+        -26,
+        6
+      ],
+      "scale": 1.0
+    },
+    {
+      "kind": "tree",
+      "pos": [
+        26,
+        6
+      ],
+      "scale": 1.0
+    },
+    {
+      "kind": "tree",
+      "pos": [
+        -26,
+        -8
+      ],
+      "scale": 1.3
+    },
+    {
+      "kind": "tree",
+      "pos": [
+        26,
+        -12
+      ],
+      "scale": 1.2
+    },
+    {
+      "kind": "bamboo",
+      "pos": [
+        -30,
+        14
+      ],
+      "count": 7
+    },
+    {
+      "kind": "bamboo",
+      "pos": [
+        30,
+        -2
+      ],
+      "count": 6
+    },
+    {
+      "kind": "well",
+      "pos": [
+        7,
+        -6
+      ]
+    },
+    {
+      "kind": "sign",
+      "pos": [
+        -6,
+        18
+      ],
+      "yaw_deg": 90,
+      "text": "百花夜市",
+      "height": 3.4
+    },
+    {
+      "kind": "sign",
+      "pos": [
+        5,
+        -15
+      ],
+      "yaw_deg": 270,
+      "text": "千灯桥",
+      "height": 3.2
+    },
+    {
+      "kind": "sign",
+      "pos": [
+        -12,
+        -16
+      ],
+      "yaw_deg": 0,
+      "text": "河埠",
+      "height": 2.8
+    },
+    {
+      "kind": "boat",
+      "pos": [
+        -16,
+        -27
+      ],
+      "yaw_deg": 8
+    },
+    {
+      "kind": "boat",
+      "pos": [
+        6,
+        -32
+      ],
+      "yaw_deg": -12
+    },
+    {
+      "kind": "boat",
+      "pos": [
+        22,
+        -28
+      ],
+      "yaw_deg": 4
+    },
+    {
+      "kind": "crate",
+      "pos": [
+        -8,
+        -1.4
+      ],
+      "yaw_deg": 12
+    },
+    {
+      "kind": "crate",
+      "pos": [
+        -9.6,
+        -2.9
+      ],
+      "yaw_deg": -20
+    },
+    {
+      "kind": "crate",
+      "pos": [
+        6,
+        15
+      ],
+      "yaw_deg": 8
+    },
+    {
+      "kind": "crate",
+      "pos": [
+        7.2,
+        14.4
+      ],
+      "yaw_deg": -14
+    },
+    {
+      "kind": "barrel",
+      "pos": [
+        -7.5,
+        7
+      ],
+      "yaw_deg": 0
+    },
+    {
+      "kind": "barrel",
+      "pos": [
+        7,
+        -2
+      ],
+      "yaw_deg": 0
+    },
+    {
+      "kind": "desk",
+      "pos": [
+        7.5,
+        -9
+      ],
+      "yaw_deg": 270,
+      "note": "纸扎铺门前柜台"
+    },
+    {
+      "kind": "desk",
+      "pos": [
+        9,
+        -19
+      ],
+      "yaw_deg": 270,
+      "note": "灯籍小房门前案桌"
+    }
   ],
   "npcs": [
-    {"id": "NPC_GATEKEEPER", "pos": [-3.4, 0, 38.5], "yaw_deg": 200, "note": "守门人·城门内侧"},
-    {"id": "NPC_VENDOR",     "pos": [-5.2, 0, 33.5], "yaw_deg": 120, "note": "挑灯小贩·入城街"},
-    {"id": "NPC_TEA",        "pos": [-4.8, 0, 1.4],  "yaw_deg": 45,  "note": "茶摊老人·夜市"},
-    {"id": "NPC_LIU",        "pos": [-19.5, 0, -19], "yaw_deg": 180, "note": "柳婶·河灯摊前"},
-    {"id": "NPC_KID",        "pos": [-16.5, 0, -19.6], "yaw_deg": 190, "note": "阿竹·河埠"},
-    {"id": "NPC_LIANG",      "pos": [7.2, 0, -5.5],  "yaw_deg": 90,  "note": "梁叔·纸扎铺前"},
-    {"id": "NPC_GU",         "pos": [9, 0, -15.5],   "yaw_deg": 90,  "note": "顾簿吏·灯籍小房前"},
-    {"id": "NPC_ATANG",      "pos": [6.5, 0, 10],    "yaw_deg": 90,  "note": "姜阿棠·傩戏台前"},
-    {"id": "NPC_BANZHU",     "pos": [7, 0, 14],      "yaw_deg": 130, "note": "罗班主·戏台侧"},
-    {"id": "NPC_AHE",        "pos": [18, 1.0, 12],   "yaw_deg": 200, "note": "阿禾·后台（站在戏台上，y=1.0）"}
+    {
+      "id": "NPC_GATEKEEPER",
+      "pos": [
+        -3.4,
+        0,
+        38.5
+      ],
+      "yaw_deg": 200,
+      "note": "守门人·城门内侧"
+    },
+    {
+      "id": "NPC_VENDOR",
+      "pos": [
+        -5.2,
+        0,
+        33.5
+      ],
+      "yaw_deg": 120,
+      "note": "挑灯小贩·入城街"
+    },
+    {
+      "id": "NPC_TEA",
+      "pos": [
+        -4.8,
+        0,
+        1.4
+      ],
+      "yaw_deg": 45,
+      "note": "茶摊老人·夜市"
+    },
+    {
+      "id": "NPC_LIU",
+      "pos": [
+        -19.5,
+        0,
+        -19
+      ],
+      "yaw_deg": 180,
+      "note": "柳婶·河灯摊前"
+    },
+    {
+      "id": "NPC_KID",
+      "pos": [
+        -16.5,
+        0,
+        -19.6
+      ],
+      "yaw_deg": 190,
+      "note": "阿竹·河埠"
+    },
+    {
+      "id": "NPC_LIANG",
+      "pos": [
+        7.2,
+        0,
+        -5.5
+      ],
+      "yaw_deg": 90,
+      "note": "梁叔·纸扎铺前"
+    },
+    {
+      "id": "NPC_GU",
+      "pos": [
+        9,
+        0,
+        -15.5
+      ],
+      "yaw_deg": 90,
+      "note": "顾簿吏·灯籍小房前"
+    },
+    {
+      "id": "NPC_ATANG",
+      "pos": [
+        6.5,
+        0,
+        10
+      ],
+      "yaw_deg": 90,
+      "note": "姜阿棠·傩戏台前"
+    },
+    {
+      "id": "NPC_BANZHU",
+      "pos": [
+        7,
+        0,
+        14
+      ],
+      "yaw_deg": 130,
+      "note": "罗班主·戏台侧"
+    },
+    {
+      "id": "NPC_AHE",
+      "pos": [
+        18,
+        1.0,
+        12
+      ],
+      "yaw_deg": 200,
+      "note": "阿禾·后台（站在戏台上，y=1.0）"
+    }
   ],
   "interactables": [
-    {"kind": "clue", "id": "INT_CLUE_MASK", "pos": [7.5, 0.95, -9], "prompt": "调查 半张面具", "dialogue": "MOYI_CLUE_MASK_010"},
-    {"kind": "clue", "id": "INT_CLUE_REGISTRY", "pos": [9, 0.95, -19], "prompt": "查看 来客登记册", "dialogue": "MOYI_CLUE_REGISTRY_010"},
-    {"kind": "clue", "id": "INT_CLUE_BRIDGE", "pos": [3, 0.9, -20.5], "prompt": "观察 水面倒影", "dialogue": "MOYI_CLUE_BRIDGE_010"},
-    {"kind": "clue", "id": "INT_PROP_BOX", "pos": [18, 1.0, 13.5], "prompt": "查看 后台戏箱", "dialogue": "MOYI_PROP_BOX_010", "no_clue": true},
-    {"kind": "door", "id": "INT_WORKSHOP_DOOR", "pos": [-13, 1.15, -3.4], "yaw_deg": 90, "prompt": "查看 废灯坊暗门", "dialogue_open": "MOYI_DOOR_OPEN", "dialogue_locked": "MOYI_DOOR_LOCKED"},
-    {"kind": "pickup", "id": "INT_PICK_LAMPSHADE", "pos": [-2.6, 0.3, -19.4], "prompt": "拾取 灯罩", "item": "KEY_LAMPSHADE", "count": 1, "flag": "HAS_LAMPSHADE", "required": ["SQ01_SEEK_LAMPSHADE"], "label": "灯罩"},
-    {"kind": "pickup", "id": "INT_PICK_PLAQUE", "pos": [3.2, 0.3, -19.4], "prompt": "拾取 旧灯牌", "item": "KEY_OLD_NAME_PLAQUE", "count": 1, "flag": "HAS_PLAQUE", "required": ["SQ01_SEEK_PLAQUE"], "label": "旧灯牌"},
-    {"kind": "pickup", "id": "INT_PICK_SUPPLY", "pos": [-7.5, 0.3, 5], "prompt": "拾取 旧木匣", "item": "ITEM_SMALL_HEAL", "count": 2, "label": "旧木匣"}
+    {
+      "kind": "clue",
+      "id": "INT_CLUE_MASK",
+      "pos": [
+        7.5,
+        0.95,
+        -9
+      ],
+      "prompt": "调查 半张面具",
+      "dialogue": "MOYI_CLUE_MASK_010"
+    },
+    {
+      "kind": "clue",
+      "id": "INT_CLUE_REGISTRY",
+      "pos": [
+        9,
+        0.95,
+        -19
+      ],
+      "prompt": "查看 来客登记册",
+      "dialogue": "MOYI_CLUE_REGISTRY_010"
+    },
+    {
+      "kind": "clue",
+      "id": "INT_CLUE_BRIDGE",
+      "pos": [
+        3,
+        0.9,
+        -20.5
+      ],
+      "prompt": "观察 水面倒影",
+      "dialogue": "MOYI_CLUE_BRIDGE_010"
+    },
+    {
+      "kind": "clue",
+      "id": "INT_PROP_BOX",
+      "pos": [
+        18,
+        1.0,
+        13.5
+      ],
+      "prompt": "查看 后台戏箱",
+      "dialogue": "MOYI_PROP_BOX_010",
+      "no_clue": true
+    },
+    {
+      "kind": "door",
+      "id": "INT_WORKSHOP_DOOR",
+      "pos": [
+        -13,
+        1.15,
+        -3.4
+      ],
+      "yaw_deg": 90,
+      "prompt": "查看 废灯坊暗门",
+      "dialogue_open": "MOYI_DOOR_OPEN",
+      "dialogue_locked": "MOYI_DOOR_LOCKED"
+    },
+    {
+      "kind": "pickup",
+      "id": "INT_PICK_LAMPSHADE",
+      "pos": [
+        -2.6,
+        0.3,
+        -19.4
+      ],
+      "prompt": "拾取 灯罩",
+      "item": "KEY_LAMPSHADE",
+      "count": 1,
+      "flag": "HAS_LAMPSHADE",
+      "required": [
+        "SQ01_SEEK_LAMPSHADE"
+      ],
+      "label": "灯罩"
+    },
+    {
+      "kind": "pickup",
+      "id": "INT_PICK_PLAQUE",
+      "pos": [
+        3.2,
+        0.3,
+        -19.4
+      ],
+      "prompt": "拾取 旧灯牌",
+      "item": "KEY_OLD_NAME_PLAQUE",
+      "count": 1,
+      "flag": "HAS_PLAQUE",
+      "required": [
+        "SQ01_SEEK_PLAQUE"
+      ],
+      "label": "旧灯牌"
+    },
+    {
+      "kind": "pickup",
+      "id": "INT_PICK_SUPPLY",
+      "pos": [
+        -7.5,
+        0.3,
+        5
+      ],
+      "prompt": "拾取 旧木匣",
+      "item": "ITEM_SMALL_HEAL",
+      "count": 2,
+      "label": "旧木匣"
+    }
   ],
   "triggers": [
-    {"id": "TRG_ALLEY_DRAMA", "pos": [-6, 0, -2.2], "radius": 4.5, "dialogue": "MOYI_ALLEY_010", "required": ["COMP_JIANGATANG_JOINED", "ANY_CLUE"], "forbidden": ["MSQ_AheMissing"], "note": "灯会小高潮：纸轿穿过人群，阿禾追进侧巷"}
+    {
+      "id": "TRG_ALLEY_DRAMA",
+      "pos": [
+        -6,
+        0,
+        -2.2
+      ],
+      "radius": 4.5,
+      "dialogue": "MOYI_ALLEY_010",
+      "required": [
+        "COMP_JIANGATANG_JOINED",
+        "ANY_CLUE"
+      ],
+      "forbidden": [
+        "MSQ_AheMissing"
+      ],
+      "note": "灯会小高潮：纸轿穿过人群，阿禾追进侧巷"
+    }
   ],
   "mountains": [
-    {"kind": "mountain", "pos": [-90, -150], "radius": 70, "height": 52, "mat": "ridge"},
-    {"kind": "mountain", "pos": [-10, -178], "radius": 95, "height": 66, "mat": "ridge_far"},
-    {"kind": "mountain", "pos": [72, -162], "radius": 76, "height": 56, "mat": "ridge"},
-    {"kind": "mountain", "pos": [152, -205], "radius": 100, "height": 72, "mat": "ridge_far"},
-    {"kind": "mountain", "pos": [-168, -195], "radius": 90, "height": 62, "mat": "ridge_far"},
-    {"kind": "mountain", "pos": [10, -122], "radius": 46, "height": 34, "mat": "ridge", "note": "近山，托住远景塔"},
-    {"kind": "mountain", "pos": [-142, 62], "radius": 80, "height": 50, "mat": "ridge_far", "note": "南侧远山，补齐第三层"}
+    {
+      "kind": "mountain",
+      "pos": [
+        -90,
+        -150
+      ],
+      "radius": 70,
+      "height": 52,
+      "mat": "ridge"
+    },
+    {
+      "kind": "mountain",
+      "pos": [
+        -10,
+        -178
+      ],
+      "radius": 95,
+      "height": 66,
+      "mat": "ridge_far"
+    },
+    {
+      "kind": "mountain",
+      "pos": [
+        72,
+        -162
+      ],
+      "radius": 76,
+      "height": 56,
+      "mat": "ridge"
+    },
+    {
+      "kind": "mountain",
+      "pos": [
+        152,
+        -205
+      ],
+      "radius": 100,
+      "height": 72,
+      "mat": "ridge_far"
+    },
+    {
+      "kind": "mountain",
+      "pos": [
+        -168,
+        -195
+      ],
+      "radius": 90,
+      "height": 62,
+      "mat": "ridge_far"
+    },
+    {
+      "kind": "mountain",
+      "pos": [
+        10,
+        -122
+      ],
+      "radius": 46,
+      "height": 34,
+      "mat": "ridge",
+      "note": "近山，托住远景塔"
+    },
+    {
+      "kind": "mountain",
+      "pos": [
+        -142,
+        62
+      ],
+      "radius": 80,
+      "height": 50,
+      "mat": "ridge_far",
+      "note": "南侧远山，补齐第三层"
+    }
   ],
   "pagodas": [
-    {"kind": "pagoda", "pos": [12, -118], "tiers": 3, "base": 8.0, "height": 5.0, "mat": "roof_dark", "wall_mat": "wood_dark", "note": "河对岸山中塔（参考图远景地标）"},
-    {"kind": "pagoda", "pos": [-104, 68], "tiers": 2, "base": 6.5, "height": 4.4, "mat": "roof_dark", "wall_mat": "wood_dark"}
+    {
+      "kind": "pagoda",
+      "pos": [
+        12,
+        -118
+      ],
+      "tiers": 3,
+      "base": 8.0,
+      "height": 5.0,
+      "mat": "roof_dark",
+      "wall_mat": "wood_dark",
+      "note": "河对岸山中塔（参考图远景地标）"
+    },
+    {
+      "kind": "pagoda",
+      "pos": [
+        -104,
+        68
+      ],
+      "tiers": 2,
+      "base": 6.5,
+      "height": 4.4,
+      "mat": "roof_dark",
+      "wall_mat": "wood_dark"
+    }
   ],
-  "spawn": {"pos": [0, 0.2, 34], "yaw_deg": 0}
+  "spawn": {
+    "pos": [
+      0,
+      0.2,
+      34
+    ],
+    "yaw_deg": 0
+  },
+  "ambience": {
+    "night": -14.0,
+    "water": -17.0,
+    "crickets": -25.0
+  }
 }

@@ -104,6 +104,18 @@ func _ready() -> void:
 	_ok_if(SaveManager.delete_save(slot), "清理测试存档")
 	_ok_if(not SaveManager.has_save(slot), "测试存档已删除")
 
+	# ---------------------------------------------------------------- 音频资产
+
+	_section("音频（tools/gen_sfx.py 程序化合成）")
+	var aud := AudioDirector.asset_summary()
+	_ok_if(int(aud["sfx"]) >= 9, "通用音效已加载：%d/9" % int(aud["sfx"]))
+	_ok_if(int(aud["steps"]) >= 7, "脚步变体已加载：%d/7" % int(aud["steps"]))
+	_ok_if(int(aud["ambience"]) == 3, "环境音层已建立：%d/3" % int(aud["ambience"]))
+
+	# 退出前释放音频：headless 音频服务器不回收 playback，不断开引用会报泄漏
+	AudioDirector.prepare_exit()
+	await get_tree().process_frame
+
 	_report()
 
 # ---------------------------------------------------------------- 断言工具
