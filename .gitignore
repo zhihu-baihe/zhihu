@@ -35,7 +35,7 @@ yunque/assets/source/textures/*.zip
 # 候选贴图：已下载并评估、但**尚未写入 TEX_MAP**（=未接入构建）。
 # 本地保留以便随时取用，不入库 —— 台账里状态为「候选」，asset_id 可重下。
 # 接入时：先把 TEX_MAP 指向它，然后**把下面这一行删掉**，它才算正式入库。
-yunque/assets/processed/textures/PavingStones138/
+# （138 已于 B6 接入河埠铺装，故不在此列。）
 yunque/assets/processed/textures/RoofingTiles011A/
 yunque/assets/processed/textures/RoofingTiles012A/
 

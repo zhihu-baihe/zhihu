@@ -107,6 +107,13 @@ const TEX_MAP := {
 	"wall": ["Plaster001", 0.32],
 	"stone": ["PavingStones070", 0.185],
 	"stone_dark": ["PavingStones070", 0.24],
+	# 河埠铺装：与主街方石刻意用两套材质（B6）。
+	# 候选里 151 是**真卵石**，但它是欧式扇形铺法（fan pattern）—— 一张贴图里
+	# 就是几个同心弧，铺到 5 m 尺度后弧线清晰可辨、且重复出现，穿帮比 070 的单调更明显。
+	# 试过放大到 8 m：弧线只会更大，扇形是图案结构、不是尺度问题，救不回来。
+	# 改用 138：暖黄条石，色相与主街的冷灰方石差异最大，且没有大尺度图案。
+	#   10 块横 × 15 块纵 / 一张铺 1/0.28 = 3.57 m → 单块 35.7 × 23.8 cm。
+	"cobble": ["PavingStones138", 0.28],
 	"wood": ["PlanksWood", 0.28],
 	"wood_dark": ["PlanksWood", 0.28],
 	"cloth_red": ["FabricWeave", 5.0],
@@ -499,7 +506,9 @@ static func _street(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	var street_key := str(s.get("mat", "stone"))
 	# 粗糙度 0.42 → 0.66：石板本身不该这么光。0.42 时整条街都是镜面，
 	# 反射要靠 SSR 只出现在近处与水面（见 town_world.gd 的 ssr_fade_in）。
-	var wet_mat := _mat(pal, street_key, 0.66, _col(pal, street_key).darkened(0.18))
+	# 可按条覆盖：卵石是圆的、高光更集中，湿了比方石更亮（河埠给 0.58）。
+	var rough := float(s.get("roughness", 0.66))
+	var wet_mat := _mat(pal, street_key, rough, _col(pal, street_key).darkened(0.18))
 	if kind == "plaza":
 		var pos := _v3(s.get("pos", [0, 0, 0]))
 		var size := _v3(s.get("size", [10, 0, 10]))

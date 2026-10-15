@@ -71,6 +71,20 @@ func _capture() -> void:
 			cam.look_at_from_position(Vector3(0, 2.0, 21.0), Vector3(0, 5.0, 42.0), Vector3.UP)
 			cam.current = true
 			await get_tree().create_timer(0.4).timeout
+		"wharf":
+			# 河埠（从主街西望）：验收卵石铺装、河埠广场与河沿的关系
+			add_child(cam)
+			cam.fov = 54.0
+			cam.look_at_from_position(Vector3(-8.0, 2.4, -19.0), Vector3(-21.0, 0.5, -19.4), Vector3.UP)
+			cam.current = true
+			await get_tree().create_timer(0.4).timeout
+		"cobble":
+			# 铺装俯视特写：验收卵石的单颗尺度与铺法（对应主街用 base / roof 看方石）
+			add_child(cam)
+			cam.fov = 42.0
+			cam.look_at_from_position(Vector3(-13.5, 3.2, -14.8), Vector3(-19.0, 0.05, -19.5), Vector3.UP)
+			cam.current = true
+			await get_tree().create_timer(0.4).timeout
 		"char":
 			# 角色特写：验收人形比例、配色、待机姿态与佩剑
 			add_child(cam)

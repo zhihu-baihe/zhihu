@@ -99,6 +99,7 @@
   "palette": {
     "stone": "#c8c2b4",
     "stone_dark": "#9a948a",
+    "cobble": "#d8dce0",
     "dirt": "#7a6b58",
     "wall": "#d8cfc0",
     "wood": "#f0e0c4",
@@ -374,8 +375,9 @@
         -19
       ],
       "width": 6,
-      "mat": "stone",
-      "note": "MY-T08 河埠"
+      "mat": "cobble",
+      "roughness": 0.58,
+      "note": "MY-T08 河埠（卵石；圆石高光更集中，湿了比方石亮）"
     },
     {
       "kind": "plaza",
@@ -387,7 +389,8 @@
         12,
         6
       ],
-      "mat": "stone",
+      "mat": "cobble",
+      "roughness": 0.58,
       "note": "MY-T08 河埠小广场"
     }
   ],
