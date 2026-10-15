@@ -45,14 +45,40 @@
 | 项 | 值 |
 |---|---|
 | 引擎 | Godot **4.7.2** stable（标准版，非 .NET；纯 GDScript） |
-| 引擎位置 | `E:/MyGame/tools/Godot/Godot_v4.7.2-stable_win64_console.exe` |
-| 工程根 | `E:/MyGame/yunque/` |
+| 引擎位置 | `D:/MyGame/tools/Godot/Godot_v4.7.2-stable_win64_console.exe` |
+| 工程根 | `D:/MyGame/yunque/` |
 | 渲染 | Forward+（Vulkan），1600×900 |
-| 运行 | `Godot_v4.7.2-stable_win64_console.exe --path E:/MyGame/yunque` |
-| 数据自检 | `... --headless --path E:/MyGame/yunque res://tests/test_data_integrity.tscn` |
-| 冒烟测试 | `... --headless --path E:/MyGame/yunque --quit-after 200` |
-| 截图 | `... --path E:/MyGame/yunque --resolution 1600x900 -- --screenshot=E:/MyGame/yunque/shots/x.png --shot-view=<机位>`，机位见下表 |
+| 运行 | 双击仓库根的 `启动游戏.bat`（见下节），或 `Godot_v4.7.2-stable_win64_console.exe --path D:/MyGame/yunque` |
+| 数据自检 | `... --headless --path D:/MyGame/yunque res://tests/test_data_integrity.tscn` |
+| 冒烟测试 | `... --headless --path D:/MyGame/yunque --quit-after 200` |
+| 截图 | `... --path D:/MyGame/yunque --resolution 1600x900 -- --screenshot=D:/MyGame/yunque/shots/x.png --shot-view=<机位>`，机位见下表 |
 | 音效重生成 | `python tools/gen_sfx.py`（在 `yunque/` 下执行；纯标准库，无需虚拟环境） |
+
+> 上面的 `D:/MyGame` 是本机实际路径。**换机器时整体替换成你的仓库根**，
+> 脚本内部一律用 `%~dp0`（自身所在目录），所以 bat 放到哪都能用。
+
+### 一键启动
+
+仓库根有两个 `.bat`，双击即可，不需要命令行：
+
+| 文件 | 作用 |
+|---|---|
+| `启动游戏.bat` | 直接开玩。首次运行会自动做一次资源导入（约 30 s），之后秒开 |
+| `打开编辑器.bat` | 打开 Godot 编辑器，用来改场景 / 调材质 / 试参数 |
+
+```
+启动游戏.bat            # 双击 = 开玩（无控制台窗口）
+启动游戏.bat debug      # 保留日志窗口，报错时用（正常情况下窗口立刻收掉）
+
+set YQ_EXTRA=--fullscreen      # 想全屏 / 改分辨率时先设这个环境变量
+```
+
+**操作**：`WASD` 移动 / 鼠标转视角（点一下画面锁定鼠标）/ `Shift` 疾跑 /
+`E` 交互与推进对白 / `空格`、`回车` 推进对白 / `Tab` 菜单（`↑↓←→` 翻页）/ `Esc` 释放鼠标。
+
+> ⚠️ **这两个 bat 必须存成 GBK + CRLF**。cmd 是按当前代码页逐行解析脚本的，
+> 存成 UTF-8 时中文注释的字节会被当成命令拆开，整个脚本会崩成一串
+> 「`'xx'` 不是内部或外部命令」。改这两个文件时注意别让编辑器转成 UTF-8。
 
 ### 截图机位（`--shot-view=`）
 
@@ -65,6 +91,8 @@
 | `facade` | 建筑正立面（格子窗 / 檐柱 / 额枋 / 门洞 / 招牌） |
 | `base` | 墙基低机位特写（台明 / 踏跺 / 勒脚 / 压顶石 / 柱础 的层叠关系） |
 | `gate` | 城门（城内望向南门：门楣 / 匾额 / 女儿墙 / 箭楼亮窗 / 门楣灯笼串） |
+| `wharf` | 河埠（从主街西望：卵石铺装 / 河埠广场 / 河沿关系） |
+| `cobble` | 铺装俯视特写（验收石块的单颗尺度与铺法；主街方石用 `base` / `roof` 看） |
 | `char` | 主角特写（比例 / 配色 / 待机 / 佩剑） |
 | `npc` | NPC 特写（站在该 NPC 正前方拍） |
 | `walk` | 步态冻结帧（`_phase=1.30`，用于复核走姿） |
