@@ -1,14 +1,24 @@
 # 本机工具链（Godot 引擎，不入库）
-tools/
+# 【必须带前导斜杠】只锚定仓库根目录。
+# 写成 `tools/` 会匹配任意层级的 tools 目录，把 yunque/tools/gen_sfx.py
+# （音效的唯一源头，见开发文档 07 §4）一起吞掉 —— 曾导致该脚本从未入库。
+/tools/
 
 # Godot 导入缓存与中间产物
 yunque/.godot/
 *.tmp
 
+# Python 缓存（yunque/tools/ 下的合成与校验脚本）
+__pycache__/
+*.pyc
+
 # 工作区本地数据（记忆/脚本运行痕迹）
 .workbuddy/
 Thumbs.db
 desktop.ini
+
+# 本机验证产物：截图 / 日志 / 一次性临时脚本，一律以 _ 开头放仓库根
+/_*
 
 # 源设计资料包：按用户决定入库（原样保留，勿在仓库内直接改动策划原文）
 # 仅排除 Office 临时锁文件
