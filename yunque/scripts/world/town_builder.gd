@@ -12,6 +12,8 @@ const TRIGGER_SCENE := preload("res://scenes/props/trigger_zone.tscn")
 
 ## 全场景动态光预算：超过后灯笼只发光、不再挂 OmniLight，避免灰盒阶段就爆光照。
 const LIGHT_BUDGET_MAX := 30
+## 全局灯光能量缩放：夜景验收要求「蓝灰环境光 + 暖灯」，避免灯笼过曝、暗部丢细节。
+const LIGHT_ENERGY_SCALE := 0.75
 static var _lights_left := LIGHT_BUDGET_MAX
 
 static func reset_budget() -> void:
@@ -189,7 +191,7 @@ static func _light(parent: Node3D, pos: Vector3, color: Color, energy: float, ra
 	var l := OmniLight3D.new()
 	l.position = pos
 	l.light_color = color
-	l.light_energy = energy
+	l.light_energy = energy * LIGHT_ENERGY_SCALE
 	l.omni_range = range_m
 	l.shadow_enabled = false
 	l.distance_fade_enabled = true
@@ -482,7 +484,7 @@ static func _lantern_row(parent: Node3D, r: Dictionary, pal: Dictionary) -> void
 	var light_every := maxi(1, int(r.get("light_every", 2)))
 	var off := _v2(r.get("offset", [0, 0]))
 	var warm := str(r.get("mat", "lantern"))
-	var lmat := MatCache.emissive(_col(pal, warm, "#ffb457"), 2.5)
+	var lmat := MatCache.emissive(_col(pal, warm, "#ffb457"), 1.7)
 	var pmat := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.9)
 	var lcolor := _col(pal, warm, "#ffb457")
 	for i in count:
@@ -592,13 +594,17 @@ static func _bridge(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 		var tm := (t0 + t1) * 0.5
 		var y_mid := arch * sin(PI * tm)
 		var mid := Vector2(lerpf(a.x, c.x, tm), lerpf(a.y, c.y, tm))
-		_box(parent, Vector3(mid.x, y_mid - 0.15, mid.y), Vector3(seg_len + 0.12, 0.3, width), deck_mat, true, yaw, "BridgeDeck")
+		# 桥面盒体随拱线切角倾斜，避免出现「台阶感」
+		var slope := atan2(arch * PI * cos(PI * tm), length)
+		var deck := _box(parent, Vector3(mid.x, y_mid - 0.15, mid.y), Vector3(seg_len + 0.16, 0.34, width), deck_mat, true, yaw, "BridgeDeck")
+		if deck is Node3D:
+			(deck as Node3D).rotate_object_local(Vector3(0, 0, 1), slope)
 		for s: float in [-1.0, 1.0]:
 			var rp := mid + perp * ((width * 0.5 - 0.12) * s)
-			_box(parent, Vector3(rp.x, y_mid + rail_h * 0.5, rp.y), Vector3(seg_len + 0.12, rail_h, 0.16), rail_mat, false, yaw, "BridgeRail")
+			_box(parent, Vector3(rp.x, y_mid + rail_h * 0.5, rp.y), Vector3(seg_len + 0.16, rail_h, 0.16), rail_mat, false, yaw, "BridgeRail")
 	# 桥头与桥心灯柱
 	var rows := int(b.get("lantern_rows", 2))
-	var lamp := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 2.6)
+	var lamp := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 1.9)
 	var pole := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.9)
 	for t: float in [0.06, 0.5, 0.94]:
 		var mid2 := Vector2(lerpf(a.x, c.x, t), lerpf(a.y, c.y, t))
@@ -617,7 +623,7 @@ static func _bridge(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 			var f := float(k) / 4.0 - 0.5
 			var q := mid3 + perp * (f * (width - 0.8))
 			_sphere(parent, Vector3(q.x, yr + 2.05, q.y), 0.17,
-				MatCache.emissive(_col(pal, "lantern_cold", "#9fd2ff"), 2.0), "BridgeString")
+				MatCache.emissive(_col(pal, "lantern_cold", "#9fd2ff"), 1.5), "BridgeString")
 
 
 # ================================================================ NPC / 交互 / 触发器

@@ -38,14 +38,14 @@
       "moon_color": "#c8d8ff",
       "moon_energy": 0.55,
       "moon_rotation_deg": [-38, 300, 0],
-      "ambient_energy": 0.42,
+      "ambient_energy": 0.50,
       "fog_color": "#26314a",
       "fog_density": 0.011,
       "fog_sky_affect": 0.40,
-      "glow_strength": 0.60,
-      "glow_bloom": 0.28,
+      "glow_strength": 0.45,
+      "glow_bloom": 0.20,
       "ssr_enabled": true,
-      "tonemap_exposure": 1.10
+      "tonemap_exposure": 1.05
     }
   },
   "environment": {
@@ -59,18 +59,18 @@
     "moon_color": "#c8d8ff",
     "moon_energy": 0.55,
     "moon_rotation_deg": [-38, 300, 0],
-    "ambient_energy": 0.42,
+    "ambient_energy": 0.50,
     "fog_enabled": true,
     "fog_color": "#26314a",
     "fog_density": 0.011,
     "fog_sky_affect": 0.40,
     "glow_enabled": true,
-    "glow_strength": 0.60,
-    "glow_bloom": 0.28,
+    "glow_strength": 0.45,
+    "glow_bloom": 0.20,
     "ssao_enabled": true,
     "ssr_enabled": true,
     "tonemap_mode": 3,
-    "tonemap_exposure": 1.10
+    "tonemap_exposure": 1.05
   },
   "palette": {
     "stone": "#7d766b",

@@ -183,6 +183,8 @@ LOD 策略：`LOD0`（近，带法线）→ `LOD1`（中，去法线、减半面
 
 ```
 res://assets/
+├── source/         原始下载档（**只读，不覆盖**；保留 .blend 与原始 FBX/OBJ）
+├── processed/      已处理可用档（.glb，导入 Godot 的唯一来源）
 ├── architecture/   SM_Building_A.glb, SM_Roof_Gable.glb …
 ├── props/          PROP_Tree.glb, PROP_Lantern_Round.glb …
 ├── materials/      M_Wood_Old.tres, M_Stone_Wall.tres …（共享材质，不嵌在模型里）
@@ -190,6 +192,8 @@ res://assets/
 ├── environment/    ENV_Sky_Dusk.tres, ENV_Moyi_Town.tres
 └── reference/      概念参考图（**不参与构建**，仅存档）
 ```
+
+> **原始档与处理档分离**（来自项目美术资料包 `开发文档/美术/美术.md` 的管线约定）：外部下载物一律先进 `source/`，在 Blender 里检查比例/原点/朝向/UV/法线/面数后，导出 `.glb` 到 `processed/` 再导入 Godot。**`processed/` 是唯一被场景引用的目录**，回滚或替换资产时不会污染原始档。
 
 命名规则：`SM_` 结构模块 / `PROP_` 道具 / `M_` 材质 / `T_` 纹理 / `ENV_` 环境；中文名只出现在文档里，资源名一律 ASCII 拼音或英文，避免跨工具编码问题。
 
@@ -241,11 +245,16 @@ res://assets/
 | Poly Haven | HDRI、PBR 纹理、少量模型 | CC0 | 天空/环境光照、木石瓦纹理 |
 | ambientCG | PBR 纹理 | CC0 | 石材、木、布、金属 |
 | Quaternius | 低模建筑/道具/角色 | CC0 | 远景剪影、临时占位 |
-| Kenney | 道具、UI 图标 | CC0 | 通用道具（风格偏卡通，仅作临时占位） |
-| OpenGameArt | 混合 | CC0 / CC-BY / GPL，**逐个确认** | 个别道具与音效 |
-| Sketchfab（CC0 筛选） | 模型 | 逐个确认 | 个别道具；务必核对作者与授权 |
+| Kenney（Building Kit） | 80+ 墙/地板/门窗模块 | CC0 | 结构补充与原型；风格偏通用，**不作中式主资产** |
+| Fab | 中式寺庙/村落/模块化/古市集摊位（关键词 `Chinese temple` / `Asian village` / `modular building` / `ancient market stall`） | 逐项核实 | 结构化资产候选 |
+| Sketchfab（CC0/CC-BY 筛选） | 见 `资源台账.md` 候选表 | 逐项核实（注意 **NC / ND / NoAI** 标记） | 中式建筑与灯笼候选，**先审核再下载** |
+| itch.io `tag-3d`+`tag-chinese` | 混合 | 逐项核实（该标签下大量是 2D/像素风） | 个别道具 |
 | Material Maker（免费开源） | 程序化纹理 | 自产 | 生成 tileable 木/石/瓦纹理 |
 | Blender | 全部自建件 | 自产 | 建筑模块、道具、桥、戏台 |
+
+**工具链**：Godot 4.7.2 / Blender（检查·拆分·减面·材质·GLB 导出）/ Krita·GIMP（贴图绘制）/ Mixamo（后续角色动画）/ **Meshy**（AI 生成模型，免费计划产物按 CC BY 4.0 需署名——生成当日必须重新核对当时条款）。
+
+**红线**：不得使用 **NC（非商业）/ ND（禁改）/ 许可不明 / 标为 NoAI** 的资产；**标 NoAI 的模型不得作为生成式 AI 的输入**。每项资产登记：`asset_id, asset_name, source_url, creator, download_date, license, commercial_ok, attribution, noai_flag, format, modified, used_in_scene, notes`（见 `资源台账.md`）。
 
 **每项资产必须登记**：用途 / 来源或制作方法 / 授权待确认项 / 影响的游戏功能。台账模板见 `开发文档/资源台账.md`。
 
