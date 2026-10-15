@@ -1,12 +1,14 @@
 extends CanvasLayer
 class_name GameHUD
-## HUD：任务追踪、线索计数、交互提示、拾取/线索提示条、队伍状态。
+## 场景内 HUD（依据 CHAR-UI-02 v0.4 §UI-07）：
+## 左上只保留一条轻量主线提示；底部单层交互提示；完整任务日志由 Tab 键打开（MenuPanel）。
 ## 交互提示采用「拉取」模型：每帧向 Interactor 取当前可交互对象，避免信号时序问题。
 
-@onready var quest_title: Label = $QuestPanel/VBox/QuestTitle
-@onready var quest_objective: Label = $QuestPanel/VBox/QuestObjective
-@onready var clue_line: Label = $QuestPanel/VBox/ClueLine
-@onready var prompt_label: Label = $InteractionPrompt
+@onready var quest_title: Label = $QuestHint/VBox/QuestTitle
+@onready var quest_objective: Label = $QuestHint/VBox/QuestObjective
+@onready var clue_line: Label = $QuestHint/VBox/ClueLine
+@onready var prompt_panel: PanelContainer = $InteractionPrompt
+@onready var prompt_label: Label = $InteractionPrompt/Row/Prompt
 @onready var toast_box: VBoxContainer = $ToastBox
 @onready var party_box: VBoxContainer = $PartyPanel/PartyBox
 @onready var hint_bar: Label = $HintBar
@@ -14,14 +16,17 @@ class_name GameHUD
 var _interactor: Node = null
 
 func _ready() -> void:
+	UITheme.apply(self, UITheme.build())
+	# 键位提示在暗场景底部会读不清，给它一张浅色纸片底
+	hint_bar.add_theme_stylebox_override("normal", UITheme.panel(UITheme.PAPER_PANEL, UITheme.LINE, 2, 10))
+	hint_bar.text = "WASD 移动 · Shift 疾行 · E 交互 · Tab 界面 · Esc 释放鼠标"
 	GameState.quest_updated.connect(_on_quest_updated)
 	GameState.clue_added.connect(_on_clue_added)
-	GameState.item_changed.connect(_on_item_changed)
 	GameState.party_changed.connect(_on_party_changed)
 	GameState.toast.connect(_on_toast)
 	DialogueRunner.dialogue_started.connect(func(_a, _b): _update_prompt())
 	DialogueRunner.dialogue_finished.connect(func(_a): _update_prompt())
-	hint_bar.text = "WASD 移动 · Shift 疾行 · E 交互 · Esc 释放鼠标 · 点击画面收回鼠标"
+	prompt_panel.visible = false
 	_refresh_quests()
 	_refresh_party()
 
@@ -33,26 +38,28 @@ func _process(_delta: float) -> void:
 
 func _update_prompt() -> void:
 	var txt := ""
-	if not DialogueRunner.active and _interactor != null and is_instance_valid(_interactor):
+	if not DialogueRunner.active and not GameState.ui_blocked \
+			and _interactor != null and is_instance_valid(_interactor):
 		txt = str(_interactor.current_prompt())
-	prompt_label.text = "［E］%s" % txt if txt != "" else ""
-	prompt_label.visible = txt != ""
+	prompt_panel.visible = txt != ""
+	prompt_label.text = txt
 
 
 # ---------------------------------------------------------------- 提示条
 
 func _on_toast(text: String, color: Color) -> void:
+	var chip := PanelContainer.new()
+	chip.add_theme_stylebox_override("panel", UITheme.panel(UITheme.PAPER_PANEL, UITheme.LINE, 2, 14))
 	var lb := Label.new()
 	lb.text = text
-	lb.modulate = color
 	lb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lb.add_theme_font_size_override("font_size", 20)
-	lb.add_theme_color_override("font_outline_color", Color(0.04, 0.04, 0.05))
-	lb.add_theme_constant_override("outline_size", 6)
-	toast_box.add_child(lb)
+	lb.add_theme_font_size_override("font_size", 19)
+	lb.add_theme_color_override("font_color", color)
+	chip.add_child(lb)
+	toast_box.add_child(chip)
 	var tw := create_tween()
-	tw.tween_property(lb, "modulate:a", 0.0, 2.6).set_delay(1.4)
-	tw.tween_callback(lb.queue_free)
+	tw.tween_property(chip, "modulate:a", 0.0, 2.4).set_delay(1.6)
+	tw.tween_callback(chip.queue_free)
 
 
 # ---------------------------------------------------------------- 任务 / 线索
@@ -61,23 +68,21 @@ func _refresh_quests() -> void:
 	var main_title := ""
 	var objective := ""
 	for q in GameState.active_quests():
-		if str(q.get("type", "")) == "main":
-			main_title = str(q.get("title", ""))
-			objective = "· %s" % str(q.get("objective", ""))
+		var st: Dictionary = q
+		if str(st.get("type", "")) == "main":
+			main_title = str(st.get("title", ""))
+			objective = str(st.get("objective", ""))
 		else:
-			objective += "\n· ［支线］%s" % str(q.get("objective", ""))
+			objective += "\n（支线）%s" % str(st.get("objective", ""))
 	quest_title.text = main_title
 	quest_objective.text = objective
-	clue_line.text = "线索 %d / %d" % [GameState.clue_count(), GameState.clue_total()]
+	clue_line.text = "线索 %d / %d　·　Tab 查看任务日志" % [GameState.clue_count(), GameState.clue_total()]
 
 func _on_quest_updated(_qid: String, _sid: String, _idx: int, _done: bool) -> void:
 	_refresh_quests()
 
 func _on_clue_added(_cid: String, _n: int, _t: int) -> void:
 	_refresh_quests()
-
-func _on_item_changed(_id: String, _total: int) -> void:
-	pass
 
 
 # ---------------------------------------------------------------- 队伍
@@ -95,18 +100,17 @@ func _refresh_party() -> void:
 func _add_party_row(character_id: String, level: int) -> void:
 	var st := _stats_for(character_id, level)
 	var row := VBoxContainer.new()
+	row.add_theme_constant_override("separation", 2)
 	var name_lb := Label.new()
-	name_lb.text = "%s  Lv%d" % [GameData.character_name(character_id), level]
-	name_lb.add_theme_font_size_override("font_size", 18)
-	name_lb.add_theme_color_override("font_outline_color", Color(0.04, 0.04, 0.05))
-	name_lb.add_theme_constant_override("outline_size", 6)
+	name_lb.text = "%s　Lv%d" % [GameData.character_name(character_id), level]
+	name_lb.add_theme_font_size_override("font_size", 19)
 	var hp := Label.new()
-	hp.text = "HP %d   MP %d" % [int(st.get("HP", 0)), int(st.get("MP", 0))]
+	hp.text = "气血 %d　灵息 %d" % [int(st.get("HP", 0)), int(st.get("MP", 0))]
 	hp.add_theme_font_size_override("font_size", 16)
-	hp.modulate = Color(0.82, 0.86, 0.8)
+	hp.add_theme_color_override("font_color", UITheme.INK_SUB)
 	var bar := ColorRect.new()
-	bar.custom_minimum_size = Vector2(160, 3)
-	bar.color = Color(0.35, 0.55, 0.42)
+	bar.custom_minimum_size = Vector2(0, 2)
+	bar.color = UITheme.ACCENT_CINNABAR
 	row.add_child(name_lb)
 	row.add_child(hp)
 	row.add_child(bar)

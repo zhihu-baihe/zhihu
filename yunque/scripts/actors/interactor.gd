@@ -22,7 +22,7 @@ func current_prompt() -> String:
 	return "互动"
 
 func _process(delta: float) -> void:
-	if DialogueRunner.active:
+	if DialogueRunner.active or GameState.ui_blocked:
 		if nearest != null:
 			nearest = null
 		return
@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 		nearest = _find_nearest()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if DialogueRunner.active:
+	if DialogueRunner.active or GameState.ui_blocked:
 		return
 	if event.is_action_pressed("interact"):
 		if nearest != null and is_instance_valid(nearest) and nearest.has_method("interact"):

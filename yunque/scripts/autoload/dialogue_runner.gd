@@ -42,7 +42,7 @@ func select_node(npc_id: String) -> Dictionary:
 func start_npc(npc_id: String) -> bool:
 	var node := select_node(npc_id)
 	if node.is_empty():
-		GameState.toast.emit("%s 现在没什么要说的。" % GameData.npc_name(npc_id), Color(0.7, 0.72, 0.7))
+		GameState.toast.emit("%s 现在没什么要说的。" % GameData.npc_name(npc_id), UITheme.INK_SUB)
 		return false
 	return start_node(str(node.get("id", "")))
 

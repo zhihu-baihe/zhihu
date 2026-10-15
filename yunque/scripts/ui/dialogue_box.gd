@@ -1,14 +1,15 @@
 extends CanvasLayer
 class_name DialogueBox
-## 对白 UI：说话人 + 打字机正文 + 继续提示。
+## 对白 UI（依据 CHAR-UI-02 v0.4 §UI-07）：底部单层对白框，说话人 + 不超过 2—3 行对白。
+## 纸白底 + 墨色正文 + 朱砂小标记；不使用深色底框与金边。
 ## 输入：对白进行中，E / 空格 / 回车 / 鼠标左键 = 立即显示全文或推进到下一行。
-## 注意 frame lock：用 E 触发对白的那一帧不能立刻把第一行跳过去。
+## frame lock：用 E 触发对白的那一帧不能立刻把第一行跳过去。
 
 const CHARS_PER_SECOND := 38.0
-const NAME_COLOR := Color(0.95, 0.85, 0.6)
 
 @onready var panel: PanelContainer = $Panel
-@onready var name_label: Label = $Panel/Margin/VBox/NameLabel
+@onready var name_row: HBoxContainer = $Panel/Margin/VBox/NameRow
+@onready var name_label: Label = $Panel/Margin/VBox/NameRow/NameLabel
 @onready var text_label: Label = $Panel/Margin/VBox/TextLabel
 @onready var hint_label: Label = $Panel/Margin/VBox/HintLabel
 
@@ -18,6 +19,7 @@ var _typing := false
 var _lock_frame := -1
 
 func _ready() -> void:
+	UITheme.apply(self, UITheme.build())
 	panel.visible = false
 	DialogueRunner.dialogue_started.connect(_on_started)
 	DialogueRunner.line_shown.connect(_on_line)
@@ -31,7 +33,7 @@ func _process(delta: float) -> void:
 	if n >= _full_text.length():
 		_revealed = float(_full_text.length())
 		_typing = false
-		hint_label.text = "▼  E / 空格 继续"
+		hint_label.text = "E / 空格 继续"
 	text_label.text = _full_text.substr(0, int(_revealed))
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -51,7 +53,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_revealed = float(_full_text.length())
 		_typing = false
 		text_label.text = _full_text
-		hint_label.text = "▼  E / 空格 继续"
+		hint_label.text = "E / 空格 继续"
 	else:
 		DialogueRunner.advance()
 
@@ -60,19 +62,16 @@ func _on_started(_node_id: String, _lines: Array) -> void:
 	_lock_frame = Engine.get_process_frames()
 
 func _on_line(_index: int, speaker: String, text: String) -> void:
+	# 旁白（用「（……）」包裹）不显示名字，正文转次级墨色
 	var is_narration := speaker.begins_with("（")
-	name_label.visible = not is_narration
+	name_row.visible = not is_narration
 	name_label.text = speaker
-	name_label.modulate = NAME_COLOR
-	if is_narration:
-		text_label.modulate = Color(0.78, 0.8, 0.86)
-	else:
-		text_label.modulate = Color(0.96, 0.95, 0.92)
+	text_label.modulate = UITheme.INK_SUB if is_narration else UITheme.INK_MAIN
 	_full_text = text
 	_revealed = 0.0
 	_typing = true
 	text_label.text = ""
-	hint_label.text = "▼  E / 空格 跳过"
+	hint_label.text = "E / 空格 跳过"
 
 func _on_finished(_node_id: String) -> void:
 	panel.visible = false

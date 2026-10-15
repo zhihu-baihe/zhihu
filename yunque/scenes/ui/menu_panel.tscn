@@ -1,0 +1,83 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/menu_panel.gd" id="1_menu"]
+
+[node name="MenuPanel" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_menu")
+
+[node name="Paper" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.953, 0.941, 0.906, 0.97)
+
+[node name="Root" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 56
+theme_override_constants/margin_top = 44
+theme_override_constants/margin_right = 56
+theme_override_constants/margin_bottom = 24
+
+[node name="HBox" type="HBoxContainer" parent="Root"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Nav" type="VBoxContainer" parent="Root/HBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NavQuest" type="Button" parent="Root/HBox/Nav"]
+layout_mode = 2
+text = "任务日志"
+
+[node name="NavItems" type="Button" parent="Root/HBox/Nav"]
+layout_mode = 2
+text = "物品"
+
+[node name="NavChar" type="Button" parent="Root/HBox/Nav"]
+layout_mode = 2
+text = "角色状态"
+
+[node name="Divider" type="ColorRect" parent="Root/HBox"]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.737, 0.78, 0.757, 1)
+
+[node name="Content" type="VBoxContainer" parent="Root/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="PageTitle" type="Label" parent="Root/HBox/Content"]
+layout_mode = 2
+theme_type_variation = &"PageTitleLabel"
+text = "任务日志"
+
+[node name="Rule" type="ColorRect" parent="Root/HBox/Content"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.737, 0.78, 0.757, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="Root/HBox/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Body" type="VBoxContainer" parent="Root/HBox/Content/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Footer" type="Label" parent="Root"]
+layout_mode = 2
+theme_type_variation = &"HintLabel"
+text = "Tab / Esc 关闭"

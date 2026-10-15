@@ -90,8 +90,8 @@
     "lantern_cold": "#9fd2ff",
     "leaf": "#3f5a3a",
     "leaf_dark": "#2c4229",
-    "ridge": "#1e2633",
-    "ridge_far": "#161d29"
+    "ridge": "#2a3646",
+    "ridge_far": "#222c3c"
   },
   "terrain": [
     {"kind": "terrain", "pos": [0, -0.5, 13],  "size": [96, 1.0, 70], "mat": "stone_dark", "note": "城内台地，顶面 y=0"},
@@ -213,17 +213,17 @@
     {"id": "TRG_ALLEY_DRAMA", "pos": [-6, 0, -2.2], "radius": 4.5, "dialogue": "MOYI_ALLEY_010", "required": ["COMP_JIANGATANG_JOINED", "ANY_CLUE"], "forbidden": ["MSQ_AheMissing"], "note": "灯会小高潮：纸轿穿过人群，阿禾追进侧巷"}
   ],
   "mountains": [
-    {"kind": "mountain", "pos": [-62, -92], "radius": 42, "height": 58, "mat": "ridge"},
-    {"kind": "mountain", "pos": [-12, -108], "radius": 56, "height": 74, "mat": "ridge_far"},
-    {"kind": "mountain", "pos": [46, -96], "radius": 46, "height": 62, "mat": "ridge"},
-    {"kind": "mountain", "pos": [98, -124], "radius": 62, "height": 84, "mat": "ridge_far"},
-    {"kind": "mountain", "pos": [-112, -118], "radius": 52, "height": 68, "mat": "ridge_far"},
-    {"kind": "mountain", "pos": [8, -76], "radius": 26, "height": 30, "mat": "ridge", "note": "近山，托住远景塔"},
-    {"kind": "mountain", "pos": [-96, 34], "radius": 44, "height": 52, "mat": "ridge_far", "note": "南侧远山，补齐第三层"}
+    {"kind": "mountain", "pos": [-90, -150], "radius": 70, "height": 52, "mat": "ridge"},
+    {"kind": "mountain", "pos": [-10, -178], "radius": 95, "height": 66, "mat": "ridge_far"},
+    {"kind": "mountain", "pos": [72, -162], "radius": 76, "height": 56, "mat": "ridge"},
+    {"kind": "mountain", "pos": [152, -205], "radius": 100, "height": 72, "mat": "ridge_far"},
+    {"kind": "mountain", "pos": [-168, -195], "radius": 90, "height": 62, "mat": "ridge_far"},
+    {"kind": "mountain", "pos": [10, -122], "radius": 46, "height": 34, "mat": "ridge", "note": "近山，托住远景塔"},
+    {"kind": "mountain", "pos": [-142, 62], "radius": 80, "height": 50, "mat": "ridge_far", "note": "南侧远山，补齐第三层"}
   ],
   "pagodas": [
-    {"kind": "pagoda", "pos": [10, -74], "tiers": 3, "base": 6.5, "height": 4.2, "mat": "roof_dark", "wall_mat": "wood_dark", "note": "河对岸山中塔（参考图远景地标）"},
-    {"kind": "pagoda", "pos": [-74, 40], "tiers": 2, "base": 5.5, "height": 3.8, "mat": "roof_dark", "wall_mat": "wood_dark"}
+    {"kind": "pagoda", "pos": [12, -118], "tiers": 3, "base": 8.0, "height": 5.0, "mat": "roof_dark", "wall_mat": "wood_dark", "note": "河对岸山中塔（参考图远景地标）"},
+    {"kind": "pagoda", "pos": [-104, 68], "tiers": 2, "base": 6.5, "height": 4.4, "mat": "roof_dark", "wall_mat": "wood_dark"}
   ],
   "spawn": {"pos": [0, 0.2, 34], "yaw_deg": 0}
 }

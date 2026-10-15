@@ -23,6 +23,8 @@ var party: Array = []               # Array[String] 角色 ID，按入队顺序
 var party_levels: Dictionary = {}   # String -> int
 var seen_dialogues: Dictionary = {} # String -> true（play_once 已播标记）
 var time_band: String = "dusk"
+## 界面占用：打开完整界面时置 true，玩家停止移动与交互（UI 不直接控制角色节点）。
+var ui_blocked: bool = false
 
 var _quest_stage_cache: Dictionary = {}   # quest_id -> stage_id
 
@@ -87,7 +89,7 @@ func add_clue(clue_id: String) -> void:
 	flag_changed.emit(clue_id, true)
 	var entry := GameData.clue_entry(clue_id)
 	var label := str(entry.get("name", clue_id))
-	toast.emit("获得线索：%s（%d/%d）" % [label, clue_count(), clue_total()], Color(0.94, 0.86, 0.63))
+	toast.emit("获得线索：%s（%d/%d）" % [label, clue_count(), clue_total()], UITheme.ACCENT_CINNABAR)
 	clue_added.emit(clue_id, clue_count(), clue_total())
 	_refresh_derived_flags()
 	_refresh_all_quests()
@@ -118,7 +120,7 @@ func add_item(item_id: String, count: int = 1) -> void:
 	if cur <= 0:
 		items.erase(item_id)
 	item_changed.emit(item_id, cur)
-	toast.emit("获得：%s ×%d" % [GameData.item_name(item_id), count], Color(0.85, 0.92, 0.72))
+	toast.emit("获得：%s ×%d" % [GameData.item_name(item_id), count], UITheme.ACCENT_TEAL)
 
 func item_count(item_id: String) -> int:
 	return int(items.get(item_id, 0))
@@ -141,7 +143,7 @@ func add_party(character_ids) -> void:
 		changed = true
 	if changed:
 		party_changed.emit(party.duplicate())
-		toast.emit("队伍加入：%s" % [GameData.character_name(str(party[-1]))], Color(0.9, 0.78, 0.6))
+		toast.emit("队伍加入：%s" % [GameData.character_name(str(party[-1]))], UITheme.ACCENT_TEAL)
 
 func party_has(character_id: String) -> bool:
 	return party.has(character_id)

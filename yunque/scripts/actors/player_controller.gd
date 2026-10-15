@@ -38,7 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		arm.rotation.x = clampf(
 			arm.rotation.x - event.relative.y * mouse_sensitivity,
 			deg_to_rad(pitch_min_deg), deg_to_rad(pitch_max_deg))
-	elif event.is_action_pressed("ui_cancel"):
+	elif event.is_action_pressed("ui_cancel") and not GameState.ui_blocked:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event is InputEventMouseButton and event.pressed and Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -50,7 +50,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = -0.1
 
 	var dir := Vector2.ZERO
-	if not DialogueRunner.active:
+	if not DialogueRunner.active and not GameState.ui_blocked:
 		dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 
 	# 以相机水平朝向为基准换算世界方向
@@ -60,7 +60,7 @@ func _physics_process(delta: float) -> void:
 		wish = wish.normalized()
 
 	var speed := walk_speed
-	if Input.is_action_pressed("sprint") and not DialogueRunner.active:
+	if Input.is_action_pressed("sprint") and not DialogueRunner.active and not GameState.ui_blocked:
 		speed = run_speed
 
 	if wish.length() > 0.01:

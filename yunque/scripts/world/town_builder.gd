@@ -258,7 +258,7 @@ static func _mountain(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
 	mi.name = "Mountain"
 	mi.mesh = mesh
 	mi.material_override = MatCache.solid(_col(pal, str(p.get("mat", "ridge")), "#1e2633"), 1.0)
-	mi.position = Vector3(pos.x, h * 0.5 - 24.0, pos.y)
+	mi.position = Vector3(pos.x, h * 0.5 - 30.0, pos.y)
 	parent.add_child(mi)
 
 ## 远景塔：层叠方塔 + 出檐，河对岸山中的地标剪影

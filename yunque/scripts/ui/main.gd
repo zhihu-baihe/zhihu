@@ -35,18 +35,29 @@ func _capture() -> void:
 			add_child(cam)
 			cam.fov = 50.0
 			cam.look_at_from_position(Vector3(40, 40, 46), Vector3(0, 2, -12), Vector3.UP)
+			cam.current = true
+			await get_tree().create_timer(0.4).timeout
 		"bridge":
 			add_child(cam)
 			cam.fov = 55.0
 			cam.look_at_from_position(Vector3(0, 9, -45), Vector3(0, 3, -27), Vector3.UP)
+			cam.current = true
+			await get_tree().create_timer(0.4).timeout
+		"menu":
+			var mp := get_node_or_null("MenuPanel")
+			if mp and mp.has_method("open"):
+				mp.open()
+			await get_tree().create_timer(0.6).timeout
+		"dialogue":
+			DialogueRunner.start_node("MOYI_ATANG_010")
+			await get_tree().create_timer(0.25).timeout
+			DialogueRunner.advance()
+			await get_tree().create_timer(0.25).timeout
+			DialogueRunner.advance()
+			await get_tree().create_timer(1.8).timeout
 		_:
 			# 跟随玩家视角：直接使用玩家相机
-			var player := SceneRouter._find_player(SceneRouter.current_world())
-			if player:
-				await _shoot()
-			return
-	cam.current = true
-	await get_tree().create_timer(0.4).timeout
+			pass
 	await _shoot()
 
 func _shoot() -> void:
