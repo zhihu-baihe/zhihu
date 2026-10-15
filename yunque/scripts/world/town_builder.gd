@@ -11,13 +11,25 @@ const DOOR_SCENE := preload("res://scenes/props/workshop_door.tscn")
 const TRIGGER_SCENE := preload("res://scenes/props/trigger_zone.tscn")
 
 ## 全场景动态光预算：超过后灯笼只发光、不再挂 OmniLight，避免灰盒阶段就爆光照。
-const LIGHT_BUDGET_MAX := 30
+## 30 → 26：分配方式从「先到先得」改成「按重要性 + 最小间距」（见 _allocate_lantern_lights），
+## 顺便把余量留给摊位、井亭与桥面 —— 旧实现里它们压根分不到灯。
+const LIGHT_BUDGET_MAX := 26
 ## 全局灯光能量缩放：夜景验收要求「蓝灰环境光 + 暖灯」，避免灯笼过曝、暗部丢细节。
 const LIGHT_ENERGY_SCALE := 0.75
+## 灯笼动态光的候选。**不在 _lantern_row 里直接建灯**，原因见 _allocate_lantern_lights。
+static var _lantern_lights: Array[Dictionary] = []
 static var _lights_left := LIGHT_BUDGET_MAX
+
+## 灯笼抖动（位置 / 高度 / 形状 / 尺寸 / 亮度）的随机种子。
+## **固定种子是刻意的**：截图必须能复现，否则每次跑出来都不一样，改动的效果就无从对比。
+## 要换一版排列，改这个数即可。
+const BUILD_SEED := 20261015
+static var _rng := RandomNumberGenerator.new()
 
 static func reset_budget() -> void:
 	_lights_left = LIGHT_BUDGET_MAX
+	_lantern_lights.clear()
+	_rng.seed = BUILD_SEED
 
 
 # ================================================================ 入口
@@ -59,6 +71,10 @@ static func build(geometry: Node3D, actors: Node3D, map: Dictionary) -> Dictiona
 	for t in _arr(map, "triggers"):
 		_trigger(actors, t)
 
+	# 灯笼的动态光放在最后分配：此时城门 / 桥头 / 戏台 / 摊位已经拿到灯，
+	# 剩下的预算才是灯笼能用的（旧实现是反过来的，见 _allocate_lantern_lights）。
+	_allocate_lantern_lights(geometry)
+
 	return {"lights_used": LIGHT_BUDGET_MAX - _lights_left}
 
 
@@ -67,20 +83,35 @@ static func build(geometry: Node3D, actors: Node3D, map: Dictionary) -> Dictiona
 static func _col(pal: Dictionary, key: String, fallback := "#888888") -> Color:
 	return Color(str(pal.get(key, fallback)))
 
-## 调色板键 → 真实 PBR 贴图集（ambientCG CC0）。[贴图集名, 世界平铺尺度（越小越密）]
+## 调色板键 → 真实 PBR 贴图集。[贴图集名, 世界平铺尺度]
 ## 没有映射的键继续用纯色，保证灰盒与正式资产可以逐块替换、互不影响。
+##
+## world_scale 怎么来的（不要肉眼试，跑 tools/calibrate_textures.py 一次算好）
+## ---------------------------------------------------------------------------
+## 三平面映射是 `uv = 世界坐标 × world_scale`，所以：
+##     一个贴图周期的实际边长 = 1 / world_scale
+##     单块尺寸 = 周期边长 ÷ 贴图内该方向的块数
+## 反过来：world_scale = 1 / (块数 × 目标单块尺寸)
+## 块数取 NormalGL/Displacement 图的主频（FFT），不是彩图——彩图会有伪峰。
+##
+##   roof       RoofTilesQing  横 19 条脊 × 0.18 m(筒瓦瓦垄) = 3.425 m → 0.292
+##   stone      PavingStones070 12 × 12 块 × 0.45 m(方石)    = 5.405 m → 0.185
+##   stone_dark 同上，但取 0.347 m 的碎料尺度给勒脚/踏跺      = 4.167 m → 0.240
+##   wood       PlanksWood      纵 16 道板缝 × 0.22 m(板宽)   = 3.571 m → 0.280
+##   cloth_*    FabricWeave     横 35 根织线 × 5.7 mm         = 0.200 m → 5.000
+##   wall       Plaster001      无周期结构（抹灰），尺度不敏感
 const TEX_ROOT := "res://assets/processed/textures/"
 const TEX_MAP := {
-	"roof": ["RoofingTiles013A", 0.5],
-	"roof_dark": ["RoofingTiles013A", 0.5],
+	"roof": ["RoofTilesQing", 0.292],
+	"roof_dark": ["RoofTilesQing", 0.292],
 	"wall": ["Plaster001", 0.32],
-	"stone": ["PavingStones151", 0.28],
-	"stone_dark": ["PavingStones151", 0.28],
-	"wood": ["Planks037A", 0.42],
-	"wood_dark": ["Planks037A", 0.42],
-	"cloth_red": ["Fabric085", 0.85],
-	"cloth_gold": ["Fabric085", 0.85],
-	"cloth_green": ["Fabric085", 0.85],
+	"stone": ["PavingStones070", 0.185],
+	"stone_dark": ["PavingStones070", 0.24],
+	"wood": ["PlanksWood", 0.28],
+	"wood_dark": ["PlanksWood", 0.28],
+	"cloth_red": ["FabricWeave", 5.0],
+	"cloth_gold": ["FabricWeave", 5.0],
+	"cloth_green": ["FabricWeave", 5.0],
 }
 
 static var _mat_cache: Dictionary = {}
@@ -232,7 +263,8 @@ static func _ramp(parent: Node3D, pos: Vector3, size: Vector3, rise_deg: float,
 	body.add_child(cs)
 	return body
 
-static func _light(parent: Node3D, pos: Vector3, color: Color, energy: float, range_m: float) -> void:
+static func _light(parent: Node3D, pos: Vector3, color: Color, energy: float, range_m: float,
+		attenuation := 1.0) -> void:
 	if _lights_left <= 0:
 		return
 	var l := OmniLight3D.new()
@@ -240,6 +272,8 @@ static func _light(parent: Node3D, pos: Vector3, color: Color, energy: float, ra
 	l.light_color = color
 	l.light_energy = energy * LIGHT_ENERGY_SCALE
 	l.omni_range = range_m
+	# 衰减指数 >1 让光斑边缘更柔：默认 1.0 时灯笼在石面上是一块硬边圆斑。
+	l.omni_attenuation = attenuation
 	l.shadow_enabled = false
 	l.distance_fade_enabled = true
 	l.distance_fade_begin = range_m * 2.5
@@ -463,7 +497,9 @@ static func _street(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	var kind := str(s.get("kind", "street"))
 	# 湿石街：低粗糙度 + SSR，让灯笼在石面上留下反射（参考图的核心视觉手段）
 	var street_key := str(s.get("mat", "stone"))
-	var wet_mat := _mat(pal, street_key, 0.42, _col(pal, street_key).darkened(0.18))
+	# 粗糙度 0.42 → 0.66：石板本身不该这么光。0.42 时整条街都是镜面，
+	# 反射要靠 SSR 只出现在近处与水面（见 town_world.gd 的 ssr_fade_in）。
+	var wet_mat := _mat(pal, street_key, 0.66, _col(pal, street_key).darkened(0.18))
 	if kind == "plaza":
 		var pos := _v3(s.get("pos", [0, 0, 0]))
 		var size := _v3(s.get("size", [10, 0, 10]))
@@ -783,11 +819,19 @@ static func _stall(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	_prism(parent, Vector3(pos.x, h + 0.28, pos.y), Vector3(size.x + 0.5, 0.55, size.y + 0.5), cloth, yaw, "StallAwning")
 	_sphere(parent, Vector3(pos.x - size.x * 0.35, 1.9, pos.y - size.y * 0.3), 0.22,
 		MatCache.emissive(_col(pal, "lantern", "#ffb457"), 2.4), "StallLantern")
-	_light(parent, Vector3(pos.x, 1.95, pos.y), _col(pal, "lantern", "#ffb457"), 1.7, 7.0)
+	_light(parent, Vector3(pos.x, 1.95, pos.y), _col(pal, "lantern", "#ffb457"), 1.55, 6.5, 1.6)
 
 
 # ================================================================ 灯笼
 
+## 灯笼：沿直线等距排开，但**每一项都做小幅抖动**。
+##
+## 旧实现有四层周期性叠在一起，一眼就是程序生成的：等距（3.0/3.25/4.25/5.38 m）、
+## 等高（3.2~4.0）、`i % 2` 严格球柱交替、亮度固定。四条周期叠加后，
+## 走三根杆就能预判第四根长什么样 —— 这才是「机械」的根源，不是杆子不够多。
+##
+## 抖动幅度刻意都压得很小（位置 ±0.30 m、高度 ±0.35 m、尺寸 0.85~1.16）：
+## 灯笼街的秩序感是资产，破的是「复读机」感，不是秩序本身。
 static func _lantern_row(parent: Node3D, r: Dictionary, pal: Dictionary) -> void:
 	var a := _v2(r.get("from", [0, 0]))
 	var b := _v2(r.get("to", [0, 0]))
@@ -796,22 +840,112 @@ static func _lantern_row(parent: Node3D, r: Dictionary, pal: Dictionary) -> void
 	var light_every := maxi(1, int(r.get("light_every", 2)))
 	var off := _v2(r.get("offset", [0, 0]))
 	var warm := str(r.get("mat", "lantern"))
-	var lmat := MatCache.emissive(_col(pal, warm, "#ffb457"), 1.7)
 	var pmat := _mat(pal, "wood_dark", 0.9)
 	var lcolor := _col(pal, warm, "#ffb457")
+	var dir := b - a
+	# 抖动必须沿**街道方向**（改间距），横向抖会把灯笼推到对向那一排身上
+	var tangent := dir.normalized() if dir.length() > 0.01 else Vector2.RIGHT
+	# 每行一个固定相位：左右两排本来是镜像对称的，同相位呼吸会更假
+	var row_phase := _rng.randf() * TAU
 	for i in count:
 		var t := 0.0 if count <= 1 else float(i) / float(count - 1)
-		var p := Vector3(lerpf(a.x, b.x, t) + off.x, 0.0, lerpf(a.y, b.y, t) + off.y)
-		_cylinder(parent, p + Vector3(0, height * 0.5, 0), 0.07, height, pmat, false, "LanternPole")
-		_box(parent, p + Vector3(0, height, 0), Vector3(1.0, 0.08, 0.08), pmat, false, 0.0, "LanternArm")
-		var lp := p + Vector3(0.35, height - 0.34, 0)
-		if i % 2 == 0:
-			_sphere(parent, lp, 0.3, lmat, "Lantern", false)
-		else:
-			_cylinder(parent, lp, 0.27, 0.58, lmat, false, "LanternCyl")
-		_cylinder(parent, lp + Vector3(0, 0.34, 0), 0.06, 0.16, lmat, false, "LanternCap")
+		var slide := _rng.randf_range(-0.30, 0.30)
+		var p := Vector3(lerpf(a.x, b.x, t) + off.x + tangent.x * slide, 0.0,
+			lerpf(a.y, b.y, t) + off.y + tangent.y * slide)
+		var h := height + _rng.randf_range(-0.35, 0.35)
+		var s := _rng.randf_range(0.85, 1.16)
+		# 亮度 ±12%，量化成 5 档：不量化就是给 47 个灯笼各建一份材质，MatCache 就白做了
+		var bri := _lantern_bright_step()
+		var lmat := MatCache.emissive(lcolor, 1.25 * bri)
+		_cylinder(parent, p + Vector3(0, h * 0.5, 0), 0.07, h, pmat, false, "LanternPole")
+		_box(parent, p + Vector3(0, h, 0), Vector3(1.0, 0.08, 0.08), pmat, false, 0.0, "LanternArm")
+		var lp := p + Vector3(0.35, h - 0.34 * s, 0)
+		_lantern_body(parent, lp, s, lmat)
+		_cylinder(parent, lp + Vector3(0, 0.34 * s, 0), 0.06 * s, 0.16 * s, lmat, false, "LanternCap")
 		if i % light_every == 0:
-			_light(parent, lp, lcolor, 1.9, 8.5)
+			_lantern_lights.append({
+				"pos": lp, "color": lcolor,
+				"energy": 1.55, "range": 6.5, "atten": 1.6,
+				"bri": bri, "phase": row_phase + _rng.randf() * TAU,
+				"period": _rng.randf_range(3.0, 6.0),
+			})
+
+## 灯笼外形：球 / 柱 / 方 按权重随机（60 / 25 / 15），替代旧的 `i % 2` 严格交替。
+static func _lantern_body(parent: Node3D, lp: Vector3, s: float, lmat: Material) -> void:
+	var roll := _rng.randf()
+	if roll < 0.60:
+		_sphere(parent, lp, 0.30 * s, lmat, "Lantern", false)
+	elif roll < 0.85:
+		_cylinder(parent, lp, 0.27 * s, 0.58 * s, lmat, false, "LanternCyl")
+	else:
+		_box(parent, lp, Vector3(0.50 * s, 0.56 * s, 0.50 * s), lmat, false, 0.0, "LanternBox")
+
+## 亮度抖动档位（0.88 ~ 1.12，共 5 档），供自发光材质复用。
+static func _lantern_bright_step() -> float:
+	const STEPS := 5
+	var raw := _rng.randf_range(0.88, 1.12)
+	var idx := clampi(int(round((raw - 0.88) / 0.24 * float(STEPS - 1))), 0, STEPS - 1)
+	return 0.88 + 0.24 * float(idx) / float(STEPS - 1)
+
+## 灯笼动态光的**延迟分配**。
+##
+## 为什么不照旧在 _lantern_row 里直接建灯：`build()` 的顺序是先城门 → 桥头 → 戏台 →
+## 摊位 → 灯笼 → 道具 → 远景塔，而 `_light()` 是**先到先得**。旧预算 30 盏时，
+## 前 9 盏被城门/桥头/戏台拿走，剩下的全被 47 个灯笼抢光 ——
+## 结果是**摊位、井亭、桥面一盏动态光都没有**，而河对岸最远那排灯笼反而亮着。
+##
+## 改成收集候选、最后统一分配，并加一条最小间距：
+## 既让「重要性高」的先拿到灯，又强制它们沿街铺开（否则近距离候选会挤在一处）。
+static func _allocate_lantern_lights(parent: Node3D) -> void:
+	var budget := _lights_left
+	if budget <= 0 or _lantern_lights.is_empty():
+		return
+	# 重要性：主街中轴 > 沿街次排 > 河埠。离出生点（z≈34）越远越不需要实体光，
+	# 那里有自发光灯笼 + bloom 就够了。
+	_lantern_lights.sort_custom(func(x: Dictionary, y: Dictionary) -> bool:
+		return _lantern_weight(Vector3(x["pos"])) > _lantern_weight(Vector3(y["pos"])))
+	# 最小间距 4.4 m：略大于主街灯笼间距(3.25 m)，保证 26 盏预算不会被一段吃光
+	const MIN_GAP := 4.4
+	var placed: Array[Vector3] = []
+	for c in _lantern_lights:
+		if placed.size() >= budget:
+			break
+		var p := Vector3(c["pos"])
+		var too_close := false
+		for q in placed:
+			if p.distance_to(q) < MIN_GAP:
+				too_close = true
+				break
+		if too_close:
+			continue
+		placed.append(p)
+		_glow_light(parent, p, Color(c["color"]), float(c["energy"]) * float(c["bri"]),
+			float(c["range"]), float(c["atten"]), float(c["phase"]), float(c["period"]))
+
+static func _lantern_weight(p: Vector3) -> float:
+	return 1.0 / (1.0 + absf(p.x) * 0.35 + absf(p.z - 30.0) * 0.045)
+
+## 带呼吸的灯笼灯：与 `_light()` 同一套预算，只是挂 `LanternGlow` 脚本。
+static func _glow_light(parent: Node3D, pos: Vector3, color: Color, energy: float,
+		range_m: float, attenuation: float, phase: float, period: float) -> void:
+	if _lights_left <= 0:
+		return
+	var l := LanternGlow.new()
+	l.position = pos
+	l.light_color = color
+	l.light_energy = energy * LIGHT_ENERGY_SCALE
+	l.omni_range = range_m
+	l.omni_attenuation = attenuation
+	l.shadow_enabled = false
+	l.distance_fade_enabled = true
+	l.distance_fade_begin = range_m * 2.5
+	l.distance_fade_length = 12.0
+	# 呼吸的基准值必须与首帧能量一致，否则挂上脚本的瞬间会跳一下
+	l.base_energy = energy * LIGHT_ENERGY_SCALE
+	l.phase = phase
+	l.period = period
+	parent.add_child(l)
+	_lights_left -= 1
 
 
 # ================================================================ 道具

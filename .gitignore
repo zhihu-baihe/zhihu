@@ -19,6 +19,25 @@ desktop.ini
 
 # 本机验证产物：截图 / 日志 / 一次性临时脚本，一律以 _ 开头放仓库根
 /_*
+# Godot 工程在 yunque/ 子目录，截图与冒烟日志落在 yunque/_tmp/ 下，单独锚定
+yunque/_tmp/
+
+# 贴图源档 zip：**不入库**，只入库 assets/processed/（构建实际读取的那一层）。
+# 理由两条：
+#   1. 全部是 CC0，可按 asset_id 随时重下（见 开发文档/资源台账.md 登记表）：
+#      https://ambientcg.com/get?file=<assetId>_1K-JPG.zip
+#   2. 本机推送必须走 SOCKS5 代理，单次上传超过约 5MB 就被 408 掐断；
+#      4 个新 zip 合计 23MB，会把整个提交卡死。
+# 这与「工具脚本必须入库」不冲突：gen_sfx.py / bake_textures.py 是不可再生的**源头**，
+# CC0 贴图是**可再取的缓存**。删掉后者不影响任何人重建工程。
+yunque/assets/source/textures/*.zip
+
+# 候选贴图：已下载并评估、但**尚未写入 TEX_MAP**（=未接入构建）。
+# 本地保留以便随时取用，不入库 —— 台账里状态为「候选」，asset_id 可重下。
+# 接入时：先把 TEX_MAP 指向它，然后**把下面这一行删掉**，它才算正式入库。
+yunque/assets/processed/textures/PavingStones138/
+yunque/assets/processed/textures/RoofingTiles011A/
+yunque/assets/processed/textures/RoofingTiles012A/
 
 # 源设计资料包：按用户决定入库（原样保留，勿在仓库内直接改动策划原文）
 # 仅排除 Office 临时锁文件

@@ -76,10 +76,12 @@ func _apply_environment() -> void:
 	var ssr := bool(e.get("ssr_enabled", false))
 	env.ssr_enabled = ssr
 	if ssr:
-		env.ssr_max_steps = 48
-		env.ssr_fade_in = 0.2
-		env.ssr_fade_out = 12.0
-		env.ssr_depth_tolerance = 0.2
+		# fade_in 0.2 → 1.2：0.2 m 意味着从相机脚下就开始反射，整条街都是镜面。
+		# 目标是「只有水面与近处湿地有反射」，远处不该出现清晰倒影。
+		env.ssr_max_steps = 24
+		env.ssr_fade_in = 1.2
+		env.ssr_fade_out = 8.0
+		env.ssr_depth_tolerance = 0.42
 	env.tonemap_mode = int(e.get("tonemap_mode", 3))
 	env.tonemap_exposure = float(e.get("tonemap_exposure", 1.05))
 	environment.environment = env

@@ -1,0 +1,62 @@
+{
+  "RoofTilesQing": {
+    "derived_from": "RoofingTiles014A",
+    "spec": {
+      "src": "RoofingTiles014A",
+      "mode": "recolor",
+      "target": "#6b7681",
+      "level": 0.13,
+      "contrast": 1.0
+    },
+    "copied_channels": [
+      "NormalGL",
+      "Roughness",
+      "AmbientOcclusion"
+    ],
+    "mode": "recolor",
+    "level_target": 0.13,
+    "lin_mean_before": 0.1465,
+    "lin_mean_after": 0.1343,
+    "srgb_mean_after": 0.3944
+  },
+  "PlanksWood": {
+    "derived_from": "Planks037A",
+    "spec": {
+      "src": "Planks037A",
+      "mode": "lift",
+      "target": null,
+      "level": 0.1,
+      "contrast": 0.95
+    },
+    "copied_channels": [
+      "NormalGL",
+      "Roughness",
+      "AmbientOcclusion"
+    ],
+    "mode": "lift",
+    "level_target": 0.1,
+    "lin_mean_before": 0.0532,
+    "lin_mean_after": 0.1,
+    "srgb_mean_after": 0.3444
+  },
+  "FabricWeave": {
+    "derived_from": "Fabric085",
+    "spec": {
+      "src": "Fabric085",
+      "mode": "neutral",
+      "target": "#b8b8b8",
+      "level": 0.3,
+      "contrast": 1.0
+    },
+    "copied_channels": [
+      "NormalGL",
+      "Roughness",
+      "AmbientOcclusion"
+    ],
+    "mode": "neutral",
+    "level_target": 0.3,
+    "lin_mean_before": 0.158,
+    "lin_mean_after": 0.3,
+    "srgb_mean_after": 0.5787
+  }
+}
