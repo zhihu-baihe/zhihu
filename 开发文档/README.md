@@ -74,10 +74,39 @@
 |---|---|
 | 仓库 | `https://github.com/zhihu-baihe/zhihu`（公开，`main` 分支） |
 | 首次推送 | 2026-10-15，7 个提交 / 292 个文件（含完整设计资料包） |
-| 网络前提 | 本机直连 github.com 不通，必须走 v2rayN SOCKS 代理 |
-| 推送命令 | `git -c http.proxy=socks5h://127.0.0.1:10808 push https://x-access-token:<TOKEN>@github.com/zhihu-baihe/zhihu.git main:main` |
+| 网络前提 | 直连 github.com 时通时不通；**失败就走 v2rayN SOCKS 代理** |
+| 推送命令 | `git push https://x-access-token:<TOKEN>@github.com/zhihu-baihe/zhihu.git main:main`（代理已写在仓库本地配置里） |
 
-> **大包提示**：仓库已配置 `http.postBuffer=5242880`（约 5MB）。不要调大——超过该值时 git 会改用整包上传，而代理会重置长连接（`curl 55 Send failure`）。小 postBuffer 会强制分块传输，实测可稳定推送 90MB+ 的提交。
+> **大包提示**：仓库已配置 `http.postBuffer=5242880`（约 5MB）。不要调大——超过该值时 git 会改用整包上传，长连接容易被重置（`curl 55 Send failure` / `HTTP 408`）。小 postBuffer 会强制分块传输，实测可稳定推送 90MB+ 的提交；偶发失败直接重试即可（第二次通常就过）。
+
+## 在新机器上继续开发
+
+> 仓库里**已经包含**工程代码、数据、贴图、音频、开发文档与源设计资料包。
+> 克隆之后只有一件事需要本机单独准备：**Godot 引擎**。
+
+| 步 | 操作 |
+|---|---|
+| 1 | 装 Godot **4.7.2 stable 标准版**（非 .NET）：`github.com/godotengine/godot/releases/tag/4.7.2-stable` → 下载 `Godot_v4.7.2-stable_win64.exe.zip`，解压到 `<仓库根>/tools/Godot/` |
+| 2 | `git clone https://github.com/zhihu-baihe/zhihu.git E:/MyGame`（路径可换，注意**用纯 ASCII 路径**） |
+| 3 | 用 Godot 打开 `E:/MyGame/yunque/project.godot`（首次自动导入，约 1 分钟） |
+| 4 | 数据自检：`--headless --path E:/MyGame/yunque res://tests/test_data_integrity.tscn` → 期望 **42/42 通过** |
+| 5 | 冒烟：`--headless --path E:/MyGame/yunque --quit-after 200` → 期望 **0 错误 0 警告** |
+| 6 | 编辑器里 F5 直接运行 |
+
+**不需要重新下载**：贴图（`yunque/assets/processed/textures/`）、音频（`yunque/assets/processed/audio/`）、设计资料包。
+**需要本机具备**：Godot 4.7.2；若要改音效则还需 Python 3.8+（`gen_sfx.py` 只用标准库，不必装依赖）。
+
+**不在仓库里的东西**（各自机器的本地产物，克隆后会自动重建）：
+
+| 路径 | 原因 |
+|---|---|
+| `tools/` | Godot 引擎二进制（约 82 MB，与平台绑定，不入库） |
+| `yunque/.godot/` | Godot 导入缓存，首次打开自动重建 |
+| `.workbuddy/` | 本地工作区记忆（不进版本库） |
+
+> **两个最容易漏的步骤**：
+> 1. **新增带 `class_name` 的脚本后要跑一次 `--headless --import`**，否则无头运行会报 `Identifier "X" not declared`。
+> 2. **改了音效参数后要重跑 `cd yunque && python tools/gen_sfx.py`**，再让 Godot 重新导入 WAV。
 
 ## 目录结构（工程侧）
 
@@ -88,8 +117,12 @@ E:/MyGame/
 │   ├── data/                    数据层（JSON，全部内容数据在这里）
 │   ├── scripts/                 GDScript（autoload / actors / interaction / world / ui）
 │   ├── scenes/                  main / world / actors / props / ui
+│   ├── tools/gen_sfx.py         音效合成脚本（音频的唯一源头，改音色改这里）
+│   ├── assets/source/           原始下载档（只读，不覆盖）
+│   ├── assets/processed/        唯一被场景引用的可用档（textures / audio）
 │   ├── tests/                   数据与流程自检
-│   └── shots/                   实机截图（开发期视觉验证）
+│   └── shots/                   实机截图（开发期视觉验证，不进构建）
+├── tools/Godot/                 引擎（不入库，新机器需自行下载）
 ├── 开发文档/                     ← 本目录
 └── 云阙行_设计资料包_v1.0/       源设计资料（勿改）
 ```
