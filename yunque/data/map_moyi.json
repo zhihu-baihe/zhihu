@@ -73,10 +73,10 @@
     "tonemap_exposure": 1.05
   },
   "palette": {
-    "stone": "#7d766b",
+    "stone": "#847d71",
     "stone_dark": "#6f6a62",
     "dirt": "#7a6b58",
-    "wall": "#a89a88",
+    "wall": "#bdb1a0",
     "wood": "#6b4f35",
     "wood_dark": "#4f3a27",
     "roof": "#46525e",

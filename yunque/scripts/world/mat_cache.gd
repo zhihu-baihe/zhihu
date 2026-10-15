@@ -49,3 +49,42 @@ static func water(color: Color) -> StandardMaterial3D:
 
 static func clear() -> void:
 	_cache.clear()
+
+## 真实 PBR 贴图材质：**世界三平面映射（triplanar）**，程序化盒体不需要逐件 UV，
+## 大墙与小箱按世界尺度平铺同一张图，尺寸自动正确。
+## 贴图来源：ambientCG（CC0），已按 05_美术标准 §7 放在 assets/processed/textures/。
+static func textured(color_path: String, normal_path: String, rough_path: String,
+		ao_path: String, world_scale: float, tint: Color,
+		roughness := 1.0, alpha := 1.0) -> StandardMaterial3D:
+	var k := "T|%s|%.3f|%s|%.2f|%.2f" % [color_path, world_scale, tint.to_html(true), roughness, alpha]
+	if _cache.has(k):
+		return _cache[k]
+	var m := StandardMaterial3D.new()
+	var ct: Texture2D = load(color_path)
+	if ct != null:
+		m.albedo_texture = ct
+	var nt: Texture2D = load(normal_path)
+	if nt != null:
+		m.normal_enabled = true
+		m.normal_texture = nt
+		m.normal_scale = 1.0
+	var rt: Texture2D = load(rough_path)
+	if rt != null:
+		m.roughness_texture = rt
+	var at: Texture2D = load(ao_path)
+	if at != null:
+		m.ao_enabled = true
+		m.ao_texture = at
+	var tinted := tint
+	if alpha < 1.0:
+		tinted.a = alpha
+		m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.albedo_color = tinted
+	m.roughness = roughness
+	m.metallic = 0.0
+	m.uv1_triplanar = true
+	m.uv1_world_triplanar = true
+	m.uv1_scale = Vector3(world_scale, world_scale, world_scale)
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	_cache[k] = m
+	return m

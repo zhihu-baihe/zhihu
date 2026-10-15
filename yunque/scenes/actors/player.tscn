@@ -73,12 +73,12 @@ mesh = SubResource("mesh_sword")
 material_override = SubResource("mat_sword")
 
 [node name="CameraYaw" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraYaw"]
-transform = Transform3D(1, 0, 0, 0, 0.97, 0.242, 0, -0.242, 0.97, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.951, 0.309, 0, -0.309, 0.951, 0, 0, 0)
 collision_mask = 1
-spring_length = 5.4
+spring_length = 6.6
 margin = 0.35
 
 [node name="Camera3D" type="Camera3D" parent="CameraYaw/SpringArm3D"]

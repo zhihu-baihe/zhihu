@@ -67,6 +67,44 @@ static func build(geometry: Node3D, actors: Node3D, map: Dictionary) -> Dictiona
 static func _col(pal: Dictionary, key: String, fallback := "#888888") -> Color:
 	return Color(str(pal.get(key, fallback)))
 
+## 调色板键 → 真实 PBR 贴图集（ambientCG CC0）。[贴图集名, 世界平铺尺度（越小越密）]
+## 没有映射的键继续用纯色，保证灰盒与正式资产可以逐块替换、互不影响。
+const TEX_ROOT := "res://assets/processed/textures/"
+const TEX_MAP := {
+	"roof": ["RoofingTiles013A", 0.5],
+	"roof_dark": ["RoofingTiles013A", 0.5],
+	"wall": ["PavingStones151", 0.28],
+	"stone": ["PavingStones151", 0.28],
+	"stone_dark": ["PavingStones151", 0.28],
+	"wood": ["Planks037A", 0.42],
+	"wood_dark": ["Planks037A", 0.42],
+	"cloth_red": ["Fabric085", 0.85],
+	"cloth_gold": ["Fabric085", 0.85],
+	"cloth_green": ["Fabric085", 0.85],
+}
+
+static var _mat_cache: Dictionary = {}
+
+## 取材质：调色板键有贴图集时返回「贴图 + 该键颜色作色调」，否则回退纯色。
+## tint_override 用于需要压暗/变体的场合（如墙帽、湿石街）。
+static func _mat(pal: Dictionary, key: String, roughness := 0.85, tint_override := Color(0, 0, 0, 0)) -> Material:
+	var color := _col(pal, key)
+	if tint_override.a > 0.0:
+		color = tint_override
+	if not TEX_MAP.has(key):
+		return MatCache.solid(color, roughness)
+	var entry: Array = TEX_MAP[key]
+	var set_name := str(entry[0])
+	var world_scale := float(entry[1])
+	var ck := "%s|%s|%.2f|%.2f" % [set_name, color.to_html(true), world_scale, roughness]
+	if _mat_cache.has(ck):
+		return _mat_cache[ck]
+	var base := TEX_ROOT + set_name + "/" + set_name + "_1K-JPG_"
+	var m := MatCache.textured(base + "Color.jpg", base + "NormalGL.jpg",
+		base + "Roughness.jpg", base + "AmbientOcclusion.jpg", world_scale, color, roughness)
+	_mat_cache[ck] = m
+	return m
+
 static func _make_body(parent: Node3D, nm: String, pos: Vector3, yaw_deg: float) -> StaticBody3D:
 	var body := StaticBody3D.new()
 	body.name = nm
@@ -222,12 +260,13 @@ static func _label(parent: Node3D, pos: Vector3, text: String, color: Color,
 static func _terrain(parent: Node3D, t: Dictionary, pal: Dictionary) -> void:
 	var pos := _v3(t.get("pos", [0, 0, 0]))
 	var size := _v3(t.get("size", [10, 1, 10]))
-	_box(parent, pos, size, MatCache.solid(_col(pal, str(t.get("mat", "stone")), "#6f6a62").darkened(0.18), 0.95), true, 0.0, "Terrain")
+	_box(parent, pos, size, _mat(pal, str(t.get("mat", "stone")), 0.95, _col(pal, str(t.get("mat", "stone")), "#6f6a62").darkened(0.18)), true, 0.0, "Terrain")
 
 static func _street(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	var kind := str(s.get("kind", "street"))
 	# 湿石街：低粗糙度 + SSR，让灯笼在石面上留下反射（参考图的核心视觉手段）
-	var wet_mat := MatCache.solid(_col(pal, str(s.get("mat", "stone")), "#7d766b").darkened(0.12), 0.42)
+	var street_key := str(s.get("mat", "stone"))
+	var wet_mat := _mat(pal, street_key, 0.42, _col(pal, street_key).darkened(0.18))
 	if kind == "plaza":
 		var pos := _v3(s.get("pos", [0, 0, 0]))
 		var size := _v3(s.get("size", [10, 0, 10]))
@@ -290,13 +329,14 @@ static func _wall(parent: Node3D, w: Dictionary, pal: Dictionary) -> void:
 	if length <= 0.01:
 		return
 	var yaw := _yaw_from_dir(d)
-	var wall_col := _col(pal, str(w.get("mat", "wall")), "#a89a88")
-	var mat := MatCache.solid(wall_col, 0.9)
+	var wall_key := str(w.get("mat", "wall"))
+	var wall_col := _col(pal, wall_key, "#a89a88")
+	var mat := _mat(pal, wall_key, 0.9)
 	_box(parent, Vector3((a.x + b.x) * 0.5, h * 0.5, (a.y + b.y) * 0.5),
 		Vector3(length, h, th), mat, true, yaw, "Wall")
 	# 墙帽，给灰盒一点轮廓
 	_box(parent, Vector3((a.x + b.x) * 0.5, h + 0.12, (a.y + b.y) * 0.5),
-		Vector3(length + 0.2, 0.24, th + 0.24), MatCache.solid(wall_col.darkened(0.25), 0.9), false, yaw, "WallCap")
+		Vector3(length + 0.2, 0.24, th + 0.24), _mat(pal, wall_key, 0.9, wall_col.darkened(0.25)), false, yaw, "WallCap")
 
 
 # ================================================================ 城门
@@ -306,9 +346,9 @@ static func _gate(parent: Node3D, g: Dictionary, pal: Dictionary) -> void:
 	var off := float(g.get("tower_offset", 7.0))
 	var tsize := _v3(g.get("tower_size", [8, 6, 7.5]))
 	var beam_y := float(g.get("beam_y", 6.0))
-	var wall_mat := MatCache.solid(_col(pal, "wall", "#a89a88"), 0.9)
+	var wall_mat := _mat(pal, "wall", 0.9)
 	var roof_col := _col(pal, "roof", "#46525e")
-	var roof_mat := MatCache.solid(roof_col, 0.8)
+	var roof_mat := _mat(pal, "roof", 0.8)
 	for s in [-1.0, 1.0]:
 		var tp := Vector3(pos.x + off * s, tsize.y * 0.5, pos.y)
 		_box(parent, tp, tsize, wall_mat, true, 0.0, "GateTower")
@@ -319,7 +359,7 @@ static func _gate(parent: Node3D, g: Dictionary, pal: Dictionary) -> void:
 	_box(parent, Vector3(pos.x, beam_y, pos.y), Vector3(off * 2 + 2.0, 1.3, tsize.z * 0.8),
 		roof_mat, false, 0.0, "GateBeam")
 	_box(parent, Vector3(pos.x, beam_y + 1.35, pos.y), Vector3(off * 2 + 3.0, 1.5, tsize.z * 0.95),
-		MatCache.solid(roof_col.darkened(0.2), 0.8), false, 0.0, "GateRoofTop")
+		_mat(pal, "roof", 0.8, roof_col.darkened(0.2)), false, 0.0, "GateRoofTop")
 	var plaque := str(g.get("plaque", "城门"))
 	_label(parent, Vector3(pos.x, beam_y + 0.2, pos.y - tsize.z * 0.45), plaque,
 		Color(0.98, 0.9, 0.66), 96, 0.007, 180.0)
@@ -332,14 +372,17 @@ static func _building(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 	var fp := _v2(b.get("footprint", [10, 8]))
 	var h := float(b.get("height", 3.4))
 	var yaw := float(b.get("yaw_deg", 90.0))
-	var wall_mat := MatCache.solid(_col(pal, str(b.get("wall_mat", "wall")), "#a89a88"), 0.9)
-	var roof_mat := MatCache.solid(_col(pal, str(b.get("roof_mat", "roof")), "#46525e"), 0.82)
-	var wood_mat := MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.85)
+	var wall_key := str(b.get("wall_mat", "wall"))
+	var roof_key := str(b.get("roof_mat", "roof"))
+	var wall_mat := _mat(pal, wall_key, 0.9)
+	var roof_col := _col(pal, roof_key)
+	var roof_mat := _mat(pal, roof_key, 0.82)
+	var wood_mat := _mat(pal, "wood", 0.85)
 	var th := 0.35
 
 	# 石砌墙基（不碰撞，避免门槛卡住玩家）
 	_box(parent, Vector3(pos.x, 0.09, pos.y), Vector3(fp.x + 0.7, 0.18, fp.y + 0.7),
-		MatCache.solid(_col(pal, "stone_dark", "#6f6a62"), 0.95), false, 0.0, "Base")
+		_mat(pal, "stone_dark", 0.95), false, 0.0, "Base")
 
 	# 四面墙
 	_box(parent, Vector3(pos.x, h * 0.5, pos.y - fp.y * 0.5), Vector3(fp.x, h, th), wall_mat, true, 0.0, "WallN")
@@ -419,11 +462,11 @@ static func _stage(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	var size := _v2(s.get("size", [12, 8]))
 	var h := float(s.get("height", 1.0))
 	var yaw := float(s.get("yaw_deg", 270.0))
-	var wood := MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.85)
-	var wood_dark := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.85)
+	var wood := _mat(pal, "wood", 0.85)
+	var wood_dark := _mat(pal, "wood_dark", 0.85)
 	var roof_col := _col(pal, "roof", "#46525e")
-	var roof := MatCache.solid(roof_col, 0.8)
-	var cloth := MatCache.solid(_col(pal, str(s.get("curtain", "cloth_red")), "#b5543c"), 0.95)
+	var roof := _mat(pal, "roof", 0.8)
+	var cloth := _mat(pal, str(s.get("curtain", "cloth_red")), 0.95)
 
 	_box(parent, Vector3(pos.x, h * 0.5, pos.y), Vector3(size.x, h, size.y), wood, true, 0.0, "StageDeck")
 	for sx in [-1.0, 1.0]:
@@ -431,7 +474,7 @@ static func _stage(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 			_cylinder(parent, Vector3(pos.x + sx * (size.x * 0.5 - 0.6), h + 2.3, pos.y + sz * (size.y * 0.5 - 0.6)),
 				0.16, 4.6, wood_dark, true, "Pillar")
 	_box(parent, Vector3(pos.x, h + 5.0, pos.y), Vector3(size.x + 1.4, 0.35, size.y + 1.4), roof, false, 0.0, "StageRoof")
-	_prism(parent, Vector3(pos.x, h + 5.7, pos.y), Vector3(size.x + 1.8, 1.2, size.y + 1.8), MatCache.solid(roof_col.darkened(0.15), 0.8), 0.0, "StageRoofTop")
+	_prism(parent, Vector3(pos.x, h + 5.7, pos.y), Vector3(size.x + 1.8, 1.2, size.y + 1.8), _mat(pal, "roof", 0.8, roof_col.darkened(0.15)), 0.0, "StageRoofTop")
 	# 后台幕布（背对观众的一侧 = -front）
 	var front := _front_dir(yaw)
 	var back := -front
@@ -460,8 +503,8 @@ static func _stall(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	var pos := _v2(s.get("pos", [0, 0]))
 	var size := _v2(s.get("size", [3.2, 2.4]))
 	var yaw := float(s.get("yaw_deg", 0.0))
-	var wood := MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.85)
-	var cloth := MatCache.solid(_col(pal, str(s.get("cloth", "cloth_red")), "#b5543c"), 0.95)
+	var wood := _mat(pal, "wood", 0.85)
+	var cloth := _mat(pal, str(s.get("cloth", "cloth_red")), 0.95)
 	var h := 2.3
 	for sx in [-1.0, 1.0]:
 		for sz in [-1.0, 1.0]:
@@ -485,7 +528,7 @@ static func _lantern_row(parent: Node3D, r: Dictionary, pal: Dictionary) -> void
 	var off := _v2(r.get("offset", [0, 0]))
 	var warm := str(r.get("mat", "lantern"))
 	var lmat := MatCache.emissive(_col(pal, warm, "#ffb457"), 1.7)
-	var pmat := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.9)
+	var pmat := _mat(pal, "wood_dark", 0.9)
 	var lcolor := _col(pal, warm, "#ffb457")
 	for i in count:
 		var t := 0.0 if count <= 1 else float(i) / float(count - 1)
@@ -511,7 +554,7 @@ static func _prop(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
 	match kind:
 		"tree":
 			var s := float(p.get("scale", 1.0))
-			var trunk := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.95)
+			var trunk := _mat(pal, "wood_dark", 0.95)
 			var leaf := MatCache.solid(_col(pal, "leaf", "#3f5a3a"), 0.95)
 			var leaf2 := MatCache.solid(_col(pal, "leaf_dark", "#2c4229"), 0.95)
 			_cylinder(parent, Vector3(pos.x, 1.6 * s, pos.z), 0.2 * s, 3.2 * s, trunk, true, "Trunk")
@@ -530,33 +573,33 @@ static func _prop(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
 				_cylinder(parent, bp + Vector3(0, h2 * 0.5, 0), 0.07, h2, stalkm, false, "Bamboo")
 				_sphere(parent, bp + Vector3(0, h2, 0), 0.55, leafm, "BambooLeaf")
 		"well":
-			var stone := MatCache.solid(_col(pal, "stone", "#8c857a"), 0.95)
-			var wood := MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.9)
+			var stone := _mat(pal, "stone", 0.95)
+			var wood := _mat(pal, "wood", 0.9)
 			_cylinder(parent, Vector3(pos.x, 0.45, pos.z), 0.95, 0.9, stone, true, "WellRing")
 			for sx in [-1.0, 1.0]:
 				_cylinder(parent, Vector3(pos.x + sx * 0.75, 1.5, pos.z), 0.07, 2.2, wood, false, "WellPost")
-			_prism(parent, Vector3(pos.x, 2.75, pos.z), Vector3(2.2, 0.6, 1.8), MatCache.solid(_col(pal, "roof", "#46525e"), 0.85), 0.0, "WellRoof")
+			_prism(parent, Vector3(pos.x, 2.75, pos.z), Vector3(2.2, 0.6, 1.8), _mat(pal, "roof", 0.85), 0.0, "WellRoof")
 		"sign":
-			var wood := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.9)
+			var wood := _mat(pal, "wood_dark", 0.9)
 			var h3 := float(p.get("height", 3.0))
 			_cylinder(parent, Vector3(pos.x, h3 * 0.5, pos.z), 0.09, h3, wood, true, "SignPost")
 			var text := str(p.get("text", ""))
 			if text != "":
 				_label(parent, Vector3(pos.x, h3 - 0.5, pos.z), text, Color(0.95, 0.9, 0.72), 64, 0.005, yaw)
 		"boat":
-			var hull := MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.9)
+			var hull := _mat(pal, "wood", 0.9)
 			_box(parent, Vector3(pos.x, -0.25, pos.z), Vector3(3.4, 0.5, 1.2), hull, false, yaw, "Hull")
 			_prism(parent, Vector3(pos.x + 1.9, -0.2, pos.z), Vector3(0.8, 0.55, 1.2), hull, yaw, "Prow")
 			_sphere(parent, Vector3(pos.x - 1.2, 0.35, pos.z), 0.18,
 				MatCache.emissive(_col(pal, "lantern", "#ffb457"), 2.2), "BoatLantern")
 		"crate":
 			_box(parent, Vector3(pos.x, 0.42, pos.z), Vector3(0.85, 0.85, 0.85),
-				MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.9), true, yaw, "Crate")
+				_mat(pal, "wood", 0.9), true, yaw, "Crate")
 		"barrel":
 			_cylinder(parent, Vector3(pos.x, 0.5, pos.z), 0.42, 1.0,
-				MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.9), true, "Barrel")
+				_mat(pal, "wood_dark", 0.9), true, "Barrel")
 		"desk":
-			var wood := MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.88)
+			var wood := _mat(pal, "wood", 0.88)
 			_box(parent, Vector3(pos.x, 0.82, pos.z), Vector3(1.9, 0.12, 0.95), wood, true, yaw, "DeskTop")
 			for sx in [-1.0, 1.0]:
 				_box(parent, Vector3(pos.x + sx * 0.8, 0.4, pos.z), Vector3(0.12, 0.8, 0.8), wood, false, yaw, "DeskLeg")
@@ -566,7 +609,7 @@ static func _prop(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
 		"ramp":
 			var size := _v3(p.get("size", [2.8, 0.24, 2.4]))
 			_ramp(parent, pos, size, float(p.get("rise_deg", 20.0)), yaw,
-				MatCache.solid(_col(pal, "wood", "#6b4f35"), 0.9), "PropRamp")
+				_mat(pal, "wood", 0.9), "PropRamp")
 
 
 # ================================================================ 桥
@@ -585,8 +628,8 @@ static func _bridge(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 	var yaw := _yaw_from_dir(d)
 	var dir := d / length
 	var perp := Vector2(-dir.y, dir.x)
-	var deck_mat := MatCache.solid(_col(pal, "stone", "#8c857a"), 0.92)
-	var rail_mat := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.9)
+	var deck_mat := _mat(pal, "stone", 0.55)
+	var rail_mat := _mat(pal, "wood_dark", 0.9)
 	var seg_len := length / float(segs)
 	for i in segs:
 		var t0 := float(i) / float(segs)
@@ -605,7 +648,7 @@ static func _bridge(parent: Node3D, b: Dictionary, pal: Dictionary) -> void:
 	# 桥头与桥心灯柱
 	var rows := int(b.get("lantern_rows", 2))
 	var lamp := MatCache.emissive(_col(pal, "lantern", "#ffb457"), 1.9)
-	var pole := MatCache.solid(_col(pal, "wood_dark", "#4f3a27"), 0.9)
+	var pole := _mat(pal, "wood_dark", 0.9)
 	for t: float in [0.06, 0.5, 0.94]:
 		var mid2 := Vector2(lerpf(a.x, c.x, t), lerpf(a.y, c.y, t))
 		var yl := arch * sin(PI * t)
