@@ -48,6 +48,13 @@ func _capture() -> void:
 			if mp and mp.has_method("open"):
 				mp.open()
 			await get_tree().create_timer(0.6).timeout
+		"menu_save":
+			var mp2 := get_node_or_null("MenuPanel")
+			if mp2 and mp2.has_method("open"):
+				mp2.open()
+				mp2.set("page", 3)
+				mp2.call("_refresh")
+			await get_tree().create_timer(0.8).timeout
 		"dialogue":
 			DialogueRunner.start_node("MOYI_ATANG_010")
 			await get_tree().create_timer(0.25).timeout
