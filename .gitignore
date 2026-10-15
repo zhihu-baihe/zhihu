@@ -1,0 +1,15 @@
+# 本机工具链（Godot 引擎，不入库）
+tools/
+
+# Godot 导入缓存与中间产物
+yunque/.godot/
+*.tmp
+
+# 工作区本地数据（记忆/脚本运行痕迹）
+.workbuddy/
+Thumbs.db
+desktop.ini
+
+# 源设计资料包：体积大（解包 79MB + 压缩包 32MB），是否入库待确认
+云阙行_设计资料包_v1.0/
+云阙行_设计资料包_v1.0.zip

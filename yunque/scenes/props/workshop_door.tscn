@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/interaction/workshop_door.gd" id="1_door"]
+
+[sub_resource type="BoxMesh" id="mesh_leaf"]
+size = Vector3(0.16, 2.4, 1.9)
+
+[sub_resource type="BoxMesh" id="mesh_frame"]
+size = Vector3(0.1, 2.8, 2.5)
+
+[sub_resource type="BoxMesh" id="mesh_lock"]
+size = Vector3(0.12, 0.3, 0.24)
+
+[sub_resource type="StandardMaterial3D" id="mat_leaf"]
+albedo_color = Color(0.28, 0.22, 0.17, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_iron"]
+albedo_color = Color(0.42, 0.42, 0.45, 1)
+metallic = 0.6
+roughness = 0.5
+
+[node name="WorkshopDoor" type="Area3D"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("1_door")
+prompt_text = "查看 废灯坊暗门"
+
+[node name="Frame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+mesh = SubResource("mesh_frame")
+material_override = SubResource("mat_iron")
+
+[node name="Leaf" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 1.2, 0)
+mesh = SubResource("mesh_leaf")
+material_override = SubResource("mat_leaf")
+
+[node name="Lock" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 1.3, 0)
+mesh = SubResource("mesh_lock")
+material_override = SubResource("mat_iron")

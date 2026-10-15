@@ -1,0 +1,545 @@
+{
+  "version": "1.0",
+  "source": "设计资料包 CH01_序章第一章 开发稿（第 9—21 节） + MAP-01_墨邑花灯节地图设计_v0.1（第 6 节）",
+  "selection_rules": {
+    "order": "优先级数值高者先选；同一 NPC 多个节点同时满足条件时取 priority 最高者。",
+    "required": "列表中所有 flag 都必须为 true 才可选。",
+    "forbidden": "列表中任意 flag 为 true 则不可选。",
+    "play_once": "为 true 时，播放过即写入已看标记，之后不再选它。",
+    "derived_flags": {
+      "ANY_CLUE": "三条线索中至少取得一条（由 GameState 自动维护）",
+      "ALL_CLUES": "三条线索全部取得（由 GameState 自动维护）"
+    }
+  },
+  "npcs": {
+    "NPC_GATEKEEPER": {"name": "守门人", "color": "#8a9bb0", "body": "#7d8794"},
+    "NPC_VENDOR":     {"name": "挑灯小贩", "color": "#9c8ec0", "body": "#8d7fb5"},
+    "NPC_LIU":        {"name": "柳婶·灯贩", "color": "#7fa06a", "body": "#6d8f5a"},
+    "NPC_KID":        {"name": "阿竹", "color": "#c9a24a", "body": "#b8923f", "scale": 0.72},
+    "NPC_LIANG":      {"name": "梁叔·纸扎匠", "color": "#a97c50", "body": "#966c44"},
+    "NPC_GU":         {"name": "顾簿吏·灯籍小房", "color": "#6f86a8", "body": "#5f7595"},
+    "NPC_ATANG":      {"name": "姜阿棠", "color": "#c2503f", "body": "#a8452f"},
+    "NPC_BANZHU":     {"name": "罗班主", "color": "#8f5a3c", "body": "#7d4d33"},
+    "NPC_AHE":        {"name": "阿禾", "color": "#d18fae", "body": "#bf7f9c", "scale": 0.82},
+    "NPC_TEA":        {"name": "茶摊老人", "color": "#8d8377", "body": "#7d7468"}
+  },
+  "nodes": [
+    {
+      "id": "MOYI_GATE_010",
+      "npc": "NPC_GATEKEEPER",
+      "priority": 70,
+      "required": [],
+      "forbidden": ["MSQ_MoyiArrived"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "守门人", "text": "第一次来墨邑？今日灯会，进城记得看好自己的灯，也看好自己的钱袋。"},
+        {"speaker": "沈照野", "text": "为何？"},
+        {"speaker": "守门人", "text": "灯会人多，灯会摊也多。前半句是关心，后半句是经验。"},
+        {"speaker": "挑灯小贩", "text": "这位看着钱袋不大，倒适合来听戏。"}
+      ],
+      "effects": {"set_flags": {"MSQ_MoyiArrived": true}}
+    },
+    {
+      "id": "MOYI_GATE_020",
+      "npc": "NPC_GATEKEEPER",
+      "priority": 10,
+      "required": ["MSQ_MoyiArrived"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "守门人", "text": "灯会里人多，走散了就先去千灯桥下等。那儿最亮，认得回城里的路。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_VENDOR_010",
+      "npc": "NPC_VENDOR",
+      "priority": 10,
+      "required": [],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "挑灯小贩", "text": "今晚傩戏台演《灯郎找路》。戏里那人拎着灯到处问路，问到最后才发现，灯一直照着他自己的脚印。"},
+        {"speaker": "沈照野", "text": "……听着挺像在说我。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_TEA_010",
+      "npc": "NPC_TEA",
+      "priority": 10,
+      "required": [],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "茶摊老人", "text": "今年灯比往年多，河里的倒影反倒比岸上的好看。你去看，就晓得了。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_LIU_010",
+      "npc": "NPC_LIU",
+      "priority": 10,
+      "required": [],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "柳婶", "text": "灯还没全亮。桥上第一盏倒映出来，今夜才算开始。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_LIU_SQ_START",
+      "npc": "NPC_LIU",
+      "priority": 88,
+      "required": ["MSQ_MoyiArrived"],
+      "forbidden": ["SQ01_STARTED"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "沈照野", "text": "婶子，摊上六盏灯……是不是少了一盏？"},
+        {"speaker": "柳婶", "text": "不是少。是留了一盏。第七盏不卖，也不给旁人碰。"},
+        {"speaker": "沈照野", "text": "留着做什么？"},
+        {"speaker": "柳婶", "text": "留着等一个人回来。来了那么多年，也没回来。你要是闲，去问问阿竹——那孩子记得比我还清楚。"}
+      ],
+      "effects": {"set_flags": {"SQ01_STARTED": true}, "start_quest": "SQ_01_SEVENTH_LANTERN"}
+    },
+    {
+      "id": "MOYI_LIU_020",
+      "npc": "NPC_LIU",
+      "priority": 55,
+      "required": ["CLUE_MY_BRIDGE_REFLECTION"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "柳婶", "text": "你说水里多出了一盏？那盏灯我们从没挂过。"},
+        {"speaker": "柳婶", "text": "墨邑的灯我都数得出。谁家的灯，谁家的心事，年年都挂在同一个钩子上。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_LIU_030",
+      "npc": "NPC_LIU",
+      "priority": 82,
+      "required": ["MSQ_BAOMIAN_DEFEATED"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "柳婶", "text": "灯又亮回来了……可有些人还是没回来。"},
+        {"speaker": "柳婶", "text": "灯是我的，记性也是我的。你不必替我难过，记得住就够了。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_KID_010",
+      "npc": "NPC_KID",
+      "priority": 30,
+      "required": [],
+      "forbidden": ["SQ01_STARTED"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "阿竹", "text": "明明有第七盏，家里人却说只有六盏。你数数看，是不是七盏？"},
+        {"speaker": "沈照野", "text": "（摊上确实只有六盏。可孩子说得很认真。）"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_KID_020",
+      "npc": "NPC_KID",
+      "priority": 65,
+      "required": ["SQ01_STARTED"],
+      "forbidden": ["HAS_LAMPSHADE", "SQ_01_SEVENTH_LANTERN_COMPLETE"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "阿竹", "text": "风把一只灯罩卷到桥墩下面去了！没有灯罩，那盏灯就点不成。"},
+        {"speaker": "阿竹", "text": "桥边水浅，你去帮我捞回来好不好？我够不着。"}
+      ],
+      "effects": {"set_flags": {"SQ01_SEEK_LAMPSHADE": true}}
+    },
+    {
+      "id": "MOYI_KID_030",
+      "npc": "NPC_KID",
+      "priority": 66,
+      "required": ["SQ01_STARTED", "HAS_LAMPSHADE"],
+      "forbidden": ["HAS_PLAQUE", "SQ_01_SEVENTH_LANTERN_COMPLETE"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "阿竹", "text": "捞回来了！谢谢你——不过光有灯罩不够。"},
+        {"speaker": "阿竹", "text": "这盏灯上原来有块灯牌，写着主人家的姓。前几年被水冲掉了，听说沉在桥边。"},
+        {"speaker": "沈照野", "text": "我去桥边找找。"}
+      ],
+      "effects": {"set_flags": {"SQ01_SEEK_PLAQUE": true}}
+    },
+    {
+      "id": "MOYI_KID_040",
+      "npc": "NPC_KID",
+      "priority": 67,
+      "required": ["SQ01_STARTED", "HAS_LAMPSHADE", "HAS_PLAQUE"],
+      "forbidden": ["SQ_01_SEVENTH_LANTERN_COMPLETE"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "阿竹", "text": "找到了！……上面的字看不清了。柳婶说，看不清也没关系，灯能漂一段就够。"},
+        {"speaker": "阿竹", "text": "你去跟柳婶说吧。这件事得大人来讲才算数。"}
+      ],
+      "effects": {"set_flags": {"SQ01_READY_TO_LIGHT": true}}
+    },
+    {
+      "id": "MOYI_LIU_SQ_END",
+      "npc": "NPC_LIU",
+      "priority": 89,
+      "required": ["SQ01_STARTED", "SQ01_READY_TO_LIGHT"],
+      "forbidden": ["SQ_01_SEVENTH_LANTERN_COMPLETE"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "沈照野", "text": "灯罩和灯牌都找回来了。第七盏，可以点了。"},
+        {"speaker": "柳婶", "text": "多谢。灯牌上的字磨平了，可形状我还认得。"},
+        {"speaker": "柳婶", "text": "劳你替我把灯放进河里吧。不用替我说什么——灯自己会漂。"}
+      ],
+      "effects": {
+        "set_flags": {"SQ_01_SEVENTH_LANTERN_COMPLETE": true},
+        "add_item": {"id": "KEY_OLD_RIVER_LANTERN", "count": 1}
+      }
+    },
+    {
+      "id": "MOYI_KID_050",
+      "npc": "NPC_KID",
+      "priority": 60,
+      "required": ["SQ_01_SEVENTH_LANTERN_COMPLETE"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "阿竹", "text": "第七盏漂下去了！你看，它往西边漂的。西边是不是有人住？"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_LIANG_010",
+      "npc": "NPC_LIANG",
+      "priority": 10,
+      "required": [],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "梁叔", "text": "纸轿是戏台的道具，不是拿来迎亲的。有人偏问我能不能借去抬灯——抬什么灯，抬回去点吗？"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_LIANG_020",
+      "npc": "NPC_LIANG",
+      "priority": 55,
+      "required": ["CLUE_MY_PAPER_SEDAN"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "梁叔", "text": "这红绳不是我打的结。我打结从来只绕两道，图个牢。"},
+        {"speaker": "梁叔", "text": "昨夜还有人借走了半张面具，说戏班急用。我这张老脸，借出去的脸，倒都没了消息。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_LIANG_030",
+      "npc": "NPC_LIANG",
+      "priority": 82,
+      "required": ["MSQ_BAOMIAN_DEFEATED"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "梁叔", "text": "面具不是我做的，纸浆里还有河底的泥。老规矩说收灯要收得干净，我从前嫌它麻烦。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_GU_010",
+      "npc": "NPC_GU",
+      "priority": 10,
+      "required": [],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "顾簿吏", "text": "姓名、来处、所问何事。不是官差盘问，是我查簿得知道找哪一页。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_GU_020",
+      "npc": "NPC_GU",
+      "priority": 55,
+      "required": ["CLUE_MY_REGISTRY"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "顾簿吏", "text": "沈青梧，记得。问话仔细，填表却嫌麻烦，最后让我替她补了目的地。"},
+        {"speaker": "沈照野", "text": "她去了青蚨渡？"},
+        {"speaker": "顾簿吏", "text": "登记上是这么写。人究竟到了没有，我不敢替路程作证。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_GU_030",
+      "npc": "NPC_GU",
+      "priority": 82,
+      "required": ["MSQ_BAOMIAN_DEFEATED"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "顾簿吏", "text": "登记在册只说明她来过，不说明路上发生了什么。你去下一站，仍得自己问。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_ATANG_010",
+      "npc": "NPC_ATANG",
+      "priority": 95,
+      "required": [],
+      "forbidden": ["COMP_JIANGATANG_JOINED"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "（纸偶抬着灯架撞歪了戏台横梁，沈照野伸手扶住）", "text": "……"},
+        {"speaker": "姜阿棠", "text": "放下。那个不卖。"},
+        {"speaker": "沈照野", "text": "我只是捡起来。"},
+        {"speaker": "姜阿棠", "text": "我知道。你若真要偷，至少不该站在失主面前。"},
+        {"speaker": "沈照野", "text": "你说话都要先绕三圈吗？"},
+        {"speaker": "姜阿棠", "text": "看人。对讲理的人我直说，对不讲理的人得多说两句，省得他装听不懂。"},
+        {"speaker": "（一只纸偶扑向摊主的油锅，沈照野拦住，姜阿棠一收符纸把纸偶扯了回来）", "text": "……"},
+        {"speaker": "姜阿棠", "text": "……手法还行。你找谁？"},
+        {"speaker": "沈照野", "text": "找我姐姐。她叫沈青梧，前些时日来过墨邑。"},
+        {"speaker": "姜阿棠", "text": "打听人得去灯籍小房，顾簿吏记性好。不过——先帮我一个忙。"},
+        {"speaker": "姜阿棠", "text": "戏班有本旧戏《沉灯记》，我父亲的。最近排演出事，戏本线索被收进了旧灯坊，班主不让我看。"},
+        {"speaker": "沈照野", "text": "你帮我打听人，我帮你找一本戏？"},
+        {"speaker": "姜阿棠", "text": "暂时。账先记着，最后再算。"},
+        {"speaker": "沈照野", "text": "你连帮忙都要记账？"},
+        {"speaker": "姜阿棠", "text": "当然。人情不能漏账，漏了才最贵。"}
+      ],
+      "effects": {"set_flags": {"COMP_JIANGATANG_JOINED": true, "MSQ_AtangMet": true}, "add_party": ["SCN_JiangAtang"]}
+    },
+    {
+      "id": "MOYI_ATANG_020",
+      "npc": "NPC_ATANG",
+      "priority": 50,
+      "required": ["COMP_JIANGATANG_JOINED"],
+      "forbidden": ["ANY_CLUE"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "姜阿棠", "text": "三处可看：桥边的纸扎铺、河沿的灯籍小房、千灯桥下的倒影。"},
+        {"speaker": "姜阿棠", "text": "看戏先看道具，查事先看账。顺序随你，别站在这儿挡我生意。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_ATANG_030",
+      "npc": "NPC_ATANG",
+      "priority": 52,
+      "required": ["COMP_JIANGATANG_JOINED", "ANY_CLUE"],
+      "forbidden": ["ALL_CLUES"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "姜阿棠", "text": "面具封口被人重缝过；你姐姐问过旧戏本；水里的灯影没有实体。三件事看着不搭，方向倒是一处。"},
+        {"speaker": "沈照野", "text": "旧灯坊？"},
+        {"speaker": "姜阿棠", "text": "封存旧道具的地方。班主不让我进去，那更说明里面有东西。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_ATANG_040",
+      "npc": "NPC_ATANG",
+      "priority": 78,
+      "required": ["ALL_CLUES"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "姜阿棠", "text": "三条都齐了。我把话先说明白：里头那张面具，多半是能照出人的。"},
+        {"speaker": "姜阿棠", "text": "真遇上了，别急着砍。先看影子，看动作合不合得上。看仔细，比出手快有用。"}
+      ],
+      "effects": {"set_flags": {"BOSS_BAOMIAN_EXTRA_HINT": true}}
+    },
+    {
+      "id": "MOYI_BANZHU_010",
+      "npc": "NPC_BANZHU",
+      "priority": 20,
+      "required": [],
+      "forbidden": ["COMP_JIANGATANG_JOINED"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "罗班主", "text": "看戏吗？今晚压轴《灯郎找路》，一年就这一场，看完你就知道什么叫墨邑的手艺。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_BANZHU_020",
+      "npc": "NPC_BANZHU",
+      "priority": 70,
+      "required": ["COMP_JIANGATANG_JOINED"],
+      "forbidden": ["MSQ_AheMissing"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "沈照野", "text": "旧灯坊里那口箱子，听说收了戏班的道具？"},
+        {"speaker": "罗班主", "text": "旧道具都是封存的规矩，不到收灯不能动。戏班要吃饭，镇上的人也等了一年，你别听阿棠瞎说。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_BANZHU_030",
+      "npc": "NPC_BANZHU",
+      "priority": 92,
+      "required": ["MSQ_AheMissing"],
+      "forbidden": ["MSQ_OLD_LANTERN_WORKSHOP_OPEN"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "罗班主", "text": "阿禾！谁让她往那边跑的？"},
+        {"speaker": "姜阿棠", "text": "你问我？你明知道那箱子里的面具不该拿出来！"},
+        {"speaker": "罗班主", "text": "我只想把今晚的戏演完。戏班要吃饭，镇上的人也等了一年！"},
+        {"speaker": "沈照野", "text": "现在先把人找回来。戏演不演，等她安全出来再算。"},
+        {"speaker": "沈照野", "text": "旧灯坊的入口在哪里？"},
+        {"speaker": "罗班主", "text": "……主灯桥西头的侧巷，墙根有一扇封了的暗门。钥匙我早丢了，你们看着来。"}
+      ],
+      "effects": {"set_flags": {"MSQ_OLD_LANTERN_WORKSHOP_OPEN": true}}
+    },
+    {
+      "id": "MOYI_AHE_010",
+      "npc": "NPC_AHE",
+      "priority": 25,
+      "required": [],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "阿禾", "text": "师姐说后台那口箱子不能碰。可我明明听见里面有人唱戏，还是旦角的调子。"},
+        {"speaker": "阿禾", "text": "你别告诉班主，说了要扣我月钱的。"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_ALLEY_010",
+      "npc": "CUTSCENE",
+      "priority": 100,
+      "required": ["COMP_JIANGATANG_JOINED"],
+      "forbidden": ["MSQ_AheMissing"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "（一列纸轿从两名观众之间穿过，没有碰到任何人。街上的灯影忽然拉长。）", "text": "……"},
+        {"speaker": "阿禾", "text": "师姐——！"},
+        {"speaker": "（阿禾追着纸轿拐进侧巷，声音在巷口断掉。人群还在，街市声像被隔在了很远的地方。）", "text": "……"},
+        {"speaker": "沈照野", "text": "阿禾？！"},
+        {"speaker": "姜阿棠", "text": "先别追。灯笼在往一个方向晃——那个方向有事。"}
+      ],
+      "effects": {"set_flags": {"MSQ_AheMissing": true}}
+    },
+    {
+      "id": "MOYI_DOOR_OPEN",
+      "npc": "SYSTEM",
+      "priority": 60,
+      "required": ["MSQ_OLD_LANTERN_WORKSHOP_OPEN"],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "（封条一扯就断，暗门后面是一条向下的石阶。灯影在阶上晃，像有人在下面提着灯走。）", "text": "……"},
+        {"speaker": "姜阿棠", "text": "下去吧。灯坊是封的，风不该往里吹——可灯芯是热的。"},
+        {"speaker": "沈照野", "text": "（旧灯坊迷宫与百面灯魇在 M2 实现。这里是当前可玩范围的终点。）"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_DOOR_LOCKED",
+      "npc": "SYSTEM",
+      "priority": 10,
+      "required": [],
+      "forbidden": ["MSQ_OLD_LANTERN_WORKSHOP_OPEN"],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "（一扇封了的暗门。铁链上挂着一把旧锁，锁孔里塞着灯灰。）", "text": "……"}
+      ],
+      "effects": {}
+    },
+    {
+      "id": "MOYI_CLUE_MASK_010",
+      "npc": "SYSTEM",
+      "priority": 40,
+      "required": [],
+      "forbidden": ["CLUE_MY_PAPER_SEDAN"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "（半张面具压在一叠纸扎底下。背面的封口绳有两道旧结，后来被人拆了重缝。）", "text": "……"},
+        {"speaker": "沈照野", "text": "这结法……和梁叔摊上的不一样。"},
+        {"speaker": "姜阿棠", "text": "面具的封口是收灯时封的。有人拆开过，还缝回去了。"}
+      ],
+      "effects": {"add_clue": "CLUE_MY_PAPER_SEDAN"}
+    },
+    {
+      "id": "MOYI_CLUE_REGISTRY_010",
+      "npc": "SYSTEM",
+      "priority": 40,
+      "required": [],
+      "forbidden": ["CLUE_MY_REGISTRY"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "（灯会的来客登记册摊在案上。有一行墨色比旁边新，像是后来补写的。）", "text": "……"},
+        {"speaker": "沈照野", "text": "沈青梧……墨邑停留三日，问旧戏本，问青蚨渡船路。"},
+        {"speaker": "姜阿棠", "text": "问戏本的人，不止你姐姐一个。可这一行字是后添的——先记着。"}
+      ],
+      "effects": {"add_clue": "CLUE_MY_REGISTRY"}
+    },
+    {
+      "id": "MOYI_CLUE_BRIDGE_010",
+      "npc": "SYSTEM",
+      "priority": 40,
+      "required": [],
+      "forbidden": ["CLUE_MY_BRIDGE_REFLECTION"],
+      "time_band": "any",
+      "play_once": true,
+      "lines": [
+        {"speaker": "沈照野", "text": "那盏灯呢？"},
+        {"speaker": "姜阿棠", "text": "在水里。"},
+        {"speaker": "沈照野", "text": "我知道在水里。我问它上面挂在哪儿。"},
+        {"speaker": "姜阿棠", "text": "这就是我不爱跟剑修讲道理的原因。你问得很直，偏偏问到了点子上。"},
+        {"speaker": "（一盏无风自转的纸灯顺着水面飘向旧巷方向，桥上没有对应的灯笼。）", "text": "……"}
+      ],
+      "effects": {"add_clue": "CLUE_MY_BRIDGE_REFLECTION"}
+    },
+    {
+      "id": "MOYI_PROP_BOX_010",
+      "npc": "SYSTEM",
+      "priority": 5,
+      "required": [],
+      "forbidden": [],
+      "time_band": "any",
+      "play_once": false,
+      "lines": [
+        {"speaker": "（后台那口旧箱子贴着一张褪色的封条，边角被人撕开过，又草草按了回去。）", "text": "……"},
+        {"speaker": "姜阿棠", "text": "就它。我爹的戏本从前放在这样的箱子里。"}
+      ],
+      "effects": {}
+    }
+  ]
+}

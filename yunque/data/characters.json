@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "source": "设计资料包 / CH01_战斗系统与装备升级补充_v0.2.md 第 33 节（首版拟定裸属性）",
+  "note": "数值为首版拟定值，必须通过试玩校准；装备加成另行计算。",
+  "growth_note": {
+    "SCN_ShenZhaoye": "HP=230+17*(Lv-1); MP=35+2*(Lv-1); ATK=25+2*(Lv-1); MATK=12+(Lv-1); DEF=14+(Lv-1); RES=12+round(0.9*(Lv-1)); SPD=100+round(0.5*(Lv-1)); ACC=90+round(0.4*(Lv-1)); EVA=8+round(0.25*(Lv-1)); POISE=35+(Lv-1)",
+    "SCN_JiangAtang": "以 Lv5 入队为锚点；HP=220+12*(Lv-5); MP=68+3*(Lv-5); ATK=15+round(1.0*(Lv-5)); MATK=30+2*(Lv-5); DEF=13+round(0.8*(Lv-5)); RES=19+round(0.8*(Lv-5)); SPD=112+round(0.6*(Lv-5)); ACC=90+round(0.4*(Lv-5)); EVA=12+round(0.4*(Lv-5)); POISE=22+(Lv-5)"
+  },
+  "characters": [
+    {
+      "id": "SCN_ShenZhaoye",
+      "display_name": "沈照野",
+      "role": "剑修",
+      "portrait_color": "#5b7fa6",
+      "weapon_type": "剑",
+      "table": {
+        "1":  {"HP":230,"MP":35,"ATK":25,"MATK":12,"DEF":14,"RES":12,"SPD":100,"ACC":90,"EVA":8,"POISE":35},
+        "5":  {"HP":298,"MP":43,"ATK":33,"MATK":16,"DEF":18,"RES":16,"SPD":102,"ACC":92,"EVA":9,"POISE":39},
+        "8":  {"HP":349,"MP":49,"ATK":39,"MATK":19,"DEF":21,"RES":18,"SPD":104,"ACC":93,"EVA":10,"POISE":42},
+        "10": {"HP":383,"MP":53,"ATK":43,"MATK":21,"DEF":23,"RES":20,"SPD":105,"ACC":94,"EVA":10,"POISE":44}
+      }
+    },
+    {
+      "id": "SCN_JiangAtang",
+      "display_name": "姜阿棠",
+      "role": "傩戏/符修",
+      "portrait_color": "#c2503f",
+      "weapon_type": "符扇",
+      "table": {
+        "5":  {"HP":220,"MP":68,"ATK":15,"MATK":30,"DEF":13,"RES":19,"SPD":112,"ACC":90,"EVA":12,"POISE":22},
+        "7":  {"HP":244,"MP":74,"ATK":17,"MATK":34,"DEF":15,"RES":21,"SPD":113,"ACC":91,"EVA":13,"POISE":24},
+        "10": {"HP":280,"MP":83,"ATK":20,"MATK":40,"DEF":17,"RES":24,"SPD":115,"ACC":92,"EVA":14,"POISE":27}
+      }
+    }
+  ]
+}

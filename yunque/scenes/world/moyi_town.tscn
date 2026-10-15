@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/town_world.gd" id="1_world"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+
+[sub_resource type="Environment" id="env_default"]
+
+[node name="MoyiTown" type="Node3D"]
+script = ExtResource("1_world")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env_default")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.82, 0.42, -0.39, 0, 0.68, 0.73, 0.57, -0.6, 0.56, 0, 12, 0)
+light_color = Color(0.62, 0.71, 0.83, 1)
+light_energy = 0.3
+shadow_enabled = true
+
+[node name="Moon" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.87, 0.29, 0.4, 0, 0.81, -0.59, -0.49, -0.51, -0.7, 0, 14, 0)
+light_color = Color(0.81, 0.88, 1, 1)
+light_energy = 0.35
+shadow_enabled = false
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 38)

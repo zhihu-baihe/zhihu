@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/actors/interactor.gd" id="2_inter"]
+
+[sub_resource type="CapsuleShape3D" id="shape_player"]
+radius = 0.34
+height = 1.7
+
+[sub_resource type="CapsuleMesh" id="mesh_body"]
+radius = 0.33
+height = 1.62
+
+[sub_resource type="StandardMaterial3D" id="mat_body"]
+albedo_color = Color(0.36, 0.46, 0.6, 1)
+roughness = 0.85
+
+[sub_resource type="SphereMesh" id="mesh_head"]
+radius = 0.185
+height = 0.37
+
+[sub_resource type="StandardMaterial3D" id="mat_head"]
+albedo_color = Color(0.78, 0.66, 0.55, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="mesh_band"]
+height = 0.11
+top_radius = 0.2
+bottom_radius = 0.2
+
+[sub_resource type="StandardMaterial3D" id="mat_band"]
+albedo_color = Color(0.79, 0.63, 0.29, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="mesh_sword"]
+size = Vector3(0.07, 1.02, 0.13)
+
+[sub_resource type="StandardMaterial3D" id="mat_sword"]
+albedo_color = Color(0.6, 0.62, 0.66, 1)
+metallic = 0.7
+roughness = 0.35
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, 0)
+shape = SubResource("shape_player")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, 0)
+mesh = SubResource("mesh_body")
+material_override = SubResource("mat_body")
+
+[node name="Head" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68, 0)
+mesh = SubResource("mesh_head")
+material_override = SubResource("mat_head")
+
+[node name="Band" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.84, 0)
+mesh = SubResource("mesh_band")
+material_override = SubResource("mat_band")
+
+[node name="Sword" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.05, -0.28)
+rotation_degrees = Vector3(14, 0, -18)
+mesh = SubResource("mesh_sword")
+material_override = SubResource("mat_sword")
+
+[node name="CameraYaw" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraYaw"]
+transform = Transform3D(1, 0, 0, 0, 0.97, 0.242, 0, -0.242, 0.97, 0, 0, 0)
+collision_mask = 1
+spring_length = 5.4
+margin = 0.35
+
+[node name="Camera3D" type="Camera3D" parent="CameraYaw/SpringArm3D"]
+fov = 66.0
+current = true
+
+[node name="Interactor" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_inter")

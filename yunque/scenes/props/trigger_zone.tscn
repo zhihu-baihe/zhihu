@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/trigger_zone.gd" id="1_trg"]
+
+[sub_resource type="SphereShape3D" id="shape_zone"]
+radius = 6.0
+
+[node name="TriggerZone" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+monitorable = false
+script = ExtResource("1_trg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("shape_zone")

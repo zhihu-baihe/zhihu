@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "source": "设计资料包 / UE5_DataTables/DT_Items.csv + CH01 开发稿（含墨邑专属道具补充）",
+  "items": [
+    {"id":"MAT_OLD_CLOTH","name":"旧布","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"修复练习剑铜箍的常规材料。"},
+    {"id":"MAT_OLD_IRON","name":"旧铁料","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"用于未名·旧铁锻造的主体材料。"},
+    {"id":"MAT_COPPER_RIVET","name":"铜铆钉","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"铁器和扇轴维修材料。"},
+    {"id":"MAT_LANTERN_PAPER","name":"灯骨纸","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"灯会专用纸材，用于符扇和照影符片。"},
+    {"id":"MAT_WIND_SHARD","name":"风脉碎屑","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"吞风蜃犬留下的风脉材料。"},
+    {"id":"MAT_MASK_ASH","name":"百面余烬","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"修复百折符扇·补轴的核心材料。只发放一次。"},
+    {"id":"MAT_WOVEN_CLOTH","name":"厚织布","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"制作耐风短氅的常规材料。"},
+    {"id":"MAT_LAMP_WICK","name":"旧灯芯","type":"material","max_stack":99,"consumable":false,"use_effect":null,"desc":"旧式灯具的灯芯材料。"},
+    {"id":"KEY_OLD_STREET_SIGN","name":"旧街牌","type":"key","max_stack":1,"consumable":false,"use_effect":null,"desc":"背面刻有旧路籍印记，与姐姐的线索有一处相似。"},
+    {"id":"KEY_SHENDENGJI_FRAGMENT","name":"《沉灯记》残页","type":"key","max_stack":1,"consumable":false,"use_effect":null,"desc":"戏本残页；本章只露出一角，不解释主线真相。"},
+    {"id":"KEY_LAMP_DELIVERY","name":"旧铜灯","type":"quest","max_stack":1,"consumable":false,"use_effect":null,"desc":"师父托沈照野送给何守灯的旧灯。"},
+    {"id":"KEY_OLD_RIVER_LANTERN","name":"旧河灯","type":"key","max_stack":1,"consumable":false,"use_effect":null,"desc":"柳婶留了多年的一盏灯。灯牌上的姓氏已模糊，却还认得出形状。"},
+    {"id":"KEY_LAMPSHADE","name":"灯罩","type":"quest","max_stack":1,"consumable":false,"use_effect":null,"desc":"被风卷到桥墩下的一只灯罩，柳婶说少一只灯就不成七盏。"},
+    {"id":"KEY_OLD_NAME_PLAQUE","name":"旧灯牌","type":"quest","max_stack":1,"consumable":false,"use_effect":null,"desc":"桥边捡到的旧木牌，上面刻着一个被磨掉大半的姓氏。"},
+    {"id":"ITEM_SMALL_HEAL","name":"小还丹","type":"consumable","max_stack":20,"consumable":true,"use_effect":"RESTORE_HP_90","desc":"恢复90点HP。"},
+    {"id":"ITEM_CLEAR_MIND","name":"清心散","type":"consumable","max_stack":20,"consumable":true,"use_effect":"CLEAR_ONE_COMMON_STATUS","desc":"清除一名角色一种可清除的普通异常。"},
+    {"id":"ITEM_MP_PILL","name":"回息丸","type":"consumable","max_stack":20,"consumable":true,"use_effect":"RESTORE_MP_18","desc":"恢复18点MP。"}
+  ]
+}

@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/interaction/clue_point.gd" id="1_clue"]
+
+[sub_resource type="SphereMesh" id="mesh_orb"]
+radius = 0.15
+height = 0.3
+
+[sub_resource type="TorusMesh" id="mesh_ring"]
+inner_radius = 0.26
+outer_radius = 0.36
+
+[sub_resource type="StandardMaterial3D" id="mat_glow"]
+albedo_color = Color(1, 0.82, 0.42, 1)
+emission_enabled = true
+emission = Color(1, 0.79, 0.36, 1)
+emission_energy_multiplier = 2.6
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="mat_ring"]
+albedo_color = Color(0.95, 0.88, 0.7, 0.55)
+emission_enabled = true
+emission = Color(0.9, 0.8, 0.55, 1)
+emission_energy_multiplier = 1.2
+transparency = 1
+roughness = 0.5
+
+[node name="CluePoint" type="Area3D"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("1_clue")
+prompt_text = "调查"
+
+[node name="Marker" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+
+[node name="Orb" type="MeshInstance3D" parent="Marker"]
+mesh = SubResource("mesh_orb")
+material_override = SubResource("mat_glow")
+
+[node name="Ring" type="MeshInstance3D" parent="Marker"]
+transform = Transform3D(1, 0, 0, 0, 0.2, 0.98, 0, -0.98, 0.2, 0, 0, 0)
+mesh = SubResource("mesh_ring")
+material_override = SubResource("mat_ring")

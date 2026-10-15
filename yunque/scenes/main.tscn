@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialogue_box.tscn" id="3_dlg"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_main")
+
+[node name="WorldRoot" type="Node" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource("2_hud")]
+
+[node name="DialogueBox" parent="." instance=ExtResource("3_dlg")]
+
+[node name="FadeLayer" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="Fade" type="ColorRect" parent="FadeLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

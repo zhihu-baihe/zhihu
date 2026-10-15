@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "source": "设计资料包 CH01 开发稿 第 21 节 任务状态表 + MAP-01 地图设计 v0.1 第 6 节",
+  "current_stage_rule": "当前阶段 = 第一个 complete_on_flags 未被全部满足的阶段；全部满足则任务完成。阶段随旗标变化实时重算，不硬编码推进顺序。",
+  "quests": [
+    {
+      "id": "Q_CH01_LAMP_AND_SHADOW",
+      "type": "main",
+      "title": "第一章·百花照影",
+      "summary": "替师父送灯下山后，沈照野来到墨邑寻找姐姐沈青梧的行踪，却先卷入一场失控的傩戏灯影。",
+      "stages": [
+        {"id": "CH01_010_ENTER_MOYI",        "objective": "进入墨邑主灯街，向灯籍小房与戏班打听沈青梧。", "complete_on_flags": ["MSQ_MoyiArrived"]},
+        {"id": "CH01_020_MEET_ATANG",        "objective": "在傩戏台与姜阿棠相遇，弄清纸偶事件。",         "complete_on_flags": ["MSQ_AtangMet"]},
+        {"id": "CH01_030_GATHER_CLUES",      "objective": "调查三条线索：纸扎铺面具、灯籍小房记录、千灯桥倒影。", "complete_on_flags": ["ALL_CLUES"]},
+        {"id": "CH01_040_OPEN_WORKSHOP",     "objective": "灯会生变，向罗班主确认废灯坊入口。",           "complete_on_flags": ["MSQ_OLD_LANTERN_WORKSHOP_OPEN"]},
+        {"id": "CH01_050_RESCUE_AHE",        "objective": "进入旧灯坊迷宫，追查阿禾。",                   "complete_on_flags": ["MSQ_AheFound"]},
+        {"id": "CH01_060_BOSS_BAOMIAN",      "objective": "在无面祭台击败百面灯魇。",                   "complete_on_flags": ["MSQ_BaomianDefeated"]},
+        {"id": "CH01_070_RETURN_FESTIVAL",   "objective": "回到主灯街，看灯会重开。",                   "complete_on_flags": ["MSQ_MOYI_AFTERSTATE"]},
+        {"id": "CH01_080_DEPART_QINGFU",     "objective": "前往青蚨渡，继续打听姐姐的行踪。",             "complete_on_flags": ["MSQ_Chapter01Complete"]}
+      ],
+      "note": "CH01_050 起属于后续里程碑（M2/M3），当前版本在旧灯坊暗门处结束。"
+    },
+    {
+      "id": "SQ_01_SEVENTH_LANTERN",
+      "type": "side",
+      "title": "支线·河边第七盏灯",
+      "summary": "柳婶的摊上只有六盏灯。第七盏留了多年，也没能点。",
+      "stages": [
+        {"id": "SQ01_010_ASK",       "objective": "向柳婶问清第七盏灯的来历。",                   "complete_on_flags": ["SQ01_STARTED"]},
+        {"id": "SQ01_020_LAMPSHADE", "objective": "把被风卷到桥墩下的灯罩捞回来。",             "complete_on_flags": ["HAS_LAMPSHADE"]},
+        {"id": "SQ01_030_PLAQUE",    "objective": "在桥边找到旧灯牌，确认那盏灯的主人。",         "complete_on_flags": ["HAS_PLAQUE"]},
+        {"id": "SQ01_040_LIGHT_UP",  "objective": "替柳婶把那盏灯放进河里。",                   "complete_on_flags": ["SQ_01_SEVENTH_LANTERN_COMPLETE"]}
+      ],
+      "note": "支线奖励不与主线关键道具重叠（设计文档 §21 失败与兜底规则）。"
+    }
+  ],
+  "clues": [
+    {"id": "CLUE_MY_PAPER_SEDAN",       "name": "纸扎铺·面具封口", "journal": "半张面具的封口绳被拆过重缝；红绳的结法与梁叔惯用的不同。"},
+    {"id": "CLUE_MY_REGISTRY",          "name": "灯籍小房·登记册", "journal": "沈青梧曾在墨邑停留三日，问过旧戏本与青蚨渡船路；那行墨色比旁边新。"},
+    {"id": "CLUE_MY_BRIDGE_REFLECTION", "name": "千灯桥·倒影",     "journal": "桥下多出一盏没有实体的灯，顺水飘向旧巷方向。"}
+  ]
+}
