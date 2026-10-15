@@ -27,7 +27,11 @@ func get_player() -> Node:
 	return player
 
 func _apply_environment() -> void:
-	var e: Dictionary = map.get("environment", {})
+	# 时段预设：按当前 time_band 取参数；缺预设时回落到 environment 兜底块。
+	var presets: Dictionary = map.get("environment_presets", {})
+	var e: Dictionary = presets.get(GameState.time_band, {})
+	if e.is_empty():
+		e = map.get("environment", {})
 	var pal: Dictionary = map.get("palette", {})
 
 	var env := Environment.new()
@@ -62,6 +66,14 @@ func _apply_environment() -> void:
 	env.ssao_enabled = bool(e.get("ssao_enabled", true))
 	env.ssao_radius = 0.8
 	env.ssao_intensity = 1.4
+	# 屏幕空间反射：湿石街与水面反射灯火，是参考图的核心视觉手段
+	var ssr := bool(e.get("ssr_enabled", false))
+	env.ssr_enabled = ssr
+	if ssr:
+		env.ssr_max_steps = 48
+		env.ssr_fade_in = 0.2
+		env.ssr_fade_out = 12.0
+		env.ssr_depth_tolerance = 0.2
 	env.tonemap_mode = int(e.get("tonemap_mode", 3))
 	env.tonemap_exposure = float(e.get("tonemap_exposure", 1.05))
 	environment.environment = env

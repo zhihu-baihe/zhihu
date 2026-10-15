@@ -4,29 +4,73 @@
   "display_name": "墨邑古城·百花千灯会",
   "source": "MAP-01_墨邑花灯节地图设计_v0.1 第 2 节 区域表（MY-T01 ~ MY-T09）",
   "note": "灰盒逻辑布局，由 scripts/world/town_builder.gd 生成几何体。坐标单位为米：+x 向东、+z 向南，玩家自南（z=38）向北入城，河在北侧（z=-22 河沿，z=-31 河道）。",
-  "time_band_default": "dusk",
+  "time_band_default": "early_night",
+  "note_time_band": "current time band 由 map 数据决定；M2 起由剧情节点切换。early_night = 蓝调时刻（参考图基线），dusk = 黄昏暖调（备用）。",
+  "environment_presets": {
+    "dusk": {
+      "sky_top": "#101a28",
+      "sky_horizon": "#8a5236",
+      "sky_ground_bottom": "#0b0f14",
+      "sky_ground_horizon": "#3a3026",
+      "sun_color": "#e0a97a",
+      "sun_energy": 0.55,
+      "sun_rotation_deg": [-22, 118, 0],
+      "moon_color": "#bcd2ff",
+      "moon_energy": 0.45,
+      "moon_rotation_deg": [-34, 300, 0],
+      "ambient_energy": 0.62,
+      "fog_color": "#2c3644",
+      "fog_density": 0.008,
+      "fog_sky_affect": 0.35,
+      "glow_strength": 0.55,
+      "glow_bloom": 0.25,
+      "ssr_enabled": false,
+      "tonemap_exposure": 1.15
+    },
+    "early_night": {
+      "sky_top": "#0d1730",
+      "sky_horizon": "#7b87ad",
+      "sky_ground_bottom": "#080c14",
+      "sky_ground_horizon": "#2b3350",
+      "sun_color": "#c98a5e",
+      "sun_energy": 0.18,
+      "sun_rotation_deg": [-8, 115, 0],
+      "moon_color": "#c8d8ff",
+      "moon_energy": 0.55,
+      "moon_rotation_deg": [-38, 300, 0],
+      "ambient_energy": 0.42,
+      "fog_color": "#26314a",
+      "fog_density": 0.011,
+      "fog_sky_affect": 0.40,
+      "glow_strength": 0.60,
+      "glow_bloom": 0.28,
+      "ssr_enabled": true,
+      "tonemap_exposure": 1.10
+    }
+  },
   "environment": {
-    "sky_top": "#101a28",
-    "sky_horizon": "#8a5236",
-    "sky_ground_bottom": "#0b0f14",
-    "sky_ground_horizon": "#3a3026",
-    "sun_color": "#e0a97a",
-    "sun_energy": 0.55,
-    "sun_rotation_deg": [-22, 118, 0],
-    "moon_color": "#bcd2ff",
-    "moon_energy": 0.45,
-    "moon_rotation_deg": [-34, 300, 0],
-    "ambient_energy": 0.62,
+    "sky_top": "#0d1730",
+    "sky_horizon": "#7b87ad",
+    "sky_ground_bottom": "#080c14",
+    "sky_ground_horizon": "#2b3350",
+    "sun_color": "#c98a5e",
+    "sun_energy": 0.18,
+    "sun_rotation_deg": [-8, 115, 0],
+    "moon_color": "#c8d8ff",
+    "moon_energy": 0.55,
+    "moon_rotation_deg": [-38, 300, 0],
+    "ambient_energy": 0.42,
     "fog_enabled": true,
-    "fog_color": "#2c3644",
-    "fog_density": 0.008,
-    "fog_sky_affect": 0.35,
+    "fog_color": "#26314a",
+    "fog_density": 0.011,
+    "fog_sky_affect": 0.40,
     "glow_enabled": true,
-    "glow_strength": 0.55,
-    "glow_bloom": 0.25,
+    "glow_strength": 0.60,
+    "glow_bloom": 0.28,
     "ssao_enabled": true,
+    "ssr_enabled": true,
     "tonemap_mode": 3,
-    "tonemap_exposure": 1.15
+    "tonemap_exposure": 1.10
   },
   "palette": {
     "stone": "#7d766b",
@@ -45,7 +89,9 @@
     "lantern": "#ffb457",
     "lantern_cold": "#9fd2ff",
     "leaf": "#3f5a3a",
-    "leaf_dark": "#2c4229"
+    "leaf_dark": "#2c4229",
+    "ridge": "#1e2633",
+    "ridge_far": "#161d29"
   },
   "terrain": [
     {"kind": "terrain", "pos": [0, -0.5, 13],  "size": [96, 1.0, 70], "mat": "stone_dark", "note": "城内台地，顶面 y=0"},
@@ -165,6 +211,19 @@
   ],
   "triggers": [
     {"id": "TRG_ALLEY_DRAMA", "pos": [-6, 0, -2.2], "radius": 4.5, "dialogue": "MOYI_ALLEY_010", "required": ["COMP_JIANGATANG_JOINED", "ANY_CLUE"], "forbidden": ["MSQ_AheMissing"], "note": "灯会小高潮：纸轿穿过人群，阿禾追进侧巷"}
+  ],
+  "mountains": [
+    {"kind": "mountain", "pos": [-62, -92], "radius": 42, "height": 58, "mat": "ridge"},
+    {"kind": "mountain", "pos": [-12, -108], "radius": 56, "height": 74, "mat": "ridge_far"},
+    {"kind": "mountain", "pos": [46, -96], "radius": 46, "height": 62, "mat": "ridge"},
+    {"kind": "mountain", "pos": [98, -124], "radius": 62, "height": 84, "mat": "ridge_far"},
+    {"kind": "mountain", "pos": [-112, -118], "radius": 52, "height": 68, "mat": "ridge_far"},
+    {"kind": "mountain", "pos": [8, -76], "radius": 26, "height": 30, "mat": "ridge", "note": "近山，托住远景塔"},
+    {"kind": "mountain", "pos": [-96, 34], "radius": 44, "height": 52, "mat": "ridge_far", "note": "南侧远山，补齐第三层"}
+  ],
+  "pagodas": [
+    {"kind": "pagoda", "pos": [10, -74], "tiers": 3, "base": 6.5, "height": 4.2, "mat": "roof_dark", "wall_mat": "wood_dark", "note": "河对岸山中塔（参考图远景地标）"},
+    {"kind": "pagoda", "pos": [-74, 40], "tiers": 2, "base": 5.5, "height": 3.8, "mat": "roof_dark", "wall_mat": "wood_dark"}
   ],
   "spawn": {"pos": [0, 0.2, 34], "yaw_deg": 0}
 }

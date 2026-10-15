@@ -45,6 +45,10 @@ static func build(geometry: Node3D, actors: Node3D, map: Dictionary) -> Dictiona
 		_lantern_row(geometry, r, pal)
 	for p in _arr(map, "props"):
 		_prop(geometry, p, pal)
+	for m in _arr(map, "mountains"):
+		_mountain(geometry, m, pal)
+	for pg in _arr(map, "pagodas"):
+		_pagoda(geometry, pg, pal)
 
 	for n in _arr(map, "npcs"):
 		_npc(actors, n)
@@ -220,11 +224,13 @@ static func _terrain(parent: Node3D, t: Dictionary, pal: Dictionary) -> void:
 
 static func _street(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 	var kind := str(s.get("kind", "street"))
+	# 湿石街：低粗糙度 + SSR，让灯笼在石面上留下反射（参考图的核心视觉手段）
+	var wet_mat := MatCache.solid(_col(pal, str(s.get("mat", "stone")), "#7d766b").darkened(0.12), 0.42)
 	if kind == "plaza":
 		var pos := _v3(s.get("pos", [0, 0, 0]))
 		var size := _v3(s.get("size", [10, 0, 10]))
 		_box(parent, Vector3(pos.x, 0.03, pos.z), Vector3(size.x, 0.06, size.z),
-			MatCache.solid(_col(pal, str(s.get("mat", "stone")), "#8c857a"), 0.92), false, 0.0, "Plaza")
+			wet_mat, false, 0.0, "Plaza")
 		return
 	var a := _v2(s.get("from", [0, 0]))
 	var b := _v2(s.get("to", [0, 0]))
@@ -235,8 +241,42 @@ static func _street(parent: Node3D, s: Dictionary, pal: Dictionary) -> void:
 		return
 	var yaw := _yaw_from_dir(d)
 	_box(parent, Vector3((a.x + b.x) * 0.5, 0.03, (a.y + b.y) * 0.5),
-		Vector3(length, 0.06, width), MatCache.solid(_col(pal, str(s.get("mat", "stone")), "#8c857a"), 0.92),
-		false, yaw, "Street")
+		Vector3(length, 0.06, width), wet_mat, false, yaw, "Street")
+
+## 远景山体：低模锥体，靠雾与冷色做剪影（第三层）
+static func _mountain(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
+	var pos := _v2(p.get("pos", [0, 0]))
+	var r := float(p.get("radius", 40.0))
+	var h := float(p.get("height", 55.0))
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = r * 0.06
+	mesh.bottom_radius = r
+	mesh.height = h
+	mesh.radial_segments = 12
+	mesh.rings = 1
+	var mi := MeshInstance3D.new()
+	mi.name = "Mountain"
+	mi.mesh = mesh
+	mi.material_override = MatCache.solid(_col(pal, str(p.get("mat", "ridge")), "#1e2633"), 1.0)
+	mi.position = Vector3(pos.x, h * 0.5 - 24.0, pos.y)
+	parent.add_child(mi)
+
+## 远景塔：层叠方塔 + 出檐，河对岸山中的地标剪影
+static func _pagoda(parent: Node3D, p: Dictionary, pal: Dictionary) -> void:
+	var pos := _v2(p.get("pos", [0, 0]))
+	var tiers := maxi(1, int(p.get("tiers", 3)))
+	var base := float(p.get("base", 6.0))
+	var tier_h := float(p.get("height", 4.0))
+	var wall_mat := MatCache.solid(_col(pal, str(p.get("wall_mat", "wood_dark")), "#4f3a27"), 0.9)
+	var roof_mat := MatCache.solid(_col(pal, str(p.get("mat", "roof_dark")), "#333c46"), 0.85)
+	var y := 0.0
+	for i in tiers:
+		var scale_f := 1.0 - 0.18 * float(i)
+		var w := base * scale_f
+		_box(parent, Vector3(pos.x, y + tier_h * 0.4, pos.y), Vector3(w, tier_h * 0.8, w), wall_mat, false, 0.0, "PagodaTier")
+		_prism(parent, Vector3(pos.x, y + tier_h * 0.9, pos.y), Vector3(w * 1.5, tier_h * 0.42, w * 1.5), roof_mat, 0.0, "PagodaRoof")
+		y += tier_h * 0.85
+	_prism(parent, Vector3(pos.x, y + tier_h * 0.35, pos.y), Vector3(base * 0.5, tier_h * 0.8, base * 0.5), roof_mat, 0.0, "PagodaSpire")
 
 static func _wall(parent: Node3D, w: Dictionary, pal: Dictionary) -> void:
 	var a := _v2(w.get("from", [0, 0]))
