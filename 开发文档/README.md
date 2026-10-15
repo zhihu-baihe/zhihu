@@ -41,7 +41,18 @@
 | 运行 | `Godot_v4.7.2-stable_win64_console.exe --path E:/MyGame/yunque` |
 | 数据自检 | `... --headless --path E:/MyGame/yunque res://tests/test_data_integrity.tscn` |
 | 冒烟测试 | `... --headless --path E:/MyGame/yunque --quit-after 200` |
-| 截图 | `... --path E:/MyGame/yunque --resolution 1600x900 -- --screenshot=E:/MyGame/yunque/shots/x.png --shot-view=town\|bridge\|player` |
+| 截图 | `... --path E:/MyGame/yunque --resolution 1600x900 -- --screenshot=E:/MyGame/yunque/shots/x.png --shot-view=town\|bridge\|player\|menu\|dialogue` |
+
+## 远端仓库
+
+| 项 | 值 |
+|---|---|
+| 仓库 | `https://github.com/zhihu-baihe/zhihu`（公开，`main` 分支） |
+| 首次推送 | 2026-10-15，7 个提交 / 292 个文件（含完整设计资料包） |
+| 网络前提 | 本机直连 github.com 不通，必须走 v2rayN SOCKS 代理 |
+| 推送命令 | `git -c http.proxy=socks5h://127.0.0.1:10808 push https://x-access-token:<TOKEN>@github.com/zhihu-baihe/zhihu.git main:main` |
+
+> **大包提示**：仓库已配置 `http.postBuffer=5242880`（约 5MB）。不要调大——超过该值时 git 会改用整包上传，而代理会重置长连接（`curl 55 Send failure`）。小 postBuffer 会强制分块传输，实测可稳定推送 90MB+ 的提交。
 
 ## 目录结构（工程侧）
 
