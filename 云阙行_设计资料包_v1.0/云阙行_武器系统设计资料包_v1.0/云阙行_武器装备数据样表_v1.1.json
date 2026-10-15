@@ -1,0 +1,2281 @@
+{
+  "project": "云阙行：九灯照夜",
+  "document_version": "1.1",
+  "status": "首版建议值，需实机平衡",
+  "weapons": [
+    {
+      "id": "WPN_SHEN_01",
+      "name": "油松练剑",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 1,
+      "base_attack": 12,
+      "speed": 4,
+      "infusion_capacity": 1,
+      "inscription_slots": 0,
+      "source": "起始装备",
+      "passive": "普通攻击获得少量锋势。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_10",
+      "name": "铁篾剑",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 10,
+      "base_attack": 27,
+      "speed": 5,
+      "infusion_capacity": 1,
+      "inscription_slots": 1,
+      "source": "砺剑镇铁匠铺",
+      "passive": "锻冶上限+2；普通攻击命中时有小概率削减目标少量破势。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_20",
+      "name": "榫口青锋",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 20,
+      "base_attack": 47,
+      "speed": 7,
+      "infusion_capacity": 2,
+      "inscription_slots": 1,
+      "source": "墨邑图谱「榫口」",
+      "passive": "首次攻击未行动敌人时额外积累锋势。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_30",
+      "name": "雁回切",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 30,
+      "base_attack": 72,
+      "speed": 9,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "蜀岚剑宗任务「试剑余响」",
+      "passive": "回风命中后，下一次破防技消耗降低。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_40",
+      "name": "乌栈",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 40,
+      "base_attack": 103,
+      "speed": 8,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "百棺峡支线「崖路旧铁」",
+      "passive": "对高防目标的破势效率提高。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_50",
+      "name": "斩潮痕",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 50,
+      "base_attack": 139,
+      "speed": 10,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "南溟海域锻造图谱",
+      "passive": "命中潮湿目标时，追加少量水刃伤害。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_60",
+      "name": "旧雨",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 60,
+      "base_attack": 181,
+      "speed": 12,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "沉灯城支线「雨痕谱」",
+      "passive": "队友触发连携时，获得少量锋势。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_70",
+      "name": "缺月台",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 70,
+      "base_attack": 228,
+      "speed": 13,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "归灯渊遗迹图谱",
+      "passive": "对处于蓄力状态的 BOSS 有额外破势效率。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_SHEN_80",
+      "name": "归路",
+      "owner": "沈照野",
+      "weapon_type": "单手直剑",
+      "min_level": 80,
+      "base_attack": 278,
+      "speed": 15,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "最终章「青背定式」锻造成品",
+      "passive": "终式强化：一剑照夜追加一次低倍率追斩；不可叠加同名追击效果。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_01",
+      "name": "竹心扇",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 1,
+      "base_attack": 8,
+      "speed": 7,
+      "infusion_capacity": 1,
+      "inscription_slots": 0,
+      "source": "起始装备",
+      "passive": "符术命中时有小概率延长标记0.5回合，向下取整时不生效。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_10",
+      "name": "红绢齿扇",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 10,
+      "base_attack": 18,
+      "speed": 8,
+      "infusion_capacity": 1,
+      "inscription_slots": 1,
+      "source": "墨邑扇铺",
+      "passive": "对已被标记的敌人，符咒伤害小幅提高。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_20",
+      "name": "百折账",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 20,
+      "base_attack": 34,
+      "speed": 10,
+      "infusion_capacity": 2,
+      "inscription_slots": 1,
+      "source": "鬼市图谱「折页骨」",
+      "passive": "对同一目标施加第二种异常时，获得少量战意。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_30",
+      "name": "过场面",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 30,
+      "base_attack": 52,
+      "speed": 12,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "蜀岚剑宗委托「戏台借骨」",
+      "passive": "纸偶被击破时，对攻击者施加轻微减速。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_40",
+      "name": "压台扇",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 40,
+      "base_attack": 72,
+      "speed": 13,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "青丘夜宴支线",
+      "passive": "对带有两种不同标记的敌人，群体符术提升。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_50",
+      "name": "末句",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 50,
+      "base_attack": 96,
+      "speed": 15,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "姜阿棠个人剧情",
+      "passive": "傩面技能结束后，随机解除自身一项轻度异常；每场战斗一次。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_60",
+      "name": "静场",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 60,
+      "base_attack": 122,
+      "speed": 16,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "沉灯城旧戏楼",
+      "passive": "控制类符术首次命中精英敌人时，额外削减少量行动条。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_70",
+      "name": "还灯纸",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 70,
+      "base_attack": 151,
+      "speed": 18,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "《沉灯记》终折图谱",
+      "passive": "队伍成员被击倒后，姜阿棠下一次援护符不消耗额外战意。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_JIANG_80",
+      "name": "戏骨原扇",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 80,
+      "base_attack": 183,
+      "speed": 19,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "终局支线「最后一折」",
+      "passive": "终式强化：终极傩戏额外生成一道低伤纸影，不能重复触发控制。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_01",
+      "name": "船钉枪",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 1,
+      "base_attack": 11,
+      "speed": 5,
+      "infusion_capacity": 1,
+      "inscription_slots": 0,
+      "source": "起始装备",
+      "passive": "普通攻击对潮湿目标增加少量破势。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_10",
+      "name": "折潮",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 10,
+      "base_attack": 24,
+      "speed": 7,
+      "infusion_capacity": 1,
+      "inscription_slots": 1,
+      "source": "青蚨渡船坊",
+      "passive": "突刺后若目标带潮湿，获得微量援护值。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_20",
+      "name": "弄汐",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 20,
+      "base_attack": 42,
+      "speed": 8,
+      "infusion_capacity": 2,
+      "inscription_slots": 1,
+      "source": "青蚨渡图谱",
+      "passive": "水系仙术后，下一次枪击获得少量水伤。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_30",
+      "name": "过舷",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 30,
+      "base_attack": 65,
+      "speed": 10,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "御剑后海战支线",
+      "passive": "横扫攻击更容易命中侧翼目标。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_40",
+      "name": "白鲸钩",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 40,
+      "base_attack": 92,
+      "speed": 11,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "南溟沉舶船材",
+      "passive": "队友受击时，闻潮首次援护的资源消耗降低。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_50",
+      "name": "倒海门",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 50,
+      "base_attack": 124,
+      "speed": 13,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "潮汐洞窟图谱",
+      "passive": "对水属性敌人造成伤害时，少量降低其速度。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_60",
+      "name": "旧舶令",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 60,
+      "base_attack": 160,
+      "speed": 14,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "楚三千支线",
+      "passive": "援护成功后，为被保护者提供一层小护盾。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_70",
+      "name": "千帆账",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 70,
+      "base_attack": 201,
+      "speed": 16,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "蓬莱仙市委托",
+      "passive": "水位机关附近作战时，第一回合行动条轻微提前。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_WEN_80",
+      "name": "归航桅锋",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 80,
+      "base_attack": 245,
+      "speed": 18,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "终局锻造",
+      "passive": "终式强化：潮水横扫追加一次低倍率边缘伤害。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_01",
+      "name": "案尾笔",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 1,
+      "base_attack": 7,
+      "speed": 8,
+      "infusion_capacity": 1,
+      "inscription_slots": 0,
+      "source": "起始装备",
+      "passive": "首次标记普通敌人时，获得少量专注。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_10",
+      "name": "黑竹录",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 10,
+      "base_attack": 16,
+      "speed": 10,
+      "infusion_capacity": 1,
+      "inscription_slots": 1,
+      "source": "酆都旧铺",
+      "passive": "对已标记敌人使用削弱技，持续时间小幅增加。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_20",
+      "name": "朱痕",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 20,
+      "base_attack": 29,
+      "speed": 12,
+      "infusion_capacity": 2,
+      "inscription_slots": 1,
+      "source": "鬼市注灵师",
+      "passive": "削弱效果命中后，有小概率降低目标少量行动条。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_30",
+      "name": "对簿",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 30,
+      "base_attack": 45,
+      "speed": 13,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "司夜府外档案",
+      "passive": "对精英敌人施加第一道判词时，伤害抗性略降。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_40",
+      "name": "封箱令",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 40,
+      "base_attack": 63,
+      "speed": 15,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "赤崖军档支线",
+      "passive": "封技命中后，下一次队友攻击略微增伤。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_50",
+      "name": "旧籍",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 50,
+      "base_attack": 84,
+      "speed": 16,
+      "infusion_capacity": 3,
+      "inscription_slots": 2,
+      "source": "鸣沙壁城图谱",
+      "passive": "对被识破的幻影或伪装敌人增加伤害。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_60",
+      "name": "迟到簿",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 60,
+      "base_attack": 108,
+      "speed": 18,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "裴渡个人剧情",
+      "passive": "成功打断 BOSS 蓄力时返还少量专注。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_70",
+      "name": "第九号",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 70,
+      "base_attack": 134,
+      "speed": 19,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "九灯城隐藏档案",
+      "passive": "对无名客类敌人提高破势，但不增加对普通人形敌人的伤害。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_PEI_80",
+      "name": "归档笔",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 80,
+      "base_attack": 162,
+      "speed": 21,
+      "infusion_capacity": 4,
+      "inscription_slots": 3,
+      "source": "最终章「生死有籍」",
+      "passive": "终式强化：最终判词扩展至第二目标，第二目标只承受部分效果。",
+      "category": "progression"
+    },
+    {
+      "id": "WPN_QS_101",
+      "name": "镇灯",
+      "owner": "沈照野可用",
+      "weapon_type": "短剑",
+      "min_level": 12,
+      "base_attack": 39,
+      "speed": 9,
+      "infusion_capacity": 1,
+      "inscription_slots": 1,
+      "source": "墨邑 BOSS「百面灯君」隐藏掉落；需铁匠重制铜钉。",
+      "passive": "灯记：首次命中目标留下短标记；下一次破防技额外削减少量破势。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_QS_102",
+      "name": "回潮",
+      "owner": "沈照野可用",
+      "weapon_type": "单手剑",
+      "min_level": 18,
+      "base_attack": 55,
+      "speed": 8,
+      "infusion_capacity": 2,
+      "inscription_slots": 1,
+      "source": "完成青蚨渡「河君不娶亲」后由老船匠赠予。",
+      "passive": "潮拍：连续两次命中同一目标，第三次普通攻击产生低倍率水刃。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_QS_103",
+      "name": "不鸣",
+      "owner": "沈照野可用",
+      "weapon_type": "单手剑",
+      "min_level": 28,
+      "base_attack": 78,
+      "speed": 12,
+      "infusion_capacity": 1,
+      "inscription_slots": 2,
+      "source": "谢停云个人支线「十七场败仗」完成奖励。",
+      "passive": "敛声：成功格挡后，下一次普攻额外削减目标行动条。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_QS_104",
+      "name": "碎碑",
+      "owner": "沈照野可用",
+      "weapon_type": "重剑",
+      "min_level": 34,
+      "base_attack": 98,
+      "speed": 4,
+      "infusion_capacity": 1,
+      "inscription_slots": 2,
+      "source": "赤崖古战场隐藏 BOSS「断旗督帅」与支线「最后一道军令」。",
+      "passive": "压阵：重击累积压阵值；满值下一击无视部分护甲，但行动延后。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_QS_105",
+      "name": "余烬",
+      "owner": "沈照野可用",
+      "weapon_type": "单手剑",
+      "min_level": 29,
+      "base_attack": 83,
+      "speed": 7,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "太华洞天隐藏任务「炉中旧约」。",
+      "passive": "余温：施放火系仙术后，下一次普通攻击附加少量火伤；连续施火会降低效果。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_JA_101",
+      "name": "《无名戏本》",
+      "owner": "姜阿棠",
+      "weapon_type": "副手法器",
+      "min_level": 50,
+      "base_attack": 0,
+      "speed": 0,
+      "infusion_capacity": 0,
+      "inscription_slots": 1,
+      "source": "完成姜阿棠个人任务「父亲的最后一折戏」。",
+      "passive": "续页：每场战斗一次，使一个已施加的异常状态延长一回合；不能延长 BOSS 免疫状态。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_WC_101",
+      "name": "楚三千的舷枪",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 49,
+      "base_attack": 121,
+      "speed": 10,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "完成南溟沉舶隐藏任务「白鲸的家书」。",
+      "passive": "临舷援护：每场战斗首次成功援护时，降低资源消耗并给被保护者小护盾。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_PD_101",
+      "name": "第九号木牌",
+      "owner": "裴渡",
+      "weapon_type": "副手法器",
+      "min_level": 52,
+      "base_attack": 0,
+      "speed": 0,
+      "infusion_capacity": 0,
+      "inscription_slots": 1,
+      "source": "完成裴渡个人剧情「未入册」。",
+      "passive": "识籍：每场战斗一次，自动识破一个幻影或伪装目标。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_QS_106",
+      "name": "未寄",
+      "owner": "沈照野可用",
+      "weapon_type": "单手剑",
+      "min_level": 63,
+      "base_attack": 188,
+      "speed": 11,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "沉灯城支线「最后一封家书」隐藏奖励。",
+      "passive": "回信：击败精英敌人后，下一场战斗首次使用技能返还少量灵息。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_QS_107",
+      "name": "照壁",
+      "owner": "沈照野可用",
+      "weapon_type": "反击剑",
+      "min_level": 69,
+      "base_attack": 211,
+      "speed": 7,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "酆都判司隐藏 BOSS「铜面夜巡」首通且不击杀被附身 NPC。",
+      "passive": "照影：成功防御后短时间提高识破幻影的几率。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_JA_102",
+      "name": "照本宣科",
+      "owner": "姜阿棠",
+      "weapon_type": "符扇",
+      "min_level": 24,
+      "base_attack": 42,
+      "speed": 12,
+      "infusion_capacity": 1,
+      "inscription_slots": 2,
+      "source": "白鹿书院支线「第九名书生」。",
+      "passive": "批注：对已标记目标施加的第一个异常状态命中率提高。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_WC_102",
+      "name": "退潮令",
+      "owner": "闻潮",
+      "weapon_type": "长枪",
+      "min_level": 36,
+      "base_attack": 101,
+      "speed": 9,
+      "infusion_capacity": 2,
+      "inscription_slots": 2,
+      "source": "青蚨渡隐藏任务「旧河道重开」。",
+      "passive": "引流：每场战斗一次，水系仙术可将一个可移动小怪拉至目标位置。",
+      "category": "named_unique"
+    },
+    {
+      "id": "WPN_PD_102",
+      "name": "失籍批",
+      "owner": "裴渡",
+      "weapon_type": "录名笔",
+      "min_level": 38,
+      "base_attack": 57,
+      "speed": 14,
+      "infusion_capacity": 1,
+      "inscription_slots": 2,
+      "source": "晦明鬼市支线「借来的名字」。",
+      "passive": "撤销：对带有强化状态的敌人施加削弱时，额外移除一层普通增益。",
+      "category": "named_unique"
+    }
+  ],
+  "infusions": [
+    {
+      "name": "注灵-破甲",
+      "effect_name": "锐意",
+      "effect": "攻击附带额外破势，触发率 25%，破势+8%",
+      "slot_cost": "2",
+      "materials": "铁甲虫颚×3、青砧砂×2",
+      "design_note": "克高防 BOSS；不增加直接伤害。"
+    },
+    {
+      "name": "注灵-回气",
+      "effect_name": "纳息",
+      "effect": "普通攻击命中时 20% 回复 3% 最大灵息，每回合最多一次",
+      "slot_cost": "2",
+      "materials": "归潮藻×3、静息石×1",
+      "design_note": "适合技能消耗高的法器用户。"
+    },
+    {
+      "name": "注灵-风行",
+      "effect_name": "轻羽",
+      "effect": "速度+6%，受到重击时该加成回合结束暂时失效",
+      "slot_cost": "1",
+      "materials": "风鬃绒×4、薄霜晶×1",
+      "design_note": "行动频率构筑。"
+    },
+    {
+      "name": "注灵-潮纹",
+      "effect_name": "听潮",
+      "effect": "命中潮湿目标时伤害+8%，每次行动仅触发一次",
+      "slot_cost": "2",
+      "materials": "黑河鳞×2、盐晶芯×2",
+      "design_note": "与闻潮及水域战斗相配。"
+    },
+    {
+      "name": "注灵-余火",
+      "effect_name": "炭心",
+      "effect": "火系仙术后下一次武器命中附加 4% 攻击的火伤",
+      "slot_cost": "2",
+      "materials": "炉心屑×3、赤砂核×1",
+      "design_note": "鼓励普攻与仙术交替。"
+    },
+    {
+      "name": "注灵-青藤",
+      "effect_name": "缠枝",
+      "effect": "普攻 15% 附加轻缠绕，普通 BOSS 触发率减半",
+      "slot_cost": "2",
+      "materials": "药藤筋×3、清露囊×2",
+      "design_note": "控制小怪，不可无限控 BOSS。"
+    },
+    {
+      "name": "注灵-山魄",
+      "effect_name": "稳根",
+      "effect": "受击后 10% 获得相当于防御 20% 的小护盾，每回合最多一次",
+      "slot_cost": "2",
+      "materials": "山魈硬骨×2、砧石粉×3",
+      "design_note": "适合前排与慢速重武器。"
+    },
+    {
+      "name": "注灵-镇祟",
+      "effect_name": "镇祟",
+      "effect": "对鬼、尸、灵体类敌人伤害+12%；对其他敌人无加成",
+      "slot_cost": "2",
+      "materials": "纸灰珠×3、旧铜钱×5",
+      "design_note": "专精型，不成为通用最优解。"
+    },
+    {
+      "name": "注灵-破幻",
+      "effect_name": "照影",
+      "effect": "每场战斗首次命中幻影目标时自动识破",
+      "slot_cost": "1",
+      "materials": "镜砂×2、灯蛾翅×4",
+      "design_note": "对幻境型 BOSS 有效。"
+    },
+    {
+      "name": "注灵-截势",
+      "effect_name": "断潮",
+      "effect": "攻击蓄力目标时额外削减行动条 5 点，每次蓄力最多触发一次",
+      "slot_cost": "2",
+      "materials": "剑魁残铁×1、潮石×3",
+      "design_note": "打断窗口构筑。"
+    },
+    {
+      "name": "注灵-追猎",
+      "effect_name": "逐痕",
+      "effect": "目标生命低于 30% 时伤害+7%，不作用于剧情无敌阶段",
+      "slot_cost": "1",
+      "materials": "崖鸦爪×4、赤铁砂×3",
+      "design_note": "收尾向，增幅克制。"
+    },
+    {
+      "name": "注灵-药引",
+      "effect_name": "引生",
+      "effect": "普攻 15% 使下次治疗对自身增加小额恢复，不提升直接输出",
+      "slot_cost": "1",
+      "materials": "百草露×3、药童木心×2",
+      "design_note": "续航用注灵。"
+    },
+    {
+      "name": "注灵-定神",
+      "effect_name": "澄心",
+      "effect": "降低封技、混乱、沉睡的持续时间 1 回合；同类效果不叠加",
+      "slot_cost": "2",
+      "materials": "澄心花×3、白鹿墨锭×2",
+      "design_note": "异常对策。"
+    },
+    {
+      "name": "注灵-招财",
+      "effect_name": "聚物",
+      "effect": "战后额外获得 5% 金钱，精英与 BOSS 不提高掉落数量",
+      "slot_cost": "1",
+      "materials": "铜钱蠹壳×3、赤铜片×2",
+      "design_note": "经济向，不影响战斗平衡。"
+    },
+    {
+      "name": "注灵-护主",
+      "effect_name": "回护",
+      "effect": "每场战斗首次援护后，武器持有者下次受击伤害-8%",
+      "slot_cost": "2",
+      "materials": "船钉×3、守卒布带×2",
+      "design_note": "鼓励援护。"
+    },
+    {
+      "name": "注灵-专注",
+      "effect_name": "定锋",
+      "effect": "暴击率+2%，但速度-2%；不能与同名铭刻叠加",
+      "slot_cost": "1",
+      "materials": "剑冢晶砂×2、玄铁屑×2",
+      "design_note": "轻量取舍。"
+    },
+    {
+      "name": "注灵-残响",
+      "effect_name": "留声",
+      "effect": "技能击败敌人后，下一次技能伤害+5%，每战最多 3 次",
+      "slot_cost": "2",
+      "materials": "旧戏铃片×1、余火晶×2",
+      "design_note": "连战奖励。"
+    },
+    {
+      "name": "注灵-封脉",
+      "effect_name": "锁息",
+      "effect": "普通攻击 12% 降低目标仙术伤害 8%，持续 2 回合；BOSS 触发率减半",
+      "slot_cost": "2",
+      "materials": "蛇妖腺×2、封印砂×3",
+      "design_note": "反施法对策。"
+    },
+    {
+      "name": "注灵-穿影",
+      "effect_name": "穿幕",
+      "effect": "对隐身/幻影/分身目标的命中惩罚减少 50%",
+      "slot_cost": "1",
+      "materials": "蜃犬风囊×1、镜片×2",
+      "design_note": "探索型与幻境 BOSS 适配。"
+    },
+    {
+      "name": "注灵-一息",
+      "effect_name": "缓息",
+      "effect": "角色行动后若生命低于 25%，每场战斗一次回复 6% 最大生命",
+      "slot_cost": "3",
+      "materials": "归水珠×1、白鲸钉×2",
+      "design_note": "保险型，槽位成本较高。"
+    },
+    {
+      "name": "注灵-刃记",
+      "effect_name": "记锋",
+      "effect": "每第三次普攻额外造成 5% 武器攻击伤害，不可与武器自带追击重复触发",
+      "slot_cost": "2",
+      "materials": "断刃屑×4、锻钢片×2",
+      "design_note": "稳定普攻路线。"
+    },
+    {
+      "name": "注灵-断咒",
+      "effect_name": "破文",
+      "effect": "对处于施法准备的敌人命中时，打断概率+10%；BOSS 受阶段规则限制",
+      "slot_cost": "2",
+      "materials": "魁星朱砂×2、符灰×3",
+      "design_note": "专门对付蓄力施法。"
+    },
+    {
+      "name": "注灵-敛迹",
+      "effect_name": "伏声",
+      "effect": "首回合受到的第一击伤害-10%，每战一次",
+      "slot_cost": "1",
+      "materials": "旧绒布×3、阴木片×2",
+      "design_note": "容错型开场保护。"
+    },
+    {
+      "name": "注灵-护灯",
+      "effect_name": "灯芯",
+      "effect": "每场战斗首次队友倒地时，武器持有者获得 10 点战意，不复活队友",
+      "slot_cost": "2",
+      "materials": "百面铜钉×1、灯油结晶×2",
+      "design_note": "危机响应，不能无限触发。"
+    }
+  ],
+  "affixes": [
+    {
+      "name": "锋口",
+      "effect": "武器攻击 +4%",
+      "category": "进攻",
+      "note": "通用低阶，单件限一个攻击百分比词条"
+    },
+    {
+      "name": "锐脊",
+      "effect": "破势 +6%",
+      "category": "破势",
+      "note": "提升破盾，不直接加伤"
+    },
+    {
+      "name": "轻柄",
+      "effect": "速度 +4%",
+      "category": "行动",
+      "note": "不能与轻羽重复叠加超过上限"
+    },
+    {
+      "name": "准星",
+      "effect": "命中 +5%",
+      "category": "稳定",
+      "note": "主要对高闪避敌人有效"
+    },
+    {
+      "name": "回锋",
+      "effect": "格挡成功后回复 2 点战意",
+      "category": "防御",
+      "note": "每回合最多一次"
+    },
+    {
+      "name": "余劲",
+      "effect": "技能命中后 10% 回复 2 点战意",
+      "category": "循环",
+      "note": "概率触发有上限"
+    },
+    {
+      "name": "凝神",
+      "effect": "仙术命中 +4%",
+      "category": "法术",
+      "note": "不增加法术倍率"
+    },
+    {
+      "name": "清明",
+      "effect": "异常命中抗性 +5%",
+      "category": "抗性",
+      "note": "防异常，不免疫"
+    },
+    {
+      "name": "破甲刻",
+      "effect": "对高防目标伤害 +4%",
+      "category": "破防",
+      "note": "只在目标防御超过阈值时生效"
+    },
+    {
+      "name": "引潮纹",
+      "effect": "潮湿目标受到的水伤 +5%",
+      "category": "元素",
+      "note": "与武器被动按乘算封顶"
+    },
+    {
+      "name": "炭线",
+      "effect": "火伤 +5%",
+      "category": "元素",
+      "note": "仅元素伤害"
+    },
+    {
+      "name": "枝脉",
+      "effect": "木系持续伤害 +5%",
+      "category": "元素",
+      "note": "持续伤害有独立上限"
+    },
+    {
+      "name": "石骨",
+      "effect": "受击伤害 -3%",
+      "category": "防御",
+      "note": "全身同类词条收益递减"
+    },
+    {
+      "name": "守门印",
+      "effect": "援护提供护盾 +5%",
+      "category": "援护",
+      "note": "不提升自身攻击"
+    },
+    {
+      "name": "旧账",
+      "effect": "对精英敌人造成伤害 +3%",
+      "category": "精英",
+      "note": "不作用于剧情阶段目标"
+    },
+    {
+      "name": "夜识",
+      "effect": "识破幻影时，下一击 +4%",
+      "category": "对策",
+      "note": "每场战斗最多触发三次"
+    },
+    {
+      "name": "墨批",
+      "effect": "削弱持续时间 +1 回合，BOSS 最多 +0",
+      "category": "控制",
+      "note": "BOSS 控制不被无限延长"
+    },
+    {
+      "name": "返照",
+      "effect": "暴击伤害 +8%",
+      "category": "暴击",
+      "note": "暴击伤害总上限 175%"
+    },
+    {
+      "name": "稳舷",
+      "effect": "被击退概率 -10%",
+      "category": "稳定",
+      "note": "不能完全免疫击退"
+    },
+    {
+      "name": "护腕槽",
+      "effect": "物品使用后速度 +2%，持续一回合",
+      "category": "辅助",
+      "note": "不对复活道具生效"
+    },
+    {
+      "name": "深刻",
+      "effect": "普攻对标记目标 +3%",
+      "category": "标记",
+      "note": "适合姜阿棠协同"
+    },
+    {
+      "name": "伏笔纹",
+      "effect": "破坏机关后回复 3% 灵息",
+      "category": "探索",
+      "note": "战斗机关只触发一次"
+    },
+    {
+      "name": "夜渡",
+      "effect": "对亡灵类敌人破势 +6%",
+      "category": "专精",
+      "note": "只对指定标签有效"
+    },
+    {
+      "name": "留痕",
+      "effect": "首次使用技能后防御 +3%，持续一回合",
+      "category": "辅助",
+      "note": "同一回合不重复叠加"
+    },
+    {
+      "name": "锋收",
+      "effect": "收招后行动条延迟减少 3%",
+      "category": "行动",
+      "note": "与速度存在软上限"
+    },
+    {
+      "name": "纸甲",
+      "effect": "纸偶存在时角色受到伤害 -2%",
+      "category": "召唤",
+      "note": "仅姜阿棠可用"
+    },
+    {
+      "name": "定潮",
+      "effect": "改变战场水位后战意 +2",
+      "category": "地形",
+      "note": "每场战斗最多一次"
+    },
+    {
+      "name": "归档",
+      "effect": "对带有增益的目标造成伤害 +3%",
+      "category": "对策",
+      "note": "不能移除增益"
+    },
+    {
+      "name": "守名",
+      "effect": "队友倒地时自身异常抗性 +5% 两回合",
+      "category": "危机",
+      "note": "不复活，不重复叠加"
+    },
+    {
+      "name": "旧物",
+      "effect": "任务地图中发现隐藏采集点概率提高",
+      "category": "探索",
+      "note": "不影响主线必需路径"
+    }
+  ],
+  "materials": [
+    {
+      "name": "青砧砂",
+      "use": "油松剑、铁篾剑、初阶锻冶",
+      "source": "砺剑镇矿匠/普通木傀",
+      "drop_rule": "常见 25%"
+    },
+    {
+      "name": "赤铁片",
+      "use": "10—20 级武器熔铸",
+      "source": "铁匠铺、山路矿点",
+      "drop_rule": "常见 30%"
+    },
+    {
+      "name": "灯油结晶",
+      "use": "灯记、护灯类注灵",
+      "source": "花灯蛾/百面灯魇",
+      "drop_rule": "精英 12%；BOSS 保底"
+    },
+    {
+      "name": "百面铜钉",
+      "use": "镇灯重制、护灯注灵",
+      "source": "百面灯君",
+      "drop_rule": "首通保底 1 个，隐藏奖励额外 1 个"
+    },
+    {
+      "name": "药藤筋",
+      "use": "青藤、药引注灵",
+      "source": "百草谷毒藤",
+      "drop_rule": "常见 20%"
+    },
+    {
+      "name": "清露囊",
+      "use": "恢复、净化类注灵",
+      "source": "百草谷药童傀",
+      "drop_rule": "精英 12%"
+    },
+    {
+      "name": "黑河鳞",
+      "use": "回潮、潮纹注灵",
+      "source": "乌鳞河君/水系精英",
+      "drop_rule": "BOSS 保底，精英 8%"
+    },
+    {
+      "name": "潮石",
+      "use": "截势、引潮纹",
+      "source": "青蚨渡水猴/逆流鱼将",
+      "drop_rule": "常见 20%"
+    },
+    {
+      "name": "崖鸦爪",
+      "use": "追猎注灵",
+      "source": "百棺峡崖鸦",
+      "drop_rule": "常见 25%"
+    },
+    {
+      "name": "悬棺钉",
+      "use": "百棺峡武器熔铸",
+      "source": "悬棺阵/攀岩尸",
+      "drop_rule": "精英 15%"
+    },
+    {
+      "name": "铜树芽",
+      "use": "鱼凫武器熔铸",
+      "source": "神树藤/金羽机关鸟",
+      "drop_rule": "普通 15%，精英 25%"
+    },
+    {
+      "name": "青铜枝",
+      "use": "沈照野中阶熔铸",
+      "source": "金面祭主",
+      "drop_rule": "首通保底 2 个"
+    },
+    {
+      "name": "剑冢晶砂",
+      "use": "定锋、断咒",
+      "source": "剑宗试炼/剑冢残灵",
+      "drop_rule": "精英 12%"
+    },
+    {
+      "name": "剑魁残铁",
+      "use": "折岳剑魁相关注灵",
+      "source": "折岳剑魁",
+      "drop_rule": "首通保底 1 个"
+    },
+    {
+      "name": "白鹿墨锭",
+      "use": "定神、裴渡武器锻造",
+      "source": "白鹿书院支线/书童傀",
+      "drop_rule": "支线保底"
+    },
+    {
+      "name": "魁星朱砂",
+      "use": "断咒、录名笔锻造",
+      "source": "魁星先生",
+      "drop_rule": "BOSS 保底 1 个"
+    },
+    {
+      "name": "纸灰珠",
+      "use": "镇祟注灵",
+      "source": "酆都纸衣鬼",
+      "drop_rule": "普通 18%"
+    },
+    {
+      "name": "镜砂",
+      "use": "破幻注灵",
+      "source": "晦明鬼市/倒卷先生",
+      "drop_rule": "精英 10%；BOSS 保底"
+    },
+    {
+      "name": "旧铜钱",
+      "use": "镇祟、聚物注灵",
+      "source": "鬼市交易、铜钱蠹",
+      "drop_rule": "常见 35%"
+    },
+    {
+      "name": "归潮藻",
+      "use": "纳息注灵",
+      "source": "青蚨渡/南溟海域采集",
+      "drop_rule": "采集点固定刷新"
+    },
+    {
+      "name": "静息石",
+      "use": "纳息注灵",
+      "source": "太华洞天石灵",
+      "drop_rule": "精英 15%"
+    },
+    {
+      "name": "炉心屑",
+      "use": "余火注灵、余烬锻造",
+      "source": "守炉真人/丹炉精",
+      "drop_rule": "BOSS 保底"
+    },
+    {
+      "name": "赤砂核",
+      "use": "火系注灵",
+      "source": "太华洞天/火系精英",
+      "drop_rule": "精英 12%"
+    },
+    {
+      "name": "船钉",
+      "use": "回护、压浪枪锻造",
+      "source": "南溟沉舶水手/商船拆解",
+      "drop_rule": "可采集或战斗获得"
+    },
+    {
+      "name": "守卒布带",
+      "use": "回护、碎碑锻造",
+      "source": "赤崖阴兵",
+      "drop_rule": "普通 20%"
+    },
+    {
+      "name": "白鲸铆钉",
+      "use": "楚三千舷枪、旧舶类注灵",
+      "source": "白鲸舶支线",
+      "drop_rule": "支线保底 3 个"
+    },
+    {
+      "name": "旧戏铃片",
+      "use": "残响、戏骨扇锻造",
+      "source": "姜阿棠支线/傩戏精英",
+      "drop_rule": "支线保底"
+    },
+    {
+      "name": "阴木片",
+      "use": "伏声注灵",
+      "source": "酆都旧门、纸衣鬼",
+      "drop_rule": "普通 18%"
+    },
+    {
+      "name": "归水珠",
+      "use": "一息注灵、终阶锻造",
+      "source": "归灯渊水魄",
+      "drop_rule": "精英 8%；终局宝箱保底"
+    },
+    {
+      "name": "断刃屑",
+      "use": "刃记注灵",
+      "source": "剑冢残剑灵",
+      "drop_rule": "常见 18%"
+    },
+    {
+      "name": "符灰",
+      "use": "断咒、符扇熔铸",
+      "source": "姜阿棠任务/符纸怪",
+      "drop_rule": "常见 20%"
+    },
+    {
+      "name": "无名木牌",
+      "use": "裴渡个人剧情与第九号木牌",
+      "source": "沉灯城旧衙门",
+      "drop_rule": "任务保底，不可刷取"
+    },
+    {
+      "name": "旧名册页",
+      "use": "终局机关、归档注灵剧情素材",
+      "source": "九灯城/司夜府",
+      "drop_rule": "关键任务保底，非随机掉落"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "REC_SHEN_010",
+      "weapon_name": "铁篾剑",
+      "materials": "赤铁片×3、青砧砂×2、木炭×2",
+      "gold_cost": "380",
+      "source": "商店购买或图谱熔铸",
+      "design_note": "基础破势型，给玩家第一件可改装的装备。"
+    },
+    {
+      "id": "REC_SHEN_020",
+      "weapon_name": "榫口青锋",
+      "materials": "赤铁片×4、悬棺钉×1、木炭×3",
+      "gold_cost": "950",
+      "source": "百棺峡图谱",
+      "design_note": "命中稳定，灵蕴 2；素材必须可在峡谷精英怪与采集点获得。"
+    },
+    {
+      "id": "REC_JIANG_020",
+      "weapon_name": "百折账",
+      "materials": "百面铜钉×1、竹心骨×3、符灰×2",
+      "gold_cost": "1,100",
+      "source": "墨邑残图+铁匠委托",
+      "design_note": "控制倾向；BOSS 铜钉首通保底。"
+    },
+    {
+      "id": "REC_WEN_020",
+      "weapon_name": "弄汐",
+      "materials": "船钉×3、黑河鳞×1、潮石×2",
+      "gold_cost": "1,200",
+      "source": "青蚨渡支线图谱",
+      "design_note": "水系基础构筑，黑河鳞由河君首通保证。"
+    },
+    {
+      "id": "REC_PEI_020",
+      "weapon_name": "朱痕",
+      "materials": "黑竹×3、旧铜钱×4、纸灰珠×2",
+      "gold_cost": "1,250",
+      "source": "晦明鬼市交易",
+      "design_note": "削弱型武器，材料可在鬼市循环获得。"
+    },
+    {
+      "id": "REC_SHEN_040",
+      "weapon_name": "乌栈",
+      "materials": "精炼铁×5、剑冢晶砂×2、百棺公木心×1",
+      "gold_cost": "4,800",
+      "source": "剑宗工艺与支线",
+      "design_note": "破防路线；BOSS 材料不可随机。"
+    },
+    {
+      "id": "REC_SHEN_050",
+      "weapon_name": "斩潮痕",
+      "materials": "白鲸铆钉×2、黑河鳞×2、海盐炭×3",
+      "gold_cost": "7,800",
+      "source": "南溟图谱",
+      "design_note": "水域相关被动；非水系 BOSS 伤害不超同级常规武器太多。"
+    },
+    {
+      "id": "REC_JIANG_060",
+      "weapon_name": "静场",
+      "materials": "旧戏铃片×2、旧戏骨×1、镜砂×2",
+      "gold_cost": "12,000",
+      "source": "《沉灯记》支线",
+      "design_note": "高阶控制；任务解锁，非纯随机掉落。"
+    },
+    {
+      "id": "REC_WEN_070",
+      "weapon_name": "千帆账",
+      "materials": "白鲸铆钉×3、归潮藻×4、海底铜线×2",
+      "gold_cost": "18,000",
+      "source": "蓬莱仙市委托",
+      "design_note": "高阶援护/速度路线。"
+    },
+    {
+      "id": "REC_PE I_070",
+      "weapon_name": "第九号",
+      "materials": "旧名册页×1、朱批笔芯×1、归水珠×1",
+      "gold_cost": "20,000",
+      "source": "九灯城隐藏图谱",
+      "design_note": "高阶对策装备，剧情材料以任务获得为主。"
+    },
+    {
+      "id": "REC_SHEN_080",
+      "weapon_name": "归路",
+      "materials": "无名核心×1、九灯余火×2、青背剑格记号×1",
+      "gold_cost": "终局",
+      "source": "终局任务配方",
+      "design_note": "不强迫换掉主角故事佩剑；它是最高阶段的战斗装备之一，但仍不是唯一可用装备。"
+    }
+  ],
+  "boss_rewards": [
+    {
+      "boss": "吞风蜃犬",
+      "materials": "蜃犬风囊×1、断风毛×2",
+      "unlock": "穿影图谱；第一条消失街道线索"
+    },
+    {
+      "boss": "百面灯君",
+      "materials": "百面铜钉×1、灯油结晶×2",
+      "unlock": "镇灯隐藏重制配方；《沉灯记》残页"
+    },
+    {
+      "boss": "乌鳞河君",
+      "materials": "黑河鳞×2、潮石×2",
+      "unlock": "回潮由 NPC 赠予；退潮令支线开启"
+    },
+    {
+      "boss": "百棺公",
+      "materials": "悬棺钉×2、崖木心×1",
+      "unlock": "百棺峡稀有熔铸图谱；姐姐巡山记录"
+    },
+    {
+      "boss": "金面祭主",
+      "materials": "青铜枝×2、纵目铜片×1",
+      "unlock": "中阶锻冶解锁；五灵树纹注灵图谱"
+    },
+    {
+      "boss": "折岳剑魁",
+      "materials": "剑魁残铁×1、问剑牌×1",
+      "unlock": "御剑能力；不鸣支线正式开启"
+    },
+    {
+      "boss": "守炉真人",
+      "materials": "炉心屑×3、赤砂核×1",
+      "unlock": "余烬图谱；丹炉类锻造"
+    },
+    {
+      "boss": "朱甲镇关将军",
+      "materials": "守卒布带×2、军令残页×1",
+      "unlock": "碎碑隐藏图谱；旧军档支线"
+    },
+    {
+      "boss": "倒卷先生",
+      "materials": "镜砂×2、逆历纸×1",
+      "unlock": "破幻、定神图谱；沉灯城位置线索"
+    },
+    {
+      "boss": "绣骨夫人",
+      "materials": "旧针骨×1、旧名册页×1",
+      "unlock": "绣骨织纹词条；九灯城主线推进"
+    },
+    {
+      "boss": "楚三千",
+      "materials": "白鲸铆钉×3、舷枪配重×1",
+      "unlock": "楚三千的舷枪；闻潮最终支线"
+    },
+    {
+      "boss": "无面城隍",
+      "materials": "归灯芯×1、万户灯灰×3",
+      "unlock": "终局注灵与归灯渊入口"
+    },
+    {
+      "boss": "陆太微",
+      "materials": "朱批笔芯×1、原始生死簿页×1",
+      "unlock": "终局锻造图谱；裴渡角色剧情"
+    },
+    {
+      "boss": "无名相",
+      "materials": "无名核心×1、九灯余火×9",
+      "unlock": "80 级终阶锻造材料；结局纪念铭刻"
+    }
+  ],
+  "story_relics": [
+    {
+      "id": "REL_SHEN_QINGBEI",
+      "name": "青背",
+      "owner": "沈照野",
+      "equippable_as_combat_weapon": false,
+      "purpose": "剧情佩剑/个人成长节点/过场展示"
+    },
+    {
+      "id": "REL_JIANG_OLDFAN",
+      "name": "旧戏骨",
+      "owner": "姜阿棠",
+      "equippable_as_combat_weapon": false,
+      "purpose": "父亲留下的扇骨，影响个人剧情与戏本收集"
+    },
+    {
+      "id": "REL_WEN_WHALE_BADGE",
+      "name": "白鲸旧牌",
+      "owner": "闻潮",
+      "equippable_as_combat_weapon": false,
+      "purpose": "白鲸舶身世线索与个人剧情物件"
+    },
+    {
+      "id": "REL_PEI_WOOD_TALLY",
+      "name": "夜巡木牌",
+      "owner": "裴渡",
+      "equippable_as_combat_weapon": false,
+      "purpose": "身份凭证；对应特殊法器第九号木牌，但不与战斗武器槽混同"
+    }
+  ],
+  "character_attribute_system": {
+    "design_status": "首版数值目标，需在墨邑垂直切片中验证",
+    "principles": [
+      "常用属性先显、战术属性折叠",
+      "角色基础成长按曲线数据表配置",
+      "运不影响关键掉落/主线/结局",
+      "属性由唯一 AttributeResolver 汇总，UI 不重复计算"
+    ],
+    "attributes": [
+      {
+        "id": "HPMax",
+        "name": "气血上限",
+        "type": "resource",
+        "display": "primary",
+        "desc": "降至 0 即倒地；战斗结束后按规则恢复，不自动满血。",
+        "source": [
+          "level_growth",
+          "equipment",
+          "buff"
+        ],
+        "cap": "无固定软上限；按章节测试生命曲线"
+      },
+      {
+        "id": "MPMax",
+        "name": "灵息上限",
+        "type": "resource",
+        "display": "primary",
+        "desc": "用于仙术、特技与部分连携；普通攻击与防御用于管理资源节奏。",
+        "source": [
+          "level_growth",
+          "equipment",
+          "buff"
+        ],
+        "cap": "章节内资源经济平衡"
+      },
+      {
+        "id": "Attack",
+        "name": "物攻",
+        "type": "offense",
+        "display": "primary",
+        "desc": "决定剑、枪等物理招式的基础伤害。",
+        "source": [
+          "level_growth",
+          "weapon",
+          "equipment",
+          "buff"
+        ],
+        "cap": "不独立封顶；通过敌方防御和章节曲线平衡"
+      },
+      {
+        "id": "SpellPower",
+        "name": "术攻",
+        "type": "offense",
+        "display": "primary",
+        "desc": "决定符术、灵术、判词等术法伤害。",
+        "source": [
+          "level_growth",
+          "equipment",
+          "buff"
+        ],
+        "cap": "不独立封顶；高术攻职业应有较低承伤能力"
+      },
+      {
+        "id": "Defense",
+        "name": "防御",
+        "type": "defense",
+        "display": "primary",
+        "desc": "降低物理伤害，主要对抗剑击、爪击、冲撞等。",
+        "source": [
+          "level_growth",
+          "armor",
+          "equipment",
+          "buff"
+        ],
+        "cap": "按章节防止物理伤害被压至 1"
+      },
+      {
+        "id": "SpiritResist",
+        "name": "灵抗",
+        "type": "defense",
+        "display": "primary",
+        "desc": "降低灵术和五灵伤害，不等同于元素免疫。",
+        "source": [
+          "level_growth",
+          "armor",
+          "equipment",
+          "buff"
+        ],
+        "cap": "抗性效果需有软上限；BOSS 机制不以堆抗性完全跳过"
+      },
+      {
+        "id": "Speed",
+        "name": "速度",
+        "type": "tempo",
+        "display": "primary",
+        "desc": "影响行动条推进与预计行动顺序；不直接增加普通攻击伤害。",
+        "source": [
+          "level_growth",
+          "weapon",
+          "equipment",
+          "buff",
+          "status"
+        ],
+        "cap": "一般角色 80—150；短时增益后有效速度建议封顶 180"
+      },
+      {
+        "id": "CritRate",
+        "name": "暴击率",
+        "type": "offense",
+        "display": "primary",
+        "desc": "造成暴击的概率。由角色基础、装备、注灵与铭刻构成。",
+        "source": [
+          "base_growth",
+          "weapon",
+          "equipment",
+          "buff"
+        ],
+        "cap": "玩家对普通敌人有效上限 65%；BOSS 的会心抗性单独结算"
+      },
+      {
+        "id": "CritDamage",
+        "name": "暴击伤害",
+        "type": "offense",
+        "display": "primary",
+        "desc": "暴击时伤害倍率；默认 150%，表示普通暴击约为 1.5 倍。",
+        "source": [
+          "base_growth",
+          "weapon",
+          "equipment",
+          "buff"
+        ],
+        "cap": "建议玩家有效上限 250%"
+      },
+      {
+        "id": "HitRate",
+        "name": "命中",
+        "type": "accuracy",
+        "display": "advanced",
+        "desc": "物理攻击、普通术法命中的稳定性；不可命中的剧情技能单独标记。",
+        "source": [
+          "base_growth",
+          "weapon",
+          "equipment",
+          "buff"
+        ],
+        "cap": "普通攻击最终命中率 75%—100%；必中特殊技不参与"
+      },
+      {
+        "id": "Evasion",
+        "name": "闪避",
+        "type": "defense",
+        "display": "advanced",
+        "desc": "完全规避一次可闪避攻击的概率；重击、场景伤害可能不可闪避。",
+        "source": [
+          "base_growth",
+          "equipment",
+          "buff"
+        ],
+        "cap": "玩家有效上限 35%；BOSS 的不可闪避招式必须有清晰提示"
+      },
+      {
+        "id": "BreakPower",
+        "name": "破势",
+        "type": "tempo",
+        "display": "advanced",
+        "desc": "提升攻击对敌方架势/破势槽的削减量；与攻击伤害分开计算。",
+        "source": [
+          "base_growth",
+          "weapon",
+          "equipment",
+          "skill"
+        ],
+        "cap": "不直接提高伤害；通过每次行动的破势值封顶"
+      },
+      {
+        "id": "Resolve",
+        "name": "定神",
+        "type": "defense",
+        "display": "advanced",
+        "desc": "降低被混乱、封技、冻结、恐惧等控制影响的概率或持续时间。",
+        "source": [
+          "base_growth",
+          "equipment",
+          "buff"
+        ],
+        "cap": "异常抵抗建议上限 65%；BOSS 关键状态使用机制抗性"
+      },
+      {
+        "id": "EffectHit",
+        "name": "效果命中",
+        "type": "accuracy",
+        "display": "advanced",
+        "desc": "影响可抵抗异常状态的成功率，不提高直接伤害。",
+        "source": [
+          "base_growth",
+          "equipment",
+          "skills"
+        ],
+        "cap": "对普通敌人有效上限 95%；BOSS 按各阶段抵抗计算"
+      },
+      {
+        "id": "Fortune",
+        "name": "运",
+        "type": "fortune",
+        "display": "advanced",
+        "desc": "影响非关键性的额外材料收益和少数可替代的探索小发现；不影响主线关键掉落、核心配方、剧情选择或必需品。",
+        "source": [
+          "accessories",
+          "affixes",
+          "side_quests"
+        ],
+        "cap": "0—100；额外普通材料概率=min(8%, 运×0.08%)；不参与暴击公式"
+      }
+    ],
+    "element_affinity": {
+      "沈照野": {
+        "风": 58,
+        "水": 22,
+        "火": 18,
+        "木": 31,
+        "山": 46
+      },
+      "姜阿棠": {
+        "风": 20,
+        "水": 28,
+        "火": 62,
+        "木": 55,
+        "山": 24
+      },
+      "闻潮": {
+        "风": 34,
+        "水": 68,
+        "火": 18,
+        "木": 27,
+        "山": 40
+      },
+      "裴渡": {
+        "风": 22,
+        "水": 39,
+        "火": 17,
+        "木": 34,
+        "山": 65
+      }
+    },
+    "formulas": {
+      "physical_damage": "max(1, round((Attack * SkillMultiplier - Target.Defense * 0.60) * DamageModifier * RandomVariance))",
+      "spell_damage": "max(1, round((SpellPower * SkillMultiplier - Target.SpiritResist * 0.52) * SpellModifier * RandomVariance))",
+      "random_variance": [
+        0.97,
+        1.03
+      ],
+      "crit_rate_cap_normal_enemy": 0.65,
+      "crit_damage_base_multiplier": 1.5,
+      "crit_damage_cap": 2.5,
+      "hit_rate_clamp": [
+        0.75,
+        1.0
+      ],
+      "evasion_cap": 0.35,
+      "resolve_status_resist": "clamp(Resolve * 0.45% + EquipmentStatusResist, 0%, 65%)",
+      "fortune_bonus_common_material_chance": "min(8%, Fortune * 0.08%)",
+      "fortune_exclusions": [
+        "main_story_items",
+        "unique_weapons",
+        "boss_first_clear_rewards",
+        "recipe_unlocks",
+        "quest_access",
+        "ending"
+      ],
+      "element_affinity_bonus": "min(10%, Affinity * 0.1%) per matching element",
+      "effect_hit_success": "clamp(BaseStatusChance + (EffectHit - Target.Resolve) * 0.35 percentage points, 10%, 95%)",
+      "element_status_buildup_bonus": "min(10%, Affinity * 0.1%) per matching element"
+    },
+    "growth_targets": {
+      "沈照野": [
+        {
+          "level": 1,
+          "HPMax": 330,
+          "MPMax": 90,
+          "Attack": 34,
+          "SpellPower": 18,
+          "Defense": 22,
+          "SpiritResist": 17,
+          "Speed": 105,
+          "CritRate": 5,
+          "CritDamage": 150,
+          "HitRate": 95,
+          "Evasion": 5,
+          "BreakPower": 28,
+          "Resolve": 20,
+          "EffectHit": 85,
+          "Fortune": 10
+        },
+        {
+          "level": 20,
+          "HPMax": 1300,
+          "MPMax": 210,
+          "Attack": 114,
+          "SpellPower": 68,
+          "Defense": 80,
+          "SpiritResist": 58,
+          "Speed": 113,
+          "CritRate": 8,
+          "CritDamage": 154,
+          "HitRate": 97,
+          "Evasion": 6,
+          "BreakPower": 44,
+          "Resolve": 22,
+          "EffectHit": 86,
+          "Fortune": 10
+        },
+        {
+          "level": 40,
+          "HPMax": 2650,
+          "MPMax": 390,
+          "Attack": 235,
+          "SpellPower": 142,
+          "Defense": 162,
+          "SpiritResist": 123,
+          "Speed": 121,
+          "CritRate": 12,
+          "CritDamage": 160,
+          "HitRate": 98,
+          "Evasion": 8,
+          "BreakPower": 62,
+          "Resolve": 27,
+          "EffectHit": 88,
+          "Fortune": 10
+        },
+        {
+          "level": 60,
+          "HPMax": 4350,
+          "MPMax": 590,
+          "Attack": 376,
+          "SpellPower": 236,
+          "Defense": 255,
+          "SpiritResist": 204,
+          "Speed": 128,
+          "CritRate": 16,
+          "CritDamage": 170,
+          "HitRate": 99,
+          "Evasion": 10,
+          "BreakPower": 80,
+          "Resolve": 34,
+          "EffectHit": 90,
+          "Fortune": 10
+        },
+        {
+          "level": 80,
+          "HPMax": 6500,
+          "MPMax": 800,
+          "Attack": 540,
+          "SpellPower": 340,
+          "Defense": 365,
+          "SpiritResist": 296,
+          "Speed": 136,
+          "CritRate": 18,
+          "CritDamage": 180,
+          "HitRate": 100,
+          "Evasion": 12,
+          "BreakPower": 100,
+          "Resolve": 40,
+          "EffectHit": 92,
+          "Fortune": 10
+        }
+      ],
+      "姜阿棠": [
+        {
+          "level": 1,
+          "HPMax": 280,
+          "MPMax": 150,
+          "Attack": 22,
+          "SpellPower": 35,
+          "Defense": 17,
+          "SpiritResist": 23,
+          "Speed": 112,
+          "CritRate": 6,
+          "CritDamage": 150,
+          "HitRate": 95,
+          "Evasion": 7,
+          "BreakPower": 16,
+          "Resolve": 24,
+          "EffectHit": 100,
+          "Fortune": 18
+        },
+        {
+          "level": 20,
+          "HPMax": 1050,
+          "MPMax": 320,
+          "Attack": 80,
+          "SpellPower": 130,
+          "Defense": 68,
+          "SpiritResist": 58,
+          "Speed": 120,
+          "CritRate": 9,
+          "CritDamage": 155,
+          "HitRate": 97,
+          "Evasion": 9,
+          "BreakPower": 28,
+          "Resolve": 30,
+          "EffectHit": 108,
+          "Fortune": 18
+        },
+        {
+          "level": 40,
+          "HPMax": 2180,
+          "MPMax": 580,
+          "Attack": 160,
+          "SpellPower": 270,
+          "Defense": 142,
+          "SpiritResist": 123,
+          "Speed": 128,
+          "CritRate": 12,
+          "CritDamage": 160,
+          "HitRate": 98,
+          "Evasion": 11,
+          "BreakPower": 42,
+          "Resolve": 38,
+          "EffectHit": 116,
+          "Fortune": 18
+        },
+        {
+          "level": 60,
+          "HPMax": 3540,
+          "MPMax": 870,
+          "Attack": 250,
+          "SpellPower": 430,
+          "Defense": 220,
+          "SpiritResist": 204,
+          "Speed": 136,
+          "CritRate": 15,
+          "CritDamage": 168,
+          "HitRate": 99,
+          "Evasion": 13,
+          "BreakPower": 56,
+          "Resolve": 46,
+          "EffectHit": 124,
+          "Fortune": 18
+        },
+        {
+          "level": 80,
+          "HPMax": 5200,
+          "MPMax": 1180,
+          "Attack": 350,
+          "SpellPower": 610,
+          "Defense": 310,
+          "SpiritResist": 296,
+          "Speed": 145,
+          "CritRate": 18,
+          "CritDamage": 178,
+          "HitRate": 100,
+          "Evasion": 15,
+          "BreakPower": 72,
+          "Resolve": 55,
+          "EffectHit": 132,
+          "Fortune": 18
+        }
+      ],
+      "闻潮": [
+        {
+          "level": 1,
+          "HPMax": 390,
+          "MPMax": 100,
+          "Attack": 32,
+          "SpellPower": 22,
+          "Defense": 28,
+          "SpiritResist": 20,
+          "Speed": 98,
+          "CritRate": 4,
+          "CritDamage": 150,
+          "HitRate": 96,
+          "Evasion": 3,
+          "BreakPower": 25,
+          "Resolve": 22,
+          "EffectHit": 88,
+          "Fortune": 12
+        },
+        {
+          "level": 20,
+          "HPMax": 1550,
+          "MPMax": 230,
+          "Attack": 112,
+          "SpellPower": 80,
+          "Defense": 104,
+          "SpiritResist": 72,
+          "Speed": 103,
+          "CritRate": 6,
+          "CritDamage": 154,
+          "HitRate": 97,
+          "Evasion": 4,
+          "BreakPower": 42,
+          "Resolve": 28,
+          "EffectHit": 89,
+          "Fortune": 12
+        },
+        {
+          "level": 40,
+          "HPMax": 3150,
+          "MPMax": 420,
+          "Attack": 235,
+          "SpellPower": 155,
+          "Defense": 215,
+          "SpiritResist": 150,
+          "Speed": 110,
+          "CritRate": 9,
+          "CritDamage": 160,
+          "HitRate": 98,
+          "Evasion": 5,
+          "BreakPower": 60,
+          "Resolve": 35,
+          "EffectHit": 91,
+          "Fortune": 12
+        },
+        {
+          "level": 60,
+          "HPMax": 5200,
+          "MPMax": 640,
+          "Attack": 375,
+          "SpellPower": 255,
+          "Defense": 335,
+          "SpiritResist": 250,
+          "Speed": 117,
+          "CritRate": 11,
+          "CritDamage": 165,
+          "HitRate": 99,
+          "Evasion": 7,
+          "BreakPower": 80,
+          "Resolve": 44,
+          "EffectHit": 93,
+          "Fortune": 12
+        },
+        {
+          "level": 80,
+          "HPMax": 7900,
+          "MPMax": 900,
+          "Attack": 530,
+          "SpellPower": 380,
+          "Defense": 470,
+          "SpiritResist": 360,
+          "Speed": 124,
+          "CritRate": 13,
+          "CritDamage": 175,
+          "HitRate": 100,
+          "Evasion": 9,
+          "BreakPower": 98,
+          "Resolve": 55,
+          "EffectHit": 96,
+          "Fortune": 12
+        }
+      ],
+      "裴渡": [
+        {
+          "level": 1,
+          "HPMax": 300,
+          "MPMax": 160,
+          "Attack": 20,
+          "SpellPower": 32,
+          "Defense": 18,
+          "SpiritResist": 26,
+          "Speed": 104,
+          "CritRate": 5,
+          "CritDamage": 150,
+          "HitRate": 97,
+          "Evasion": 5,
+          "BreakPower": 18,
+          "Resolve": 32,
+          "EffectHit": 105,
+          "Fortune": 15
+        },
+        {
+          "level": 20,
+          "HPMax": 1120,
+          "MPMax": 340,
+          "Attack": 76,
+          "SpellPower": 124,
+          "Defense": 72,
+          "SpiritResist": 76,
+          "Speed": 112,
+          "CritRate": 7,
+          "CritDamage": 155,
+          "HitRate": 98,
+          "Evasion": 6,
+          "BreakPower": 30,
+          "Resolve": 40,
+          "EffectHit": 114,
+          "Fortune": 15
+        },
+        {
+          "level": 40,
+          "HPMax": 2350,
+          "MPMax": 620,
+          "Attack": 150,
+          "SpellPower": 260,
+          "Defense": 150,
+          "SpiritResist": 150,
+          "Speed": 120,
+          "CritRate": 9,
+          "CritDamage": 160,
+          "HitRate": 99,
+          "Evasion": 7,
+          "BreakPower": 44,
+          "Resolve": 50,
+          "EffectHit": 123,
+          "Fortune": 15
+        },
+        {
+          "level": 60,
+          "HPMax": 3850,
+          "MPMax": 920,
+          "Attack": 235,
+          "SpellPower": 415,
+          "Defense": 238,
+          "SpiritResist": 250,
+          "Speed": 127,
+          "CritRate": 11,
+          "CritDamage": 170,
+          "HitRate": 100,
+          "Evasion": 9,
+          "BreakPower": 60,
+          "Resolve": 60,
+          "EffectHit": 132,
+          "Fortune": 15
+        },
+        {
+          "level": 80,
+          "HPMax": 5600,
+          "MPMax": 1250,
+          "Attack": 330,
+          "SpellPower": 590,
+          "Defense": 330,
+          "SpiritResist": 465,
+          "Speed": 134,
+          "CritRate": 14,
+          "CritDamage": 180,
+          "HitRate": 100,
+          "Evasion": 11,
+          "BreakPower": 75,
+          "Resolve": 72,
+          "EffectHit": 140,
+          "Fortune": 15
+        }
+      ]
+    },
+    "training_routes": {
+      "沈照野": {
+        "轻锋": [
+          "速度提升",
+          "追击资源降低",
+          "轻技恢复延迟减少",
+          "连击增伤",
+          "追风终式"
+        ],
+        "破锋": [
+          "破势提高",
+          "重击破甲",
+          "打断后回灵",
+          "蓄力敌人增伤",
+          "断势终式"
+        ],
+        "守锋": [
+          "格挡减伤",
+          "防御后反击",
+          "援护效率",
+          "守势资源生成",
+          "回护终式"
+        ]
+      },
+      "姜阿棠": {
+        "符火": [
+          "术攻提升",
+          "灼烧积累",
+          "群体符术",
+          "引爆标记",
+          "落火终式"
+        ],
+        "纸偶": [
+          "纸偶耐久",
+          "异常持续",
+          "诱饵减伤",
+          "纸偶反击",
+          "百偶终式"
+        ],
+        "傩面": [
+          "效果命中",
+          "识破幻象",
+          "标记强化",
+          "异常联动",
+          "无相终式"
+        ]
+      },
+      "闻潮": {
+        "压浪": [
+          "水伤提升",
+          "潮湿积累",
+          "减速强化",
+          "潮拍追击",
+          "断潮终式"
+        ],
+        "稳舷": [
+          "气血提升",
+          "援护减伤",
+          "护盾效率",
+          "保护标记目标",
+          "定舷终式"
+        ],
+        "破舟": [
+          "突刺伤害",
+          "破势提高",
+          "精英打断",
+          "蓄力惩罚",
+          "破舟终式"
+        ]
+      },
+      "裴渡": {
+        "朱批": [
+          "封技成功率",
+          "判词持续",
+          "削弱加强",
+          "多目标判词",
+          "朱批终式"
+        ],
+        "归档": [
+          "标记协同",
+          "弱点识别",
+          "资源恢复",
+          "状态延长",
+          "归档终式"
+        ],
+        "夜巡": [
+          "速度提升",
+          "定神提升",
+          "亡魂类克制",
+          "低血量保护",
+          "巡夜终式"
+        ]
+      }
+    },
+    "ui_spec": {
+      "resolution_reference": "1920x1080",
+      "palette": {
+        "background": "#0F1724",
+        "panel": "#182231",
+        "panel_alt": "#1D2A3A",
+        "primary_text": "#E5DCC6",
+        "secondary_text": "#9DA9B4",
+        "accent_copper": "#BE975B",
+        "accent_jade": "#68AB9A",
+        "accent_blue": "#6497CD",
+        "danger": "#B95B4D"
+      },
+      "regions": [
+        {
+          "id": "top_navigation",
+          "ratio": "7% height",
+          "content": [
+            "角色",
+            "属性详情",
+            "技能",
+            "仙术",
+            "装备",
+            "修习"
+          ]
+        },
+        {
+          "id": "party_list",
+          "ratio": "13% width",
+          "content": [
+            "4 member portraits",
+            "role and level",
+            "HP/MP bars",
+            "status icons"
+          ]
+        },
+        {
+          "id": "character_preview",
+          "ratio": "39% width",
+          "content": [
+            "full body model",
+            "equipped combat weapon",
+            "idle animation",
+            "story relic separate"
+          ]
+        },
+        {
+          "id": "attribute_panel",
+          "ratio": "45% width",
+          "content": [
+            "HP/MP",
+            "Attack/SpellPower",
+            "Defense/SpiritResist",
+            "Speed/CritRate/CritDamage",
+            "advanced foldout",
+            "five affinity bars"
+          ]
+        },
+        {
+          "id": "bottom_equipment_training",
+          "ratio": "25% height",
+          "content": [
+            "weapon",
+            "outfit",
+            "guard",
+            "accessory",
+            "spirit object",
+            "training summary"
+          ]
+        }
+      ],
+      "ux_rules": [
+        "8 core numbers visible by default",
+        "all other attributes in detail view",
+        "tooltips show definition, sources, final value",
+        "equipment comparison includes stat and mechanic deltas",
+        "Fortune tooltip explicitly lists excluded rewards",
+        "color must never be sole status cue",
+        "screen must fit 1920x1080, 1600x900, 1280x720"
+      ]
+    },
+    "training_point_rule": "Gain 1 training point at Lv.5, 10, 15, ..., 75 (15 total); Lv.80 grants a final mastery trait instead of another freely assigned point."
+  }
+}

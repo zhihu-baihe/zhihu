@@ -1,0 +1,9 @@
+﻿Name,TriggerEvent,OncePerBattle,EffectType,Magnitude,TargetRule,Description
+PASS_FIRST_GUARD_GUTS5,OnFirstSuccessfulGuard,True,GainGUTS,5,Self,每场战斗首次成功防御额外+5战意
+PASS_DAMAGE_BROKEN_PLUS5,OnHitPoiseBrokenTarget,False,DamageMultiplierAdd,0.05,SelfHit,对已破韧目标伤害+5%
+PASS_FIREBIRD_BURNPLUS3PP,OnApplyBurnWithFirebird,False,StatusChanceAdd,0.03,SkillTarget,火雀符灼烧概率额外+3个百分点
+PASS_SNARE_NEXT_FIRE_PLUS8_BOSS4,OnSnareSuccess,False,NextFireDamageTaken,0.08,SnaredTarget,普通敌人下一次火系伤害+8%；BOSS+4%且每阶段只触发一次
+PASS_FIRST_PUSH_PENALTY_MINUS30,OnFirstForcedMovePerBattle,True,PushPenaltyMultiplier,-0.3,Wearer,每场战斗首次推拉导致的行动槽惩罚降低30%
+PASS_FIRST_PUSH_DISTANCE_MINUS50,OnFirstForcedMovePerBattle,True,PushDistanceMultiplier,-0.5,Wearer,每场战斗首次推拉距离降低50%
+PASS_OBSERVE_ILLUSION_NEXT_HIT_PLUS8,OnObserveIllusionSuccess,True,NextDamageToIllusionMultiplierAdd,0.08,WearerNextHit,观察成功后下一次对幻象伤害+8%
+PASS_FIRST_STATUS_DURATION_MINUS1,OnFirstStatusReceived,True,StatusDurationDelta,-1,Wearer,每场战斗第一次受到可缩短的普通异常时，持续时间-1次自身行动

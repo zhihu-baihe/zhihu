@@ -1,0 +1,15 @@
+﻿Name,DisplayName,ItemType,MaxStack,Consumable,UseEffectID,Description,AcquisitionNotes
+MAT_OLD_CLOTH,旧布,Material,99,False,None,修复练习剑铜箍的常规材料。,风鬃鼠少量掉落；镇上杂货可补购
+MAT_OLD_IRON,旧铁料,Material,99,False,None,用于未名·旧铁锻造的主体材料。,铁匠委托、旧灯坊侧室、商人补购
+MAT_COPPER_RIVET,铜铆钉,Material,99,False,None,铁器和扇轴维修材料。,铁匠铺／杂货摊
+MAT_LANTERN_PAPER,灯骨纸,Material,99,False,None,灯会专用纸材，用于符扇和照影符片。,花灯蛾、宋纸匠、固定支线奖励
+MAT_WIND_SHARD,风脉碎屑,Material,99,False,None,吞风蜃犬留下的风脉材料。,吞风蜃犬固定奖励
+MAT_MASK_ASH,百面余烬,Material,99,False,None,修复百折符扇·补轴的核心材料。,百面灯魇固定奖励，只发放一次
+MAT_WOVEN_CLOTH,厚织布,Material,99,False,None,制作耐风短氅的常规材料。,裁缝支线／杂货商
+MAT_LAMP_WICK,旧灯芯,Material,99,False,None,旧式灯具的灯芯材料。,灯会环境箱、部分纸灯敌人
+KEY_OLD_STREET_SIGN,旧街牌,KeyItem,1,False,None,背面刻有旧路籍印记，与姐姐的线索有一处相似。,吞风蜃犬剧情奖励
+KEY_SHENDENGJI_FRAGMENT,《沉灯记》残页,KeyItem,1,False,None,戏本残页；本章只露出一角，不解释主线真相。,百面灯魇固定奖励
+KEY_LAMP_DELIVERY,旧铜灯,QuestItem,1,False,None,师父托沈照野送给何守灯的旧灯。,开场获得，交付后移出任务携带栏
+ITEM_SMALL_HEAL,小还丹,Consumable,20,True,RESTORE_HP_90,恢复90点HP。,开场补给、商店、少量箱子
+ITEM_CLEAR_MIND,清心散,Consumable,20,True,CLEAR_ONE_COMMON_STATUS,清除一名角色一种可清除的普通异常。,商店与少量探索奖励
+ITEM_MP_PILL,回息丸,Consumable,20,True,RESTORE_MP_18,恢复18点MP。,商店与少量探索奖励

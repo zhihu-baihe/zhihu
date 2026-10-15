@@ -1,0 +1,8 @@
+﻿Name,DisplayName,OwnerID,UnlockLevel,CostMP,PowerMultiplier,HitCount,TargetRule,BaseHitChance,StatusID,StatusChance,PoiseDamage,ActionTags,Description
+SK_SHZ_SLASH,斜斩,CHAR_SHENZHAOYE,1,0,1.0,1,SingleEnemy,0.95,None,0,12,Basic;Physical,单体100%ATK，命中后战意+8
+SK_SHZ_HUIFENG,回风,CHAR_SHENZHAOYE,4,8,0.65,2,SingleEnemy,0.93,None,0,8,Physical;MultiHit;Fast,两段各65%ATK；每段分别判命中
+SK_SHZ_PODENG,破灯,CHAR_SHENZHAOYE,7,10,0.85,1,SingleEnemy,0.95,DEF_DOWN,1.0,18,Physical;Debuff;Break,85%ATK；普通敌人DEF-15%持续目标2次行动，BOSS DEF-8%
+SK_JAT_HUOQUE,火雀符,CHAR_JIANGATANG,1,8,1.1,1,SingleEnemy,0.92,BURN,0.25,8,Fire;Magic,110%MATK，基础25%灼烧概率
+SK_JAT_FULING,缚灵符,CHAR_JIANGATANG,4,10,0.75,1,SingleEnemy,0.9,SNARE,0.6,16,Control;Magic;Break,75%MATK；普通敌人60%缠绕1次行动；BOSS转为削韧
+SK_JAT_ZHIZHOU,纸偶替身,CHAR_JIANGATANG,7,12,0,0,SelfOrAlly,1,PAPER_DOLL_GUARD,1,0,Support;Guard,纸偶吸收下一次单体攻击；群攻仍可命中角色；每场最多1个
+SK_JAT_ZHAOYAO,照妖面,CHAR_JIANGATANG,10,10,0,0,BossIllusion,1,REVEAL_WEAKPOINT,1,8,Observe;Illusion;Utility,揭示幻象本体与弱点，持续我方2次行动；首领每阶段仅可标记一次

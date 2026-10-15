@@ -1,0 +1,5 @@
+﻿RelicID,DisplayName,Owner,EquippableAsCombatWeapon,Purpose
+REL_SHEN_QINGBEI,青背,沈照野,False,剧情佩剑/个人成长节点/过场展示
+REL_JIANG_OLDFAN,旧戏骨,姜阿棠,False,父亲留下的扇骨，影响个人剧情与戏本收集
+REL_WEN_WHALE_BADGE,白鲸旧牌,闻潮,False,白鲸舶身世线索与个人剧情物件
+REL_PEI_WOOD_TALLY,夜巡木牌,裴渡,False,身份凭证；对应特殊法器第九号木牌，但不与战斗武器槽混同

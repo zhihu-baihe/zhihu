@@ -1,0 +1,12 @@
+﻿Token,用途,Hex,备注
+INK_MAIN,主文字/标题,#263B43,墨色蓝灰；用于标题、主要数值
+INK_SUB,次级文字,#697D80,说明、弱提示、次级标签
+PAPER_BG,页面底色,#F3F0E7,温润纸白，主背景
+PAPER_PANEL,内容面板,#FAF8F1,轻量半透明面板
+PAPER_SELECTED,选中项,#E8EEE8,当前选中行、选中技能
+LINE,分隔线,#BCC7C1,细线、边框
+ACCENT_TEAL,主交互色,#557D83,当前标签、确认按钮、正向变化
+ACCENT_BLUE,灵息/信息,#6E8F9B,MP/灵息、提示性信息
+ACCENT_CINNABAR,朱砂强调,#B95F50,HP、剧情重点、少量危险提示
+ACCENT_WOOD,器物点缀,#B39A68,少量铜/木质细节，不作为稀有度等级
+MUTED_GREEN,五灵木系,#7F987E,木属性图示

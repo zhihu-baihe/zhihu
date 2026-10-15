@@ -1,0 +1,6 @@
+﻿Name,DisplayName,DurationActions,TickDamagePctMaxHP,ATKModifierPct,DEFModifierPct,ActionGaugeRatePct,CanBossApply,BossConversionRule,StackRule,ClearMethod,Notes
+BURN,灼烧,3,0.04,0,0,0,True,DamageCappedAndReduced,RefreshDuration,WaterSkill;ClearMindPowder,每次目标行动后扣最大HP4%，首领伤害需封顶
+SNARE,缠绕,1,0,0,0,-0.25,False,ConvertToPoiseDamageAndDelay,RefreshDuration,Cleanse;CutVines,普通敌人行动槽增长-25%；BOSS转削韧与少量延后
+DEF_DOWN,破甲,2,0,0,-0.15,0,True,ReduceToMinus8Pct,RefreshDuration,DefenseSkill;DurationEnd,首领破灯效果降为DEF-8%
+PAPER_DOLL_GUARD,纸偶护卫,1,0,0,0,0,True,BlockNextSingleTargetHitOnly,NoStack,AbsorbedHit;DurationEnd,只拦截下一次单体攻击，不拦截群攻
+REVEAL_WEAKPOINT,识破弱点,2,0,0,0,0,True,RevealOnePhaseOnce,RefreshDuration,DurationEnd;PhaseChange,提供目标信息，不直接跳过首领机制

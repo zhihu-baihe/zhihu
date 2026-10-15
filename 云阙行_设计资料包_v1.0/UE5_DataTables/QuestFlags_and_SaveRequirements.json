@@ -1,0 +1,71 @@
+{
+  "QuestFlags": [
+    {
+      "Flag": "MSQ_LAMP_DELIVERED",
+      "Description": "将铜灯交给何守灯"
+    },
+    {
+      "Flag": "MSQ_XIAOMAN_RESCUED",
+      "Description": "从吞风巷救出小满"
+    },
+    {
+      "Flag": "MSQ_WIND_DOG_DEFEATED",
+      "Description": "击败并驱离吞风蜃犬"
+    },
+    {
+      "Flag": "MSQ_MOYI_ARRIVED",
+      "Description": "进入墨邑"
+    },
+    {
+      "Flag": "COMP_JIANGATANG_JOINED",
+      "Description": "姜阿棠加入临时同行"
+    },
+    {
+      "Flag": "CLUE_MASK",
+      "Description": "纸扎铺面具封绳线索"
+    },
+    {
+      "Flag": "CLUE_LEDGER",
+      "Description": "灯籍小房记录线索"
+    },
+    {
+      "Flag": "CLUE_REFLECTION",
+      "Description": "千灯桥倒影线索"
+    },
+    {
+      "Flag": "MSQ_OLD_LANTERN_WORKSHOP_OPEN",
+      "Description": "旧灯坊入口开放"
+    },
+    {
+      "Flag": "BOSS_MASK_LANTERN_DEFEATED",
+      "Description": "百面灯魇战斗完成"
+    },
+    {
+      "Flag": "MSQ_MOYI_AFTERSTATE",
+      "Description": "灯会进入战后状态"
+    },
+    {
+      "Flag": "SQ_RIVER_LAMP_COMPLETE",
+      "Description": "河边第七盏灯支线完成"
+    },
+    {
+      "Flag": "SQ_TAILOR_WIND_CLOAK_COMPLETE",
+      "Description": "耐风短氅支线完成"
+    },
+    {
+      "Flag": "Q_BLACKSMITH_TRIAL_COMPLETE",
+      "Description": "周铁匠试剑任务完成"
+    }
+  ],
+  "SaveRequirements": [
+    "Quest stage IDs",
+    "Evidence flags",
+    "Boss checkpoint ID",
+    "NPC one-shot dialogue flags",
+    "Current equipped item IDs",
+    "Materials and coins",
+    "Moyi time slice",
+    "Map variant state",
+    "SaveVersion"
+  ]
+}
